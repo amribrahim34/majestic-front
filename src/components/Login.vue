@@ -27,18 +27,20 @@
             type="password"
             placeholder="******************"
           />
-          <p class="text-xs italic text-right text-blue-500 hover:text-blue-800 cursor-pointer">
-            Forgot your password?
-          </p>
         </div>
         <div class="flex items-center justify-between mb-6">
           <label class="inline-flex items-center">
             <input type="checkbox" class="form-checkbox text-indigo-600" />
             <span class="ml-2 text-sm text-gray-700">Remember me</span>
           </label>
+          <p class="text-xs italic text-right text-blue-500 hover:text-blue-800 cursor-pointer">
+            Forgot your password?
+          </p>
+        </div>
+        <div>
           <button
-            class="bg-black text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
+            type="submit"
+            class="flex w-full justify-center rounded-md bg-black px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Log in
           </button>
@@ -46,23 +48,25 @@
         <div class="flex items-center justify-center mb-6">
           <span class="mx-auto">or</span>
         </div>
-        <div class="flex items-center justify-between mb-6">
+
+        <div class="flex justify-between space-x-4">
           <button
-            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center justify-center"
           >
-            <span>G</span>
+            G
           </button>
           <button
-            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
+            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center justify-center"
           >
-            <span>f</span>
+            F
           </button>
           <button
-            class="bg-light-blue-300 hover:bg-light-blue-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+            class="flex-1 bg-light-blue-300 hover:bg-light-blue-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center justify-center"
           >
-            <span>t</span>
+            T
           </button>
         </div>
+
         <div class="text-center text-sm text-gray-600">
           Don’t have an account yet?
           <span class="text-blue-500 hover:text-blue-800 cursor-pointer">Sign up</span>
