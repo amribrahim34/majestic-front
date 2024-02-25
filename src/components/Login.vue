@@ -1,10 +1,7 @@
 <template>
-  <div
-    class="flex items-center justify-center min-h-screen bg-cover bg-no-repeat bg-center"
-    style="background-image: url('/path-to-your-background-image.jpg')"
-  >
+  <div class="flex items-center justify-center align-middle min-h-screen">
     <div class="bg-white p-8 rounded shadow-md w-96">
-      <h2 class="text-3xl font-bold mb-2 text-center">Log in</h2>
+      <h2 class="text-3xl font-bold mb-2 text-center text-black">Log in</h2>
       <div class="text-sm text-gray-600 text-center mb-8">
         Enter your login credentials to access your account
       </div>
