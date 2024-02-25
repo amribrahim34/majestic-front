@@ -69,7 +69,11 @@
 
         <div class="text-center text-sm text-gray-600">
           Don’t have an account yet?
-          <span class="text-blue-500 hover:text-blue-800 cursor-pointer">Sign up</span>
+          <span class="text-blue-500 hover:text-blue-800 cursor-pointer">
+            <router-link to="/signup" class="text-blue-500 hover:text-blue-800 cursor-pointer"
+              >Sign up</router-link
+            >
+          </span>
         </div>
       </form>
     </div>

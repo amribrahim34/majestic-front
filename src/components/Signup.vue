@@ -84,7 +84,10 @@
           </button>
         </div>
         <div class="text-center text-sm text-gray-600">
-          Already have an account? <a href="#" class="text-blue-500 hover:text-blue-800">Log in</a>
+          Already have an account?
+          <router-link to="/login" class="text-blue-500 hover:text-blue-800 cursor-pointer"
+            >Log in</router-link
+          >
         </div>
       </form>
     </div>
