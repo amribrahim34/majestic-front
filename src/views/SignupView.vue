@@ -1,10 +1,10 @@
 <script lang="ts">
-import Login from '../components/Login.vue'
+import Signup from '../components/Signup.vue'
 
 export default {
-  name: 'LoginView',
+  name: 'SignupView',
   components: {
-    Login
+    Signup
   },
   data() {
     return {
@@ -15,12 +15,12 @@ export default {
 </script>
 
 <template>
-  <Login />
+  <Signup />
 </template>
 <style>
 /* This applies the style directly to the <body> element, affecting the entire page */
 body {
-  background-image: url('@/assets/login-background.png');
+  background-image: url('@/assets/signup-background.png');
   background-size: cover; /* Cover the entire page */
   background-position: center; /* Center the background image */
 }
