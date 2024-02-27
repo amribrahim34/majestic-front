@@ -14,79 +14,66 @@
     </section>
 
     <!-- Team Section -->
-    <section class="py-12">
-      <h2 class="text-3xl font-bold text-center mb-8">Team</h2>
-      <div class="grid grid-cols-3 gap-4">
-        <!-- Team Member Card -->
-        <div class="text-center">
-          <img
-            src="../assets/about-us/hannah.jpeg"
-            alt="Hannah Mika"
-            class="rounded-full w-24 h-24 mx-auto mb-4"
-          />
-          <h3 class="font-bold">Hannah Mika</h3>
-          <p>CEO</p>
+    <section class="bg-white py-12">
+      <div class="container mx-auto px-4">
+        <h2 class="text-center text-4xl font-extrabold mb-12">Team</h2>
+        <p class="text-center text-lg mb-8">Meet the People Behind Our Magical Product</p>
+        <div class="flex flex-wrap justify-center gap-10">
+          <!-- Team Member Component -->
+          <div class="w-40 text-center" v-for="member in teamMembers" :key="member.name">
+            <img :src="member.image" :alt="member.name" class="w-24 h-24 rounded-full mx-auto" />
+            <h3 class="font-bold text-lg mt-4">{{ member.name }}</h3>
+            <p class="text-gray-600">{{ member.role }}</p>
+          </div>
         </div>
-        <div class="text-center">
-          <img
-            src="../assets/about-us/hannah.jpeg"
-            alt="Hannah Mika"
-            class="rounded-full w-24 h-24 mx-auto mb-4"
-          />
-          <h3 class="font-bold">Daniel Beter</h3>
-          <p>CTO</p>
-        </div>
-        <div class="text-center">
-          <img
-            src="../assets/about-us/hannah.jpeg"
-            alt="Hannah Mika"
-            class="rounded-full w-24 h-24 mx-auto mb-4"
-          />
-          <h3 class="font-bold">Lars Mikkel</h3>
-          <p>Head of Operations</p>
-        </div>
-        <!-- Repeat for other team members -->
       </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="text-center py-12 bg-gray-100">
-      <h2 class="text-3xl font-bold mb-6">Start Your Reading Journey</h2>
-      <router-link
-        to="/signup"
-        class="bg-black text-white font-bold py-2 px-4 rounded hover:bg-opacity-90"
-        >Sign up now</router-link
-      >
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-white">
-      <div class="container mx-auto px-6 py-4">
-        <div class="flex justify-between items-center">
-          <div class="flex items-center">
-            <a href="#" class="text-xl font-bold text-indigo-600">MajesticMinds</a>
-            <!-- Add social links here -->
-          </div>
-          <div class="flex items-center">
-            <p class="text-sm text-gray-600">Need help? Our support is here for you 24/7</p>
-            <p class="text-sm text-gray-600 ml-4">(+123) 000 111 222 333</p>
-            <a href="mailto:support@majesticminds.com" class="text-sm text-gray-600 ml-4">
-              support@majesticminds.com
-            </a>
-          </div>
+    <section class="flex justify-between items-center bg-white p-12">
+      <div class="flex-1">
+        <h2 class="text-5xl font-bold mb-4">Start Your Reading Journey</h2>
+        <p class="text-xl mb-8">Explore Different Genres</p>
+        <router-link
+          to="/signup"
+          class="bg-black text-white py-3 px-6 rounded-lg text-lg font-medium hover:bg-opacity-90 transition-opacity"
+          >Sign up now</router-link
+        >
+      </div>
+      <div class="flex-1 hidden lg:block">
+        <!-- Assuming the image on the right is a background image; otherwise, use an <img> tag -->
+        <div class="w-2/3 h-2/3 bg-cover bg-no-repeat bg-center">
+          <img src="../assets/about-us/journey.jpeg" alt="" />
         </div>
       </div>
-    </footer>
+    </section>
+    <FooterComponent />
   </div>
 </template>
 
 <script lang="ts">
 import HeaderComponent from '@/components/Header.vue'
+import FooterComponent from '@/components/FooterComponent.vue'
 
 export default {
   name: 'AboutUsPage',
   components: {
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent
+  },
+  data() {
+    return {
+      teamMembers: [
+        { name: 'Hannah Mika', role: 'CEO', image: 'src/assets/about-us/hannah.jpeg' },
+        { name: 'Daniel Peter', role: 'CTO', image: 'src/assets/about-us/hannah.jpeg' },
+        {
+          name: 'Lars Mikkel',
+          role: 'Head of Operations',
+          image: 'src/assets/about-us/hannah.jpeg'
+        }
+        // Add the rest of your team members here
+      ]
+    }
   }
   // Data and methods would go here
 }
