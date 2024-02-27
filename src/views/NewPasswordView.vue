@@ -17,7 +17,7 @@ export default {
 <template>
   <NewPassword />
 </template>
-<style>
+<style scoped>
 /* This applies the style directly to the <body> element, affecting the entire page */
 body {
   background-image: url('@/assets/new-password-background.png');

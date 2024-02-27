@@ -17,7 +17,7 @@ export default {
 <template>
   <ResetPassword />
 </template>
-<style>
+<style scoped>
 /* This applies the style directly to the <body> element, affecting the entire page */
 body {
   background-image: url('@/assets/reset-password-background.png');
