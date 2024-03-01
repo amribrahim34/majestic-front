@@ -2,12 +2,6 @@
 import ProductSearchView from '@/views/Books/ProductSearchView.vue'
 // ... import other views
 
-const products = [
-  {
-    path: '/product/search',
-    name: 'ProductSearch',
-    component: ProductSearchView
-  }
-]
+// const products = []
 
-export default products
+// export default products

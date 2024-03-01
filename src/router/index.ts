@@ -6,12 +6,14 @@ import ResetPasswordView from '@/views/ResetPasswordView.vue'
 import NewPasswordView from '@/views/NewPasswordView.vue'
 import RequestBookView from '@/views/RequestBookView.vue'
 import AccountDetailsView from '@/views/AccountDetailsView.vue'
-import products from './products'
+import ProductSearchView from '@/views/Books/ProductSearchView.vue'
+
+// import products from './products'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    ...products,
+    // ...products,
     {
       path: '/',
       name: 'home',
@@ -46,6 +48,11 @@ const router = createRouter({
       path: '/account-details',
       name: 'AccountDetails',
       component: AccountDetailsView
+    },
+    {
+      path: '/product/search',
+      name: 'ProductSearch',
+      component: ProductSearchView
     },
     {
       path: '/about',
