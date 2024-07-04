@@ -51,7 +51,8 @@ export default {
           currency: '$',
           isFavorite: false,
           inCart: false,
-          img: '/src/assets/book-imgs/1.jpeg'
+          img: '/src/assets/book-imgs/1.jpeg',
+          rating: 4.5
         },
         {
           id: 2,
@@ -62,7 +63,8 @@ export default {
           currency: '$',
           isFavorite: true,
           inCart: false,
-          img: '/src/assets/book-imgs/2.png'
+          img: '/src/assets/book-imgs/2.png',
+          rating: 4.5
         },
         {
           id: 3,
@@ -73,6 +75,7 @@ export default {
           currency: '$',
           isFavorite: false,
           inCart: false,
+          rating: 4.5,
           img: '/src/assets/book-imgs/3.jpeg'
         },
         {
@@ -84,6 +87,7 @@ export default {
           currency: '$',
           isFavorite: false,
           inCart: false,
+          rating: 4.5,
           img: '/src/assets/book-imgs/4.png'
         }
       ]

@@ -1,7 +1,17 @@
-// src/router/routes.js
 import ProductSearchView from '@/views/Books/ProductSearchView.vue'
-// ... import other views
+import ProductDetailsView from '@/views/Books/ProductDetailsView.vue'
 
-// const products = []
+const products = [
+  {
+    path: '/product/search',
+    name: 'ProductSearch',
+    component: ProductSearchView
+  },
+  {
+    path: '/product/details',
+    name: 'ProductDetails',
+    component: ProductDetailsView
+  }
+]
 
-// export default products
+export default products
