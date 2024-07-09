@@ -14,6 +14,7 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="email"
             type="email"
+            v-model="email"
             placeholder="example@example.com"
           />
         </div>
@@ -25,6 +26,7 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
             type="password"
+            v-model="password"
             placeholder="******************"
           />
         </div>
@@ -85,6 +87,9 @@
 </style>
 
 <script lang="ts">
+import { useLoginStore } from '@/stores/auth'
+import { mapState, mapActions } from 'pinia'
+
 export default {
   name: 'Login',
   data() {
@@ -94,11 +99,20 @@ export default {
     }
   },
   methods: {
+    ...mapActions(useLoginStore, ['handleLogin']),
     login() {
-      // Here, you would usually send a request to your backend to authenticate the user.
-      console.log('Email:', this.email, 'Password:', this.password)
-      // Add your authentication logic here
+      try {
+        this.handleLogin(this.email, this.password)
+        console.log('Logged in successfully', this.userData)
+        // Handle successful login
+      } catch (error) {
+        console.error('Login failed', error)
+        // Handle login error
+      }
     }
+  },
+  computed: {
+    ...mapState(useLoginStore, ['userData'])
   }
 }
 </script>
