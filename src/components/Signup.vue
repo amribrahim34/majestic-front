@@ -1,5 +1,7 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-cover bg-no-repeat bg-center">
+  <div
+    class="flex items-center justify-center min-h-screen bg-cover bg-no-repeat bg-center background"
+  >
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
       <h2 class="text-3xl font-bold mb-4 text-center">Sign up</h2>
       <p class="text-sm text-gray-600 text-center mb-8">Join our academic community!</p>
@@ -122,7 +124,7 @@ export default {
 </script>
 
 <style scoped>
-body {
+.background {
   background-image: url('@/assets/signup-background.png');
   background-size: cover; /* Cover the entire page */
   background-position: center; /* Center the background image */

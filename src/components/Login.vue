@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center align-middle min-h-screen">
+  <div class="flex items-center justify-center align-middle min-h-screen background">
     <div class="bg-white p-8 rounded shadow-md w-96">
       <h2 class="text-3xl font-bold mb-2 text-center text-black">Log in</h2>
       <div class="text-sm text-gray-600 text-center mb-8">
@@ -118,5 +118,10 @@ export default {
 </script>
 
 <style scoped>
-/* Add your CSS styles here */
+/* This applies the style directly to the <body> element, affecting the entire page */
+.background {
+  background-image: url('@/assets/login-background.png');
+  background-size: cover; /* Cover the entire page */
+  background-position: center; /* Center the background image */
+}
 </style>

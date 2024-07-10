@@ -11,7 +11,7 @@
           <p class="text-xl font-bold">Search results for “Branding”</p>
         </div>
         <div class="gap-3 flex justify-between flex-wrap">
-          <ProductCard v-for="product in products" :key="product.id" :product="product" />
+          <ProductCard v-for="book in books" :key="book.id" :book="book" />
         </div>
       </div>
     </div>
@@ -28,6 +28,8 @@ import ProductCard from '@/components/ProductSearch/ProductCard.vue' // Ensure t
 import FilterSection from '@/components/ProductSearch/FilterSection.vue' // Ensure this path is correct
 import HeaderComponent from '@/components/Header.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
+import { useBookStore } from '@/stores/bookStore'
+import { mapState, mapActions } from 'pinia'
 
 export default {
   name: 'ProductSearchView',
@@ -37,61 +39,22 @@ export default {
     HeaderComponent,
     FooterComponent
   },
-  data() {
-    return {
-      // This would be your data fetched from an API or similar
-      items: [],
-      products: [
-        {
-          id: 1,
-          name: 'narnia',
-          author: 'sharles dekins',
-          publisher: 'ingram',
-          price: 20,
-          currency: '$',
-          isFavorite: false,
-          inCart: false,
-          img: '/src/assets/book-imgs/1.jpeg',
-          rating: 4.5
-        },
-        {
-          id: 2,
-          name: 'world economics',
-          author: 'shinder',
-          publisher: 'ingram',
-          price: 20,
-          currency: '$',
-          isFavorite: true,
-          inCart: false,
-          img: '/src/assets/book-imgs/2.png',
-          rating: 4.5
-        },
-        {
-          id: 3,
-          name: 'the basics of corporate finance',
-          author: 'sharles',
-          publisher: 'ingram',
-          price: 20,
-          currency: '$',
-          isFavorite: false,
-          inCart: false,
-          rating: 4.5,
-          img: '/src/assets/book-imgs/3.jpeg'
-        },
-        {
-          id: 4,
-          name: 'branding',
-          author: 'dekins',
-          publisher: 'ingram',
-          price: 20,
-          currency: '$',
-          isFavorite: false,
-          inCart: false,
-          rating: 4.5,
-          img: '/src/assets/book-imgs/4.png'
-        }
-      ]
-    }
+  computed: {
+    // Use mapState to map store state to computed properties
+    ...mapState(useBookStore, ['books', 'loading', 'error', 'currentBook'])
+  },
+  methods: {
+    ...mapActions(useBookStore, [
+      'fetchAllBooks',
+      'fetchBookById',
+      'fetchBooksByCategory',
+      'searchBooks',
+      'fetchLatestBooks',
+      'fetchBestSellers'
+    ])
+  },
+  created() {
+    this.fetchAllBooks()
   }
 }
 </script>
