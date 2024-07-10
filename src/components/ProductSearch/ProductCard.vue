@@ -1,7 +1,7 @@
 <template>
   <div class="rounded shadow-lg w-96 mb-16">
     <div class="">
-      <img class="w-full object-cover h-56" :src="book.img" :alt="book.title" />
+      <img class="w-full object-cover h-56" :src="book.image" :alt="book.title" />
     </div>
     <div class="px-5 pb-5">
       <div class="">
@@ -24,7 +24,7 @@
         </span>
       </div>
       <div class="flex items-center justify-between">
-        <span class="text-3xl font-bold text-gray-900">
+        <span class="text-xl font-bold text-gray-900">
           {{ formatPrice(book.price) }}
         </span>
 
@@ -53,9 +53,14 @@ export default defineComponent({
     }
   },
   methods: {
-    formatPrice(price: number | undefined): string {
+    formatPrice(price: number | string | undefined): string {
       if (typeof price === 'number') {
-        return `$${price.toFixed(2)}`
+        return `LE ${price.toFixed(2)}`
+      } else if (typeof price === 'string') {
+        const numPrice = parseFloat(price)
+        if (!isNaN(numPrice)) {
+          return `LE ${numPrice.toFixed(2)}`
+        }
       }
       return 'Price not available'
     }

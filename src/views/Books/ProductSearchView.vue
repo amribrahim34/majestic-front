@@ -13,6 +13,20 @@
         <div class="gap-3 flex justify-between flex-wrap">
           <ProductCard v-for="book in books" :key="book.id" :book="book" />
         </div>
+        <!-- Pagination -->
+        <div class="flex justify-center mt-8">
+          <button
+            v-for="page in lastPage"
+            :key="page"
+            @click="setPage(page)"
+            :class="[
+              'mx-1 px-3 py-2 rounded',
+              currentPage === page ? 'bg-black text-white' : 'bg-gray-200'
+            ]"
+          >
+            {{ page }}
+          </button>
+        </div>
       </div>
     </div>
     <!-- Load More Button -->
@@ -41,7 +55,7 @@ export default {
   },
   computed: {
     // Use mapState to map store state to computed properties
-    ...mapState(useBookStore, ['books', 'loading', 'error', 'currentBook'])
+    ...mapState(useBookStore, ['books', 'loading', 'error', 'currentPage', 'lastPage', 'total'])
   },
   methods: {
     ...mapActions(useBookStore, [
@@ -50,7 +64,8 @@ export default {
       'fetchBooksByCategory',
       'searchBooks',
       'fetchLatestBooks',
-      'fetchBestSellers'
+      'fetchBestSellers',
+      'setPage'
     ])
   },
   created() {
