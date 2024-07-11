@@ -6,7 +6,6 @@ import type { Publisher } from './Publisher'
 export interface Book {
   id: number
   title: string
-  author_id: number
   category_id: number
   publisher_id: number
   publication_date: string
@@ -25,7 +24,7 @@ export interface Book {
   updated_at?: string
 
   // Relations
-  author?: Author
+  authors?: Author[]
   category?: Category
   publisher?: Publisher
   language?: Language

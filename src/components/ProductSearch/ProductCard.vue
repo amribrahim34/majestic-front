@@ -10,7 +10,7 @@
             {{ book.title }}
           </h5>
         </a>
-        <p>by {{ book.author?.name || 'Unknown Author' }}</p>
+        <p>by {{ formatAuthors(book.authors) }}</p>
       </div>
 
       <div class="flex items-center mt-2.5 mb-5">
@@ -27,7 +27,6 @@
         <span class="text-xl font-bold text-gray-900">
           {{ formatPrice(book.price) }}
         </span>
-
         <a
           href="#"
           class="text-white bg-black hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -41,8 +40,26 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import type { Book } from '@/types/Book'
 import type { PropType } from 'vue'
+
+interface Author {
+  id: number
+  name: string
+}
+
+interface Category {
+  id: number
+  name: string
+}
+
+interface Book {
+  id: number
+  title: string
+  authors: Author[]
+  category?: Category
+  price: number | string
+  image: string
+}
 
 export default defineComponent({
   name: 'ProductCard',
@@ -63,6 +80,18 @@ export default defineComponent({
         }
       }
       return 'Price not available'
+    },
+    formatAuthors(authors: Author[]): string {
+      if (!authors || authors.length === 0) {
+        return 'Unknown Author'
+      }
+      if (authors.length === 1) {
+        return authors[0].name
+      }
+      if (authors.length === 2) {
+        return `${authors[0].name} and ${authors[1].name}`
+      }
+      return `${authors[0].name} et al.`
     }
   }
 })
