@@ -1,17 +1,17 @@
 import ProductSearchView from '@/views/Books/ProductSearchView.vue'
 import ProductDetailsView from '@/views/Books/ProductDetailsView.vue'
 
-const products = [
+const books = [
   {
-    path: '/product/search',
-    name: 'ProductSearch',
+    path: '/books/search',
+    name: 'BookSearch',
     component: ProductSearchView
   },
   {
-    path: '/product/details',
-    name: 'ProductDetails',
+    path: '/books/details',
+    name: 'BookDetails',
     component: ProductDetailsView
   }
 ]
 
-export default products
+export default books

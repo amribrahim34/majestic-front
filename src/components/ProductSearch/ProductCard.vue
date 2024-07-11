@@ -10,7 +10,8 @@
             {{ book.title }}
           </h5>
         </a>
-        <p>by {{ formatAuthors(book.authors) }}</p>
+        <p>by</p>
+        <p v-for="author in book.authors" :key="author.id">{{ author.name }}</p>
       </div>
 
       <div class="flex items-center mt-2.5 mb-5">
@@ -20,46 +21,50 @@
         <span
           class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3"
         >
-          {{ book.category?.name || 'Uncategorized' }}
+          {{ book.category?.category_name || 'Uncategorized' }}
         </span>
       </div>
       <div class="flex items-center justify-between">
         <span class="text-xl font-bold text-gray-900">
           {{ formatPrice(book.price) }}
         </span>
-        <a
-          href="#"
-          class="text-white bg-black hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-        >
-          Add to cart
-        </a>
+        <div class="flex space-x-2">
+          <button
+            @click="toggleWishlist"
+            class="p-2.5 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+          >
+            <svg
+              class="w-5 h-5"
+              :class="{ 'text-red-500 fill-current': isWishlisted, 'text-gray-600': !isWishlisted }"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+          </button>
+          <a
+            href="#"
+            class="text-white bg-black hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+            Add to cart
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import type { Author } from '@/types/Author'
+import type { Book } from '@/types/Book'
+import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'
-
-interface Author {
-  id: number
-  name: string
-}
-
-interface Category {
-  id: number
-  name: string
-}
-
-interface Book {
-  id: number
-  title: string
-  authors: Author[]
-  category?: Category
-  price: number | string
-  image: string
-}
 
 export default defineComponent({
   name: 'ProductCard',
@@ -68,6 +73,16 @@ export default defineComponent({
       type: Object as PropType<Book>,
       required: true
     }
+  },
+  setup() {
+    const isWishlisted = ref(false)
+
+    const toggleWishlist = () => {
+      isWishlisted.value = !isWishlisted.value
+      // Here you would typically also update the wishlist status on the server
+    }
+
+    return { isWishlisted, toggleWishlist }
   },
   methods: {
     formatPrice(price: number | string | undefined): string {
@@ -80,18 +95,6 @@ export default defineComponent({
         }
       }
       return 'Price not available'
-    },
-    formatAuthors(authors: Author[]): string {
-      if (!authors || authors.length === 0) {
-        return 'Unknown Author'
-      }
-      if (authors.length === 1) {
-        return authors[0].name
-      }
-      if (authors.length === 2) {
-        return `${authors[0].name} and ${authors[1].name}`
-      }
-      return `${authors[0].name} et al.`
     }
   }
 })

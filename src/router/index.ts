@@ -8,12 +8,12 @@ import RequestBookView from '@/views/RequestBookView.vue'
 import AccountDetailsView from '@/views/AccountDetailsView.vue'
 import ProductSearchView from '@/views/Books/ProductSearchView.vue'
 
-import products from './products'
+import books from './books'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    ...products,
+    ...books,
     {
       path: '/',
       name: 'home',

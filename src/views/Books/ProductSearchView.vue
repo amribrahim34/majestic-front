@@ -1,12 +1,12 @@
 <template>
   <div class="container mx-auto">
     <HeaderComponent />
-    <div class="flex w-full my-20">
-      <div class="filter-sidebar w-48 ml-7">
+    <div class="flex my-20">
+      <div class="filter-sidebar w-1/5 ml-7">
         <FilterSection />
       </div>
       <!-- Main content grid -->
-      <div class="p-5 mx-10">
+      <div class="p-5 mx-10 w-4/5">
         <div class="mb-5">
           <p class="text-xl font-bold">Search results for “Branding”</p>
         </div>
