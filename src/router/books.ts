@@ -3,7 +3,7 @@ import ProductDetailsView from '@/views/Books/ProductDetailsView.vue'
 
 const books = [
   {
-    path: '/books/search',
+    path: '/books',
     name: 'BookSearch',
     component: ProductSearchView
   },

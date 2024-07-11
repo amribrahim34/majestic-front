@@ -37,29 +37,52 @@
           class="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100"
           >bulk order</router-link
         >
-        <router-link
-          to="/login"
-          class="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100"
-          >Log in</router-link
-        >
-        <router-link
-          to="/signup"
-          class="bg-black text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-90"
-          >sign up</router-link
-        >
+        <template v-if="!isLoggedIn">
+          <router-link
+            to="/login"
+            class="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100"
+            >Log in</router-link
+          >
+          <router-link
+            to="/signup"
+            class="bg-black text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-90"
+            >sign up</router-link
+          >
+        </template>
+        <template v-else>
+          <button
+            @click="logout"
+            class="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100"
+          >
+            Log out
+          </button>
+        </template>
       </div>
     </div>
   </header>
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'
+import { mapState, mapActions } from 'pinia'
+import { useLoginStore } from '@/stores/auth'
+
+export default defineComponent({
   name: 'HeaderComponent',
-  data() {
-    return {}
+
+  computed: {
+    ...mapState(useLoginStore, ['isLoggedIn'])
   },
-  methods: {}
-}
+
+  methods: {
+    ...mapActions(useLoginStore, ['handleLogout']),
+
+    logout() {
+      this.handleLogout()
+      this.$router.push('/')
+    }
+  }
+})
 </script>
 
 <style scoped>

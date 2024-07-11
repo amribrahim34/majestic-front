@@ -7,6 +7,7 @@ import NewPasswordView from '@/views/NewPasswordView.vue'
 import RequestBookView from '@/views/RequestBookView.vue'
 import AccountDetailsView from '@/views/AccountDetailsView.vue'
 import ProductSearchView from '@/views/Books/ProductSearchView.vue'
+import AuthCallback from '@/components/AuthCallback.vue'
 
 import books from './books'
 
@@ -18,6 +19,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
+    },
+    {
+      path: '/auth/callback',
+      name: 'AuthCallback',
+      component: AuthCallback
     },
     {
       path: '/login',
