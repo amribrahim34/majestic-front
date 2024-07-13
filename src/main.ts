@@ -10,9 +10,25 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faGoogle, faFacebook, faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import { useLoginStore } from './stores/auth' // Import your login store
+import { useLoginStore } from './stores/auth'
+import {
+  faShoppingCart,
+  faUserCircle,
+  faTrashAlt,
+  faMinus,
+  faPlus
+} from '@fortawesome/free-solid-svg-icons'
 
-library.add(faGoogle, faFacebook, faTwitter)
+library.add(
+  faGoogle,
+  faFacebook,
+  faTwitter,
+  faShoppingCart,
+  faUserCircle,
+  faTrashAlt,
+  faMinus,
+  faPlus
+)
 
 const app = createApp(App)
 const pinia = createPinia()
