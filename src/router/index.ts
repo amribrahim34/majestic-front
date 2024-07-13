@@ -9,13 +9,13 @@ import AccountDetailsView from '@/views/AccountDetailsView.vue'
 import AuthCallback from '@/components/AuthCallback.vue'
 
 import books from './books'
-import carts from './carts'
+// import carts from './carts'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     ...books,
-    ...carts,
+    // ...carts,
     {
       path: '/',
       name: 'home',
