@@ -17,6 +17,7 @@ export default defineComponent({
       const urlParams = new URLSearchParams(window.location.search)
       const token = urlParams.get('token')
       const user = JSON.parse(urlParams.get('user') || '{}')
+      console.log(user, token)
 
       if (token && user) {
         this.setUser(user)
@@ -25,7 +26,7 @@ export default defineComponent({
         localStorage.setItem('auth_token', token)
 
         // Redirect to dashboard or home page
-        this.$router.push('/dashboard')
+        this.$router.push('/books')
       } else {
         // Handle error
         console.error('Authentication failed')
