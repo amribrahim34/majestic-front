@@ -92,7 +92,7 @@
   </footer>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: 'FooterComponent'
   // Component logic goes here

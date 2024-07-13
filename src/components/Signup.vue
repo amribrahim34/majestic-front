@@ -98,7 +98,7 @@
 
 <script lang="ts">
 export default {
-  name: 'Signup',
+  name: 'Signup-Component',
   data() {
     return {
       fullName: '',

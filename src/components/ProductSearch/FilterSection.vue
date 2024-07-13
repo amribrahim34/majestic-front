@@ -72,16 +72,16 @@ export default defineComponent({
       }
     ])
 
-    const toggle = (filter) => {
+    const toggle = (filter: any) => {
       filter.isOpen = !filter.isOpen
     }
 
-    const updateFilter = (filter) => {
+    const updateFilter = (filter: any) => {
       // Here you can implement the logic to update the parent component or vuex store
       console.log(`Filter ${filter.title} updated:`, filter.selected)
     }
 
-    const getComponentType = (filter) => {
+    const getComponentType = (filter: any) => {
       return filter.componentType
     }
 

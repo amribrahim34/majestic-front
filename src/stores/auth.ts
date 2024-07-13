@@ -17,7 +17,7 @@ export const useLoginStore = defineStore('login', {
         this.userData = response.data
         this.setToken(response.data?.token)
       } catch (error) {
-        throw new Error(error)
+        throw new Error(error instanceof Error ? error.message : 'An unknown error occurred')
       }
     },
     async handleSignup(user: Omit<User, 'id'>) {
@@ -26,7 +26,7 @@ export const useLoginStore = defineStore('login', {
         this.userData = response.data
         this.setToken(response.data?.token)
       } catch (error) {
-        throw new Error(error)
+        throw new Error(error instanceof Error ? error.message : 'An unknown error occurred')
       }
     },
     async initializeAuth() {

@@ -91,12 +91,11 @@
 import { defineComponent } from 'vue'
 import { useLoginStore } from '@/stores/auth'
 import { mapState, mapActions } from 'pinia'
-import axios from 'axios'
 import api from '@/api'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 export default defineComponent({
-  name: 'Login',
+  name: 'Login-Component',
   components: {
     FontAwesomeIcon
   },

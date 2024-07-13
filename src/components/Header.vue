@@ -95,12 +95,12 @@
                 <p class="font-semibold text-lg">Cart Total: LE {{ cartTotal.toFixed(2) }}</p>
               </div>
               <div class="mt-4 flex space-x-4">
-                <button
+                <!-- <button
                   @click="goToCart"
                   class="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300"
                 >
                   Go to Cart
-                </button>
+                </button> -->
                 <button
                   @click="goToCheckout"
                   class="flex-1 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -165,7 +165,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { mapState, mapActions } from 'pinia'
 import { useLoginStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'

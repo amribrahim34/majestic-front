@@ -6,15 +6,16 @@ import ResetPasswordView from '@/views/ResetPasswordView.vue'
 import NewPasswordView from '@/views/NewPasswordView.vue'
 import RequestBookView from '@/views/RequestBookView.vue'
 import AccountDetailsView from '@/views/AccountDetailsView.vue'
-import ProductSearchView from '@/views/Books/ProductSearchView.vue'
 import AuthCallback from '@/components/AuthCallback.vue'
 
 import books from './books'
+import carts from './carts'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     ...books,
+    ...carts,
     {
       path: '/',
       name: 'home',

@@ -22,7 +22,7 @@ export interface Book {
   img: string
   created_at?: string
   updated_at?: string
-  image?: string
+  image: string
 
   // Relations
   authors?: Author[]
