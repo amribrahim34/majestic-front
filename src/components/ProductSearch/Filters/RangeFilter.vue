@@ -44,43 +44,52 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, computed } from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'RangeFilter',
-  props: ['filter', 'modelValue'],
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    const minValue = ref(props.modelValue?.[0] ?? props.filter.min)
-    const maxValue = ref(props.modelValue?.[1] ?? props.filter.max)
-
-    const updateRange = () => {
-      // Ensure min doesn't exceed max
-      if (minValue.value > maxValue.value) {
-        minValue.value = maxValue.value
-      }
-      emit('update:modelValue', [minValue.value, maxValue.value])
+  props: {
+    filter: {
+      type: Object,
+      required: true
+    },
+    modelValue: {
+      type: Array,
+      default: () => []
     }
-
-    watch(
-      () => props.modelValue,
-      (newValue) => {
-        if (newValue) {
-          minValue.value = newValue[0]
-          maxValue.value = newValue[1]
-        }
-      }
-    )
-
-    const displayMin = computed(() => minValue.value.toFixed(2))
-    const displayMax = computed(() => maxValue.value.toFixed(2))
-
+  },
+  emits: ['update:modelValue'],
+  data() {
     return {
-      minValue,
-      maxValue,
-      updateRange,
-      displayMin,
-      displayMax
+      minValue: this.modelValue[0] ?? this.filter.min,
+      maxValue: this.modelValue[1] ?? this.filter.max
+    }
+  },
+  computed: {
+    displayMin() {
+      return this.minValue.toFixed(2)
+    },
+    displayMax() {
+      return this.maxValue.toFixed(2)
+    }
+  },
+  methods: {
+    updateRange() {
+      if (this.minValue > this.maxValue) {
+        this.minValue = this.maxValue
+      }
+      this.$emit('update:modelValue', [this.minValue, this.maxValue])
+    }
+  },
+  watch: {
+    modelValue: {
+      handler(newValue) {
+        if (newValue) {
+          this.minValue = newValue[0]
+          this.maxValue = newValue[1]
+        }
+      },
+      immediate: true
     }
   }
 })

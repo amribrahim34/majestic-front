@@ -107,7 +107,7 @@
 </template>
 
 <script lang="ts">
-import { ShippingInfo } from '@/types/ShippingInfo'
+import type { ShippingInfo } from '@/types/ShippingInfo'
 import { defineComponent } from 'vue'
 
 export default defineComponent({

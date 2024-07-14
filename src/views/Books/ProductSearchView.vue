@@ -3,7 +3,7 @@
     <HeaderComponent />
     <div class="flex my-20">
       <div class="filter-sidebar w-1/5 ml-7">
-        <FilterSection />
+        <FilterSection @filter-updated="onFilterUpdated" :initial-filters="getFiltersFromURL()" />
       </div>
       <!-- Main content grid -->
       <div class="p-5 mx-10 w-4/5">
@@ -66,10 +66,50 @@ export default {
       'fetchLatestBooks',
       'fetchBestSellers',
       'setPage'
-    ])
+    ]),
+    fetchBooks() {
+      const filters = { ...this.$route.query }
+      this.fetchAllBooks(this.currentPage, filters)
+    },
+    getFiltersFromURL() {
+      const filters: Record<string, any> = {}
+      Object.entries(this.$route.query).forEach(([key, value]) => {
+        if (typeof value === 'string') {
+          if (key === 'year') {
+            filters[key] = value.split(',').map(Number)
+          } else if (value.includes(',')) {
+            filters[key] = value.split(',')
+          } else {
+            filters[key] = [value]
+          }
+        }
+      })
+      return filters
+    },
+    onFilterUpdated(filters: Record<string, any>) {
+      const query = Object.entries(filters).reduce(
+        (acc, [key, value]) => {
+          if (Array.isArray(value)) {
+            acc[key] = value.join(',')
+          } else {
+            acc[key] = value
+          }
+          return acc
+        },
+        {} as Record<string, string>
+      )
+
+      this.$router.push({ query })
+    }
+  },
+  watch: {
+    '$route.query': {
+      handler: 'fetchBooks',
+      deep: true
+    }
   },
   created() {
-    this.fetchAllBooks()
+    this.fetchBooks()
   }
 }
 </script>

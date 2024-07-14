@@ -25,7 +25,7 @@
               </div>
             </div>
           </td>
-          <td>{{ item.book.isbn }}</td>
+          <td>{{ item.book.isbn10 }}</td>
           <td>
             <div class="flex items-center">
               <button @click="decreaseQuantity(item)" class="px-2 py-1 bg-gray-200 rounded-l">
@@ -64,8 +64,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
-import { CartItem } from '@/types/CartItem'
+import { defineComponent, type PropType } from 'vue'
+import type { CartItem } from '@/types/CartItem'
 
 export default defineComponent({
   name: 'CartItemList',

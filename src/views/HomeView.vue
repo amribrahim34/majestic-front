@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import HeaderComponent from '@/components/Header.vue'
 import WelcomeSection from '@/components/Home/WelcomeSection.vue'
 import FeaturesSection from '@/components/Home/FeaturesSection.vue'

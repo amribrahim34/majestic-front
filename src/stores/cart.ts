@@ -2,10 +2,11 @@
 import { defineStore } from 'pinia'
 import api from '@/api' // Assuming you have an api service set up
 import type { Cart } from '@/types/Cart'
+import { CartItem } from '../types/CartItem'
 
 export const useCartStore = defineStore('cartStore', {
   state: (): Cart => ({
-    items: [],
+    items: [] as CartItem[],
     total: 0,
     loading: false,
     error: null

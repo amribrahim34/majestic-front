@@ -10,7 +10,7 @@
         />
       </div>
       <div class="md:col-span-1">
-        <CartSummary :subtotal="subtotal" :shipping="shipping" :total="total" />
+        <CartSummary :subtotal="0" :shipping="0" :total="total" />
       </div>
     </div>
   </div>
@@ -22,7 +22,7 @@ import { mapState, mapActions } from 'pinia'
 import { useCartStore } from '@/stores/cart'
 import CartItemList from './CartItemList.vue'
 import CartSummary from './CartSummary.vue'
-import { CartItem } from '@/types/CartItem'
+import type { CartItem } from '@/types/CartItem'
 
 export default defineComponent({
   name: 'CartContent',
@@ -31,7 +31,7 @@ export default defineComponent({
     CartSummary
   },
   computed: {
-    ...mapState(useCartStore, ['items', 'subtotal', 'shipping', 'total']),
+    ...mapState(useCartStore, ['items', 'total']),
     cartItems(): CartItem[] {
       return this.items
     }
