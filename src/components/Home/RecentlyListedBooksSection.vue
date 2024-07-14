@@ -11,7 +11,7 @@
           />
           <h3 class="text-lg font-bold mb-2">{{ book.title }}</h3>
           <p class="text-gray-600 mb-2">{{ book.price }}</p>
-          <button class="mt-2 bg-blue-500 text-white py-1 px-4 rounded-lg">View Details</button>
+          <button class="mt-2 bg-black text-white py-1 px-4">View Details</button>
         </div>
       </div>
     </div>
@@ -28,37 +28,37 @@ export default {
           id: 1,
           title: 'Introduction to Sociology',
           price: '$10',
-          image: '@/assets/books/sociology.jpg'
+          image: '@/assets/book-imgs/sociology.jpg'
         },
         {
           id: 2,
           title: 'Biology Textbook',
           price: '$120',
-          image: '@/assets/books/biology.jpg'
+          image: '@/assets/book-imgs/biology.jpg'
         },
         {
           id: 3,
           title: 'Chemical Engineering',
           price: '$29',
-          image: '@/assets/books/chemical-engineering.jpg'
+          image: '@/assets/book-imgs/chemical-engineering.jpg'
         },
         {
           id: 4,
           title: 'Economics Book',
           price: '$200',
-          image: '@/assets/books/economics.jpg'
+          image: '@/assets/book-imgs/economics.jpg'
         },
         {
           id: 5,
           title: 'Physics Textbook',
           price: '$30',
-          image: '@/assets/books/physics.jpg'
+          image: '@/assets/book-imgs/physics.jpg'
         },
         {
           id: 6,
           title: 'Computer Science',
           price: '$105',
-          image: '@/assets/books/computer-science.jpg'
+          image: '@/assets/book-imgs/computer-science.jpg'
         }
       ]
     }

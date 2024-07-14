@@ -10,7 +10,7 @@
             class="mb-4 w-full h-40 object-cover rounded-lg"
           />
           <h3 class="text-lg font-bold mb-2">{{ book.title }}</h3>
-          <button class="mt-2 bg-blue-500 text-white py-1 px-4 rounded-lg">View Details</button>
+          <button class="mt-2 bg-black text-white py-1 px-4">View Details</button>
         </div>
       </div>
     </div>
