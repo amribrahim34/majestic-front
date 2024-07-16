@@ -1,43 +1,47 @@
+<!-- CheckboxFilter.vue -->
 <template>
   <div>
-    <div v-for="option in filter.options" :key="option.value" class="flex justify-between pb-1">
-      <label :for="option.value" class="text-base">{{ option.label }}</label>
+    <div v-for="option in displayedOptions" :key="option.value" class="flex items-center">
       <input
         type="checkbox"
         :id="option.value"
         :value="option.value"
         v-model="selectedOptions"
-        @change="updateValue"
+        @change="updateModelValue"
       />
+      <label :for="option.value" class="ml-2">{{ option.label }}</label>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue'
 
-export default defineComponent({
-  name: 'CheckboxFilter',
-  props: ['filter', 'modelValue'],
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    const selectedOptions = ref(props.modelValue || [])
-
-    const updateValue = () => {
-      emit('update:modelValue', selectedOptions.value)
-    }
-
-    watch(
-      () => props.modelValue,
-      (newValue) => {
-        selectedOptions.value = newValue
-      }
-    )
-
-    return {
-      selectedOptions,
-      updateValue
-    }
+const props = defineProps<{
+  filter: {
+    options: Array<{ value: string | number; label: string }>
+    selected: Array<string | number>
+    displayLimit: number
   }
+}>()
+
+const emit = defineEmits(['update:modelValue'])
+
+const selectedOptions = ref(props.filter.selected)
+
+const displayedOptions = computed(() => {
+  return props.filter.options.slice(0, props.filter.displayLimit)
 })
+
+const updateModelValue = () => {
+  emit('update:modelValue', selectedOptions.value)
+}
+
+watch(
+  () => props.filter.selected,
+  (newSelected) => {
+    selectedOptions.value = newSelected
+  },
+  { deep: true }
+)
 </script>

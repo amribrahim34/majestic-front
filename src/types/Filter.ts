@@ -1,30 +1,30 @@
-interface BaseFilter {
+// @/types/Filter.ts
+export interface BaseFilter {
   title: string
   isOpen: boolean
-  componentType: 'CheckboxFilter' | 'RangeFilter' | 'DateRangeFilter'
-  selected: any
   key: string
+  selected: any
 }
 
 export interface CheckboxFilterType extends BaseFilter {
   componentType: 'CheckboxFilter'
-  options: { value: any; label: string }[]
+  options: Array<{ value: string | number; label: string }>
+  displayLimit: number
+  totalOptions: number
 }
 
 export interface RangeFilterType extends BaseFilter {
   componentType: 'RangeFilter'
   min: number
   max: number
-  options?: { value: any; label: string }[]
-  selected: number[]
+  selected: [number, number]
 }
 
 export interface DateRangeFilterType extends BaseFilter {
   componentType: 'DateRangeFilter'
   min: number
   max: number
-  options?: { value: any; label: string }[]
-  selected: number[]
+  selected: [number, number]
 }
 
 export type Filter = CheckboxFilterType | RangeFilterType | DateRangeFilterType

@@ -1,99 +1,59 @@
+<!-- DateRangeFilter.vue -->
 <template>
-  <div class="date-range-filter">
-    <div class="year-display">
-      <span>{{ fromYear }}</span>
-      <span>-</span>
-      <span>{{ toYear }}</span>
-    </div>
-    <div class="slider-container">
-      <div class="slider-track"></div>
-      <div class="slider-range" :style="rangeStyle"></div>
-      <input
-        type="range"
-        :min="filter.min"
-        :max="filter.max"
-        v-model.number="fromYear"
-        @input="updateFromYear"
-        class="slider from-slider"
-      />
-      <input
-        type="range"
-        :min="filter.min"
-        :max="filter.max"
-        v-model.number="toYear"
-        @input="updateToYear"
-        class="slider to-slider"
-      />
-    </div>
-    <div class="year-inputs">
-      <input
-        type="number"
-        v-model.number="fromYear"
-        @input="updateFromYear"
-        :min="filter.min"
-        :max="toYear - 1"
-      />
-      <input
-        type="number"
-        v-model.number="toYear"
-        @input="updateToYear"
-        :min="fromYear + 1"
-        :max="filter.max"
-      />
-    </div>
+  <div>
+    <input
+      type="number"
+      :min="filter.min"
+      :max="filter.max"
+      v-model.number="localMin"
+      @input="debouncedUpdateValues"
+    />
+    <input
+      type="number"
+      :min="filter.min"
+      :max="filter.max"
+      v-model.number="localMax"
+      @input="debouncedUpdateValues"
+    />
+    <div>From: {{ localMin }}, To: {{ localMax }}</div>
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'DateRangeFilter',
-  props: ['filter', 'modelValue'],
-  emits: ['update:modelValue'],
-  data() {
-    return {
-      fromYear: this.modelValue?.[0] ?? this.filter.min,
-      toYear: this.modelValue?.[1] ?? this.filter.max
-    }
-  },
-  computed: {
-    rangeStyle() {
-      const left = ((this.fromYear - this.filter.min) / (this.filter.max - this.filter.min)) * 100
-      const right =
-        100 - ((this.toYear - this.filter.min) / (this.filter.max - this.filter.min)) * 100
-      return {
-        left: `${left}%`,
-        right: `${right}%`
-      }
-    }
-  },
-  methods: {
-    updateFromYear() {
-      if (this.fromYear >= this.toYear) {
-        this.fromYear = this.toYear - 1
-      }
-      this.$emit('update:modelValue', [this.fromYear, this.toYear])
-    },
-    updateToYear() {
-      if (this.toYear <= this.fromYear) {
-        this.toYear = this.fromYear + 1
-      }
-      this.$emit('update:modelValue', [this.fromYear, this.toYear])
-    }
-  },
-  watch: {
-    modelValue: {
-      handler(newValue) {
-        if (newValue) {
-          this.fromYear = newValue[0]
-          this.toYear = newValue[1]
-        }
-      },
-      immediate: true
-    }
-  }
-}
-</script>
+<script setup lang="ts">
+import { ref, watch, onMounted } from 'vue'
+import { debounce } from '@/utils/debounce'
 
-<style scoped>
-/* The CSS remains the same as in your original component */
-</style>
+const props = defineProps<{
+  filter: {
+    min: number
+    max: number
+    selected: [number, number]
+  }
+}>()
+
+const emit = defineEmits(['update:modelValue'])
+
+const localMin = ref(props.filter.selected[0])
+const localMax = ref(props.filter.selected[1])
+
+const updateValues = () => {
+  emit('update:modelValue', [localMin.value, localMax.value])
+}
+
+const debouncedUpdateValues = debounce(updateValues, 300) // 300ms debounce
+
+watch(
+  () => props.filter.selected,
+  (newValue) => {
+    localMin.value = newValue[0]
+    localMax.value = newValue[1]
+  },
+  { deep: true }
+)
+
+onMounted(() => {
+  // Initialize local values
+  localMin.value = props.filter.selected[0]
+  localMax.value = props.filter.selected[1]
+})
+</script>
