@@ -2,41 +2,46 @@
   <div>Processing login...</div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapActions } from 'pinia'
-import { useLoginStore } from '@/stores/auth' // adjust the import path as needed
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useLoginStore } from '@/stores/auth'
 
-export default defineComponent({
-  name: 'SocialLoginCallback',
+const router = useRouter()
+const loginStore = useLoginStore()
 
-  methods: {
-    ...mapActions(useLoginStore, ['setUser', 'setToken']),
+const processAuth = async () => {
+  console.log('Processing auth callback')
+  const params = new URLSearchParams(window.location.search)
 
-    processAuth() {
-      const urlParams = new URLSearchParams(window.location.search)
-      const token = urlParams.get('token')
-      const user = JSON.parse(urlParams.get('user') || '{}')
-      console.log(user, token)
+  const token = params.get('token')
+  const userJson = params.get('user')
 
-      if (token && user) {
-        this.setUser(user)
-        this.setToken(token)
-        // Store token in localStorage or secure cookie
-        localStorage.setItem('auth_token', token)
+  console.log('Token:', token)
+  console.log('User JSON:', userJson)
 
-        // Redirect to dashboard or home page
-        this.$router.push('/books')
+  if (token && userJson) {
+    try {
+      const success = await loginStore.handleSocialLoginCallback(params.toString())
+      console.log('Social login callback result:', success)
+
+      if (success) {
+        console.log('Redirecting to /books')
+        await router.push('/books')
       } else {
-        // Handle error
-        console.error('Authentication failed')
-        this.$router.push('/login')
+        throw new Error('Login failed')
       }
+    } catch (error) {
+      console.error('Authentication failed:', error)
+      router.push('/login')
     }
-  },
-
-  mounted() {
-    this.processAuth()
+  } else {
+    console.error('Missing token or user data')
+    router.push('/login')
   }
+}
+
+onMounted(() => {
+  processAuth()
 })
 </script>

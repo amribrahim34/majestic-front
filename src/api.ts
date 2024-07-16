@@ -1,4 +1,4 @@
-import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
+import axios, { type AxiosInstance } from 'axios'
 
 // Use an environment variable for the base URL
 const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'
@@ -16,19 +16,27 @@ const api: AxiosInstance = axios.create({
 })
 
 // Request interceptor for API calls
-api.interceptors.request.use(
-  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    // You can modify config here if needed, for example, attaching an authorization token
-    const token = localStorage.getItem('auth_token')
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`
-    }
-    return config
-  },
-  (error: any) => {
-    return Promise.reject(error)
+// api.interceptors.request.use(
+//   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+//     // You can modify config here if needed, for example, attaching an authorization token
+//     const token = localStorage.getItem('auth_token')
+//     if (token) {
+//       config.headers['Authorization'] = `Bearer ${token}`
+//     }
+//     return config
+//   },
+//   (error: any) => {
+//     return Promise.reject(error)
+//   }
+// )
+
+api.interceptors.request.use((config) => {
+  const token = document.head.querySelector('meta[name="csrf-token"]')
+  if (token) {
+    config.headers['X-CSRF-TOKEN'] = (token as HTMLMetaElement).content
   }
-)
+  return config
+})
 
 // Response interceptor for API calls
 api.interceptors.response.use(
@@ -38,13 +46,9 @@ api.interceptors.response.use(
   },
   async (error) => {
     if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
       switch (error.response.status) {
         case 401:
-          // Redirect or handle unauthorized access
           console.log('Unauthorized access')
-          // You might want to redirect to login page or refresh token here
           break
         case 403:
           console.log('Forbidden')
@@ -59,14 +63,10 @@ api.interceptors.response.use(
           console.log('An error occurred', error.response.data)
       }
     } else if (error.request) {
-      // The request was made but no response was received
       console.log('No response received', error.request)
     } else {
-      // Something happened in setting up the request that triggered an Error
       console.log('Error', error.message)
     }
-
-    // Forward the error for further handling if needed
     return Promise.reject(error)
   }
 )

@@ -38,8 +38,28 @@ app.use(router)
 
 app.component('font-awesome-icon', FontAwesomeIcon)
 
-// Check authentication before mounting the app
+// Mount the app immediately
+app.mount('#app')
+
+// Check authentication status after mounting
 const loginStore = useLoginStore(pinia)
-loginStore.checkAuthStatus().then(() => {
-  app.mount('#app')
+loginStore.checkAuthStatus().catch((error) => {
+  console.error('Failed to check authentication status:', error)
+  // You might want to show a notification to the user or handle the error in some way
+})
+
+// Optional: Set up a global navigation guard
+router.beforeEach(async (_to, _from, next) => {
+  if (!loginStore.isInitialized) {
+    await loginStore.initializeAuth()
+  }
+
+  // Add your navigation guard logic here
+  // For example:
+  // if (to.meta.requiresAuth && !loginStore.isLoggedIn) {
+  //   next('/login')
+  // } else {
+  //   next()
+  // }
+  next()
 })

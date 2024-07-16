@@ -17,7 +17,9 @@
           <span class="text-xl font-semibold text-gray-800">MajesticMinds</span>
         </router-link>
         <p class="text-gray-600 text-sm mb-4">Curated selection delivered to your doorstep!</p>
-        <router-link to="/request" class="text-gray-800 underline">Request a book!</router-link>
+        <router-link to="/request-book" class="text-gray-800 underline"
+          >Request a book!</router-link
+        >
         <!-- Social Media Icons -->
         <div class="flex mt-4">
           <!-- Replace with actual paths to your social media accounts -->

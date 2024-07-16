@@ -3,6 +3,7 @@ interface BaseFilter {
   isOpen: boolean
   componentType: 'CheckboxFilter' | 'RangeFilter' | 'DateRangeFilter'
   selected: any
+  key: string
 }
 
 export interface CheckboxFilterType extends BaseFilter {

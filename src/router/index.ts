@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
@@ -12,7 +12,7 @@ import books from './books'
 // import carts from './carts'
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     ...books,
     // ...carts,
@@ -21,6 +21,17 @@ const router = createRouter({
       name: 'home',
       component: HomeView
     },
+
+    // {
+    //   path: '/papers',
+    //   name: 'Papers',
+    //   component: () => import('../views/Papers.vue')
+    // },
+    // {
+    //   path: '/bulk-order',
+    //   name: 'BulkOrder',
+    //   component: () => import('../views/BulkOrder.vue')
+    // },
     {
       path: '/auth/callback',
       name: 'AuthCallback',

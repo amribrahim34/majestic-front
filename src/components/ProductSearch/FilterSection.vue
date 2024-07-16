@@ -43,6 +43,7 @@ export default defineComponent({
           title: 'Category',
           isOpen: true,
           componentType: 'CheckboxFilter',
+          key: 'category_ids[]',
           options: [],
           selected: []
         },
@@ -50,6 +51,7 @@ export default defineComponent({
           title: 'Book Format',
           isOpen: false,
           componentType: 'CheckboxFilter',
+          key: 'formats[]',
           options: [],
           selected: []
         },
@@ -57,6 +59,7 @@ export default defineComponent({
           title: 'Price Range',
           isOpen: false,
           componentType: 'RangeFilter',
+          key: 'price_range[]',
           min: 0,
           max: 1000,
           selected: [0, 1000]
@@ -65,6 +68,7 @@ export default defineComponent({
           title: 'Publishing Year',
           isOpen: false,
           componentType: 'DateRangeFilter',
+          key: 'year_range[]',
           min: 1900,
           max: new Date().getFullYear(),
           selected: [1900, new Date().getFullYear()]
@@ -85,6 +89,20 @@ export default defineComponent({
     },
 
     updateFilter(filter: Filter) {
+      if (filter.componentType === 'CheckboxFilter') {
+        // Ensure selected is always an array for checkbox filters
+        filter.selected = Array.isArray(filter.selected) ? filter.selected : [filter.selected]
+      } else if (
+        filter.componentType === 'RangeFilter' ||
+        filter.componentType === 'DateRangeFilter'
+      ) {
+        // Ensure selected is always an array of two numbers for range filters
+        filter.selected =
+          Array.isArray(filter.selected) && filter.selected.length === 2
+            ? filter.selected
+            : [filter.min, filter.max]
+      }
+
       console.log(`Filter ${filter.title} updated:`, filter.selected)
       this.updateURL()
       this.emitFilterUpdated()
@@ -98,7 +116,17 @@ export default defineComponent({
       const apiFilters: Record<string, any> = {}
       this.filters.forEach((filter) => {
         if (filter.selected && filter.selected.length > 0) {
-          apiFilters[filter.title.toLowerCase()] = filter.selected
+          switch (filter.componentType) {
+            case 'CheckboxFilter':
+              // Ensure category_ids are sent as individual array elements
+              apiFilters[filter.key] = filter.selected
+              break
+            case 'RangeFilter':
+            case 'DateRangeFilter':
+              // Ensure range filters are sent as arrays of two elements
+              apiFilters[filter.key] = filter.selected.map(String)
+              break
+          }
         }
       })
       return apiFilters
@@ -108,11 +136,7 @@ export default defineComponent({
       const query: Record<string, string> = {}
       this.filters.forEach((filter) => {
         if (filter.selected && filter.selected.length > 0) {
-          if (Array.isArray(filter.selected)) {
-            query[filter.title.toLowerCase()] = filter.selected.join(',')
-          } else {
-            query[filter.title.toLowerCase()] = filter.selected.toString()
-          }
+          query[filter.key] = filter.selected.join(',')
         }
       })
       this.updateRouteQuery(query)
@@ -155,7 +179,7 @@ export default defineComponent({
       handler(newRoute) {
         if (newRoute && newRoute.query) {
           this.filters.forEach((filter) => {
-            const queryValue = newRoute.query[filter.title.toLowerCase()]
+            const queryValue = newRoute.query[filter.key]
             if (queryValue && typeof queryValue === 'string') {
               if (filter.componentType === 'CheckboxFilter') {
                 filter.selected = queryValue.split(',')

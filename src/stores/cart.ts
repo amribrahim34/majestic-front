@@ -91,6 +91,20 @@ export const useCartStore = defineStore('cartStore', {
       } finally {
         this.loading = false
       }
+    },
+    async transferGuestCart(userId: number) {
+      this.loading = true
+      this.error = null
+      try {
+        const response = await api.post('/cart/transfer', { user_id: userId })
+        this.items = response.data.data.items
+        this.total = response.data.data.total
+      } catch (error) {
+        this.error = 'Failed to transfer guest cart'
+        console.error('Error transferring guest cart:', error)
+      } finally {
+        this.loading = false
+      }
     }
   }
 })

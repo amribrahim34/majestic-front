@@ -22,21 +22,21 @@
 
       <!-- Navigation Links -->
       <div class="flex items-center">
-        <router-link
+        <!-- <router-link
           to="/papers"
           class="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100"
           >papers</router-link
-        >
+        > -->
         <router-link
           to="/books"
           class="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100"
           >books</router-link
         >
-        <router-link
+        <!-- <router-link
           to="/bulk-order"
           class="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100"
           >bulk order</router-link
-        >
+        > -->
         <!-- Cart Icon -->
         <div class="relative">
           <button @click="toggleCartPreview" class="relative px-3 py-2" ref="cartButton">
@@ -57,8 +57,8 @@
           >
             <h3 class="font-bold text-xl mb-4">Your Cart</h3>
             <div v-if="cartItemCount > 0">
-              <ul v-if="!cartLoading" class="divide-y divide-gray-200">
-                <li v-for="item in cartItems" :key="item.id" class="py-4 flex">
+              <ul v-if="!loading" class="divide-y divide-gray-200">
+                <li v-for="item in items" :key="item.id" class="py-4 flex">
                   <img
                     :src="item.book.image"
                     alt="Book cover"
@@ -112,8 +112,8 @@
             <div v-else>
               <p>Your cart is empty</p>
             </div>
-            <p v-if="cartLoading">Loading cart...</p>
-            <p v-if="cartError" class="text-red-500">{{ cartError }}</p>
+            <p v-if="loading">Loading cart...</p>
+            <p v-if="error" class="text-red-500">{{ error }}</p>
           </div>
         </div>
 
@@ -164,116 +164,107 @@
   </header>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapState, mapActions } from 'pinia'
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { useLoginStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 
-export default defineComponent({
-  name: 'HeaderComponent',
-  data() {
-    return {
-      showUserMenu: false,
-      showCartPreview: false
-    }
-  },
-  computed: {
-    ...mapState(useLoginStore, ['isLoggedIn']),
-    ...mapState(useCartStore, ['cartItemCount', 'cartTotal', 'items', 'loading', 'error']),
-    cartItems() {
-      return this.items
-    },
-    cartLoading() {
-      return this.loading
-    },
-    cartError() {
-      return this.error
-    }
-  },
-  methods: {
-    ...mapActions(useLoginStore, ['handleLogout']),
-    ...mapActions(useCartStore, ['addItem', 'removeItem', 'updateItemQuantity']),
+const router = useRouter()
+const loginStore = useLoginStore()
+const cartStore = useCartStore()
 
-    toggleUserMenu() {
-      this.showUserMenu = !this.showUserMenu
-    },
+const showUserMenu = ref(false)
+const showCartPreview = ref(false)
 
-    toggleCartPreview(event: Event) {
-      event.stopPropagation()
-      this.showCartPreview = !this.showCartPreview
-    },
-    handleOutsideClick(event: MouseEvent) {
-      const cartPreview = this.$refs.cartPreview as HTMLElement | undefined
-      const cartButton = this.$refs.cartButton as HTMLElement | undefined
-      if (
-        this.showCartPreview &&
-        cartPreview &&
-        cartButton &&
-        !cartPreview.contains(event.target as Node) &&
-        !cartButton.contains(event.target as Node)
-      ) {
-        this.showCartPreview = false
-      }
-    },
+const cartButton = ref<HTMLElement | null>(null)
+const cartPreview = ref<HTMLElement | null>(null)
 
-    logout() {
-      this.handleLogout()
-      this.$router.push('/')
-      this.showUserMenu = false
-    },
+const toggleUserMenu = () => {
+  showUserMenu.value = !showUserMenu.value
+}
 
-    addToCart(bookId: number) {
-      this.addItem(bookId, 1)
-    },
+const toggleCartPreview = (event: Event) => {
+  event.stopPropagation()
+  showCartPreview.value = !showCartPreview.value
+}
 
-    removeFromCart(bookId: number) {
-      this.removeItem(bookId)
-    },
+const { isLoggedIn } = storeToRefs(loginStore)
+const { cartItemCount, cartTotal, items, loading, error } = storeToRefs(cartStore)
 
-    goToCheckout() {
-      this.$router.push('/checkout')
-      this.showCartPreview = false
-    },
-    decreaseQuantity(bookId: number) {
-      const item = this.cartItems.find((item) => item.book.id === bookId)
-      if (item && item.quantity > 1) {
-        this.updateItemQuantity(bookId, item.quantity - 1)
-      } else if (item && item.quantity === 1) {
-        this.removeItem(bookId)
-      }
-    },
-    increaseQuantity(bookId: number) {
-      const item = this.cartItems.find((item) => item.book.id === bookId)
-      if (item) {
-        this.updateItemQuantity(bookId, item.quantity + 1)
-      }
-    },
-    formatPrice(price: number | string): string {
-      const numPrice = typeof price === 'string' ? parseFloat(price) : price
-      return isNaN(numPrice) ? '0.00' : numPrice.toFixed(2)
-    },
-    goToCart() {
-      this.$router.push('/cart')
-      this.showCartPreview = false
-    }
-  },
-  mounted() {
-    // Fetch cart data when component is mounted
-    const cartStore = useCartStore()
-    cartStore.fetchCart()
-    document.addEventListener('click', this.handleOutsideClick)
-  },
-  beforeUnmount() {
-    document.removeEventListener('click', this.handleOutsideClick)
-  },
-  watch: {
-    // Close cart preview when route changes
-    $route() {
-      this.showCartPreview = false
-    }
+const handleOutsideClick = (event: MouseEvent) => {
+  if (
+    showCartPreview.value &&
+    cartPreview.value &&
+    cartButton.value &&
+    !cartPreview.value.contains(event.target as Node) &&
+    !cartButton.value.contains(event.target as Node)
+  ) {
+    showCartPreview.value = false
   }
+}
+
+const logout = () => {
+  loginStore.handleLogout()
+  router.push('/')
+  showUserMenu.value = false
+}
+
+// const addToCart = (bookId: number) => {
+//   cartStore.addItem(bookId, 1)
+// }
+
+const removeFromCart = (bookId: number) => {
+  cartStore.removeItem(bookId)
+}
+
+const goToCheckout = () => {
+  router.push('/checkout')
+  showCartPreview.value = false
+}
+
+const decreaseQuantity = (bookId: number) => {
+  const item = cartStore.items.find((item) => item.book.id === bookId)
+  if (item && item.quantity > 1) {
+    cartStore.updateItemQuantity(bookId, item.quantity - 1)
+  } else if (item && item.quantity === 1) {
+    cartStore.removeItem(bookId)
+  }
+}
+
+const increaseQuantity = (bookId: number) => {
+  const item = cartStore.items.find((item) => item.book.id === bookId)
+  if (item) {
+    cartStore.updateItemQuantity(bookId, item.quantity + 1)
+  }
+}
+
+const formatPrice = (price: number | string): string => {
+  const numPrice = typeof price === 'string' ? parseFloat(price) : price
+  return isNaN(numPrice) ? '0.00' : numPrice.toFixed(2)
+}
+
+// const goToCart = () => {
+//   router.push('/cart')
+//   showCartPreview.value = false
+// }
+
+onMounted(() => {
+  cartStore.fetchCart()
+  document.addEventListener('click', handleOutsideClick)
 })
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleOutsideClick)
+})
+
+watch(
+  () => router.currentRoute.value,
+  () => {
+    showCartPreview.value = false
+  }
+)
 </script>
 <style scoped>
 @media (min-width: 768px) {

@@ -5,6 +5,7 @@ import type { Category } from '@/types/Category'
 import type { Publisher } from '@/types/Publisher'
 import type { Author } from '@/types/Author'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import qs from 'qs'
 
 export const useBookStore = defineStore('bookStore', {
   state: () => ({
@@ -29,12 +30,16 @@ export const useBookStore = defineStore('bookStore', {
     async fetchAllBooks(page: number = 1, filters: Record<string, any> = {}) {
       this.loading = true
       try {
-        const response = await api.get('/books', { params: { page, ...filters } })
+        const response = await api.get('/books', {
+          params: { page, ...filters },
+          paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' })
+        })
         this.books = response.data.data
+        console.log('Filters sent to API:', filters)
         this.updatePaginationInfo(response.data)
       } catch (error) {
         this.error = 'Error fetching books'
-        console.error(error)
+        console.error('Error fetching books:', error)
       } finally {
         this.loading = false
       }
