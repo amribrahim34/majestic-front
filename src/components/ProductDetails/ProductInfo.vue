@@ -1,0 +1,171 @@
+<template>
+  <section class="m-8 lg:m-32 shadow-lg">
+    <div
+      v-if="book"
+      class="flex flex-col md:flex-row justify-between items-start w-full max-w-6xl mx-auto"
+    >
+      <div class="product-image w-full md:w-2/5 mb-8 md:mb-0 h-96">
+        <img :src="book.image" :alt="book.title" class="w-full h-full object-contain rounded-lg" />
+      </div>
+      <div class="product-details w-full md:w-1/2">
+        <h1 class="text-3xl font-bold mb-4">{{ book.title }}</h1>
+        <div class="rating flex items-center mb-4">
+          <star-rating :rating="book.rating" />
+          <span class="ml-2 text-gray-600">({{ book.reviewCount }} Reviews)</span>
+        </div>
+        <div class="price mb-4">
+          <span class="current-price text-2xl font-bold">LE {{ book.price }}</span>
+          <span class="original-price text-lg text-gray-500 line-through ml-2">{{
+            book.originalPrice
+          }}</span>
+        </div>
+        <p class="description text-gray-700 mb-6">{{ book.description }}</p>
+        <div class="product-type mb-4"><strong>Type:</strong> {{ book.format }}</div>
+        <div class="quantity flex items-center mb-6">
+          <strong class="mr-4">Qty:</strong>
+          <input type="number" v-model="quantity" min="1" class="w-16 p-2 border rounded" />
+        </div>
+        <div class="actions flex">
+          <button
+            @click="toggleWishlist"
+            class="p-2.5 mx-3 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            :disabled="isWishlistLoading"
+          >
+            <svg
+              class="w-5 h-5"
+              :class="{ 'text-red-500 fill-current': isWishlisted, 'text-gray-600': !isWishlisted }"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+          </button>
+          <div v-if="cartItem" class="flex items-center space-x-2">
+            <button
+              @click="decreaseQuantity"
+              class="px-2 py-1 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            >
+              -
+            </button>
+            <span class="text-lg font-semibold">{{ cartItem.quantity }}</span>
+            <button
+              @click="increaseQuantity"
+              class="px-2 py-1 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            >
+              +
+            </button>
+            <button
+              @click="removeFromCart"
+              class="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+            >
+              <font-awesome-icon icon="trash-alt" />
+            </button>
+          </div>
+          <button
+            v-else
+            @click="addToCart"
+            class="bg-black text-white px-6 py-2 mr-4 hover:bg-blue-700 transition"
+            :disabled="isAddingToCart"
+          >
+            {{ isAddingToCart ? 'Adding...' : 'Add to cart' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref, computed, PropType, onMounted } from 'vue'
+import StarRating from '@/components/shared/StarRating.vue'
+import { Book } from '@/types/Book'
+import { useCartStore } from '@/stores/cart'
+import { useWishlistStore } from '@/stores/wishlist'
+import { storeToRefs } from 'pinia'
+
+export default defineComponent({
+  name: 'ProductInfo',
+  components: {
+    StarRating
+  },
+  props: {
+    book: {
+      type: Object as PropType<Book>,
+      required: true
+    }
+  },
+  setup(props) {
+    const cartStore = useCartStore()
+    const wishlistStore = useWishlistStore()
+    const { items: cartItems } = storeToRefs(cartStore)
+    const quantity = ref(1)
+    const isAddingToCart = ref(false)
+
+    const cartItem = computed(() => cartItems.value.find((item) => item.book.id === props.book.id))
+    const isWishlisted = computed(() => wishlistStore.isItemWishlisted(props.book.id))
+    const isWishlistLoading = computed(() => wishlistStore.loading)
+
+    onMounted(() => {
+      wishlistStore.fetchWishlist()
+    })
+
+    const toggleWishlist = async () => {
+      await wishlistStore.toggleWishlistItem(props.book.id)
+    }
+
+    onMounted(() => {
+      wishlistStore.fetchWishlist()
+    })
+
+    const addToCart = async () => {
+      if (isAddingToCart.value) return
+
+      isAddingToCart.value = true
+      try {
+        await cartStore.addItem(props.book.id, quantity.value)
+      } catch (error) {
+        console.error('Failed to add item to cart:', error)
+      } finally {
+        isAddingToCart.value = false
+      }
+    }
+
+    const increaseQuantity = async () => {
+      if (cartItem.value) {
+        await cartStore.updateItemQuantity(props.book.id, cartItem.value.quantity + 1)
+      }
+    }
+
+    const decreaseQuantity = async () => {
+      if (cartItem.value && cartItem.value.quantity > 1) {
+        await cartStore.updateItemQuantity(props.book.id, cartItem.value.quantity - 1)
+      } else if (cartItem.value && cartItem.value.quantity === 1) {
+        await removeFromCart()
+      }
+    }
+
+    const removeFromCart = async () => {
+      await cartStore.removeItem(props.book.id)
+    }
+
+    return {
+      quantity,
+      isAddingToCart,
+      cartItem,
+      isWishlisted,
+      isWishlistLoading,
+      addToCart,
+      increaseQuantity,
+      decreaseQuantity,
+      toggleWishlist,
+      removeFromCart
+    }
+  }
+})
+</script>

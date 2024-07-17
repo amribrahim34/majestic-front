@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-white px-6 py-4 shadow-md w-full">
+  <footer class="bg-white px-6 py-4 shadow-md shadow-top w-full">
     <div class="container mx-auto flex justify-between items-center">
       <!-- Branding and CTA -->
       <div>
@@ -102,5 +102,9 @@ export default {
 </script>
 
 <style scoped>
-/* Additional styles if needed */
+.shadow-top {
+  box-shadow:
+    0 -4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+}
 </style>

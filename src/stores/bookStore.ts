@@ -23,19 +23,25 @@ export const useBookStore = defineStore('bookStore', {
     priceRange: { min: 0, max: 0 },
     yearRange: { min: 0, max: 0 },
     route: null as RouteLocationNormalizedLoaded | null,
-    error: ''
+    error: '',
+    searchQuery: ''
   }),
 
   actions: {
     async fetchAllBooks(page: number = 1, filters: Record<string, any> = {}) {
       this.loading = true
       try {
+        const params = {
+          page,
+          ...filters,
+          search: this.searchQuery
+        }
         const response = await api.get('/books', {
-          params: { page, ...filters },
+          params,
           paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' })
         })
         this.books = response.data.data
-        console.log('Filters sent to API:', filters)
+        console.log('Filters sent to API:', params)
         this.updatePaginationInfo(response.data)
       } catch (error) {
         this.error = 'Error fetching books'
@@ -44,12 +50,15 @@ export const useBookStore = defineStore('bookStore', {
         this.loading = false
       }
     },
+    setSearchQuery(query: string) {
+      this.searchQuery = query
+    },
 
-    async fetchBookById(id: number) {
+    async fetchBookById(id: number | string) {
       this.loading = true
       try {
         const response = await api.get(`/books/${id}`)
-        this.currentBook = response.data
+        this.currentBook = response.data.data
       } catch (error) {
         this.error = 'Error fetching book details'
         console.error(error)

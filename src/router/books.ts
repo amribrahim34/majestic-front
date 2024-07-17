@@ -1,5 +1,5 @@
 import ProductSearchView from '@/views/Books/ProductSearchView.vue'
-import ProductDetailsView from '@/views/Books/ProductDetailsView.vue'
+import BookDetailsView from '@/views/Books/BookDetailsView.vue'
 
 const books = [
   {
@@ -8,9 +8,10 @@ const books = [
     component: ProductSearchView
   },
   {
-    path: '/books/details',
+    path: '/books/:id',
     name: 'BookDetails',
-    component: ProductDetailsView
+    component: BookDetailsView,
+    props: true
   }
 ]
 

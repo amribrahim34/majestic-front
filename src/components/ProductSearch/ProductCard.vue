@@ -1,17 +1,25 @@
 <template>
-  <div class="rounded shadow-lg w-96 mb-16">
+  <div class="rounded shadow-lg w-80 mb-16">
     <div class="">
       <img class="w-full object-cover h-56" :src="book.image" :alt="book.title" />
     </div>
     <div class="px-5 pb-5">
       <div class="">
         <a href="#">
-          <h5 class="text-xl font-semibold tracking-tight text-gray-900">
-            {{ book.title }}
-          </h5>
+          <router-link
+            :to="{ name: 'BookDetails', params: { id: book.id } }"
+            :id="book.id"
+            class=""
+          >
+            <h5 class="text-xl font-semibold tracking-tight text-gray-900">
+              {{ book.title }}
+            </h5>
+          </router-link>
         </a>
-        <p>by</p>
-        <p v-for="author in book.authors" :key="author.id">{{ author.name }}</p>
+        <p>
+          by
+          <span v-for="author in book.authors" :key="author.id">{{ author.name }}</span>
+        </p>
       </div>
 
       <div class="flex items-center mt-2.5 mb-5">

@@ -14,6 +14,8 @@
       <!-- Search Bar -->
       <div class="flex-1 mx-6">
         <input
+          v-model="searchQuery"
+          @keyup.enter="performSearch"
           type="search"
           placeholder="Search for a book, author or category"
           class="w-full px-4 py-2 border rounded-md text-gray-700 focus:ring focus:ring-opacity-50"
@@ -170,11 +172,13 @@ import { useLoginStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useBookStore } from '@/stores/bookStore'
 
 const router = useRouter()
 const loginStore = useLoginStore()
 const cartStore = useCartStore()
-
+const bookStore = useBookStore()
+const searchQuery = ref('')
 const showUserMenu = ref(false)
 const showCartPreview = ref(false)
 
@@ -183,6 +187,13 @@ const cartPreview = ref<HTMLElement | null>(null)
 
 const toggleUserMenu = () => {
   showUserMenu.value = !showUserMenu.value
+}
+
+const performSearch = () => {
+  if (searchQuery.value.trim()) {
+    bookStore.setSearchQuery(searchQuery.value)
+    router.push({ path: '/books', query: { search: searchQuery.value } })
+  }
 }
 
 const toggleCartPreview = (event: Event) => {

@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
+import { onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useBookStore } from '@/stores/bookStore'
@@ -44,7 +44,7 @@ const { books, currentPage, lastPage, categories, formats, priceRange, yearRange
   storeToRefs(bookStore)
 const { fetchAllBooks, setPage, fetchAllFilterData } = bookStore
 
-const searchTerm = ref('Branding')
+const searchTerm = computed(() => (route.query.search as string) || '')
 
 const fetchBooks = async () => {
   try {
@@ -55,13 +55,14 @@ const fetchBooks = async () => {
 }
 
 const debouncedOnFilterUpdated = debounce((filters: Record<string, any>) => {
-  const query = Object.fromEntries(
-    Object.entries(filters).map(([key, value]) => [
+  const query = { ...route.query, ...filters }
+  const processedQuery = Object.fromEntries(
+    Object.entries(query).map(([key, value]) => [
       key,
       Array.isArray(value) ? value.join(',') : value
     ])
   )
-  router.push({ query })
+  router.push({ query: processedQuery })
 }, 300)
 
 const fetchFilters = async () => {
@@ -76,7 +77,7 @@ const filtersFromURL = computed(() => {
   return Object.fromEntries(
     Object.entries(route.query).map(([key, value]) => {
       if (typeof value === 'string') {
-        return [key, key === 'year' ? value.split(',').map(Number) : value.split(',')]
+        return [key, key === 'year_range' ? value.split(',').map(Number) : value.split(',')]
       }
       return [key, value]
     })
@@ -95,13 +96,29 @@ const filtersFromURL = computed(() => {
 
 const onPageChange = (page: number) => {
   setPage(page)
+  router.push({ query: { ...route.query, page } })
   fetchBooks()
 }
 
 onMounted(async () => {
+  if (route.query.search) {
+    bookStore.setSearchQuery(route.query.search as string)
+  }
   await fetchFilters()
   await fetchBooks()
 })
 
 watch(() => route.query, fetchBooks, { deep: true })
+
+watch(
+  () => route.query.search,
+  (newSearch) => {
+    if (newSearch) {
+      bookStore.setSearchQuery(newSearch as string)
+    } else {
+      bookStore.setSearchQuery('')
+    }
+    fetchBooks()
+  }
+)
 </script>

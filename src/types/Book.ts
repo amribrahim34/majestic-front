@@ -23,7 +23,9 @@ export interface Book {
   created_at?: string
   updated_at?: string
   image: string
-
+  originalPrice?: number
+  rating: number
+  reviewCount: number
   // Relations
   authors?: Author[]
   category?: Category

@@ -1,8 +1,8 @@
 <!-- SearchResults.vue -->
 <template>
   <div class="p-5 mx-10 w-4/5">
-    <h2 class="text-xl font-bold mb-5">Search results for "{{ searchTerm }}"</h2>
-    <div class="gap-3 flex justify-between flex-wrap">
+    <h2 v-if="searchTerm" class="text-xl font-bold mb-5">Search results for "{{ searchTerm }}"</h2>
+    <div class="flex justify-between flex-wrap">
       <ProductCard v-for="book in books" :key="book.id" :book="book" />
     </div>
     <Pagination :current-page="currentPage" :last-page="lastPage" @page-change="onPageChange" />
