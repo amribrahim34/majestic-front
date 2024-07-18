@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col min-h-screen">
+  <div class="">
     <HeaderComponent />
-    <main class="flex-grow">
+    <main class="m-10">
       <div class="cart-page container mx-auto py-8">
         <h1 class="text-3xl font-bold mb-6">Your Cart</h1>
         <div v-if="loading" class="text-center">
@@ -69,7 +69,7 @@ export default defineComponent({
   methods: {
     ...mapActions(useCartStore, ['fetchCart', 'updateItemQuantity', 'removeItem']),
     formatPrice(price: number): string {
-      return `$${price.toFixed(2)}`
+      return `LE ${price.toFixed(2)}`
     },
     proceedToCheckout() {
       // Implement checkout logic or navigation
