@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 defineProps(['subtotal', 'shipping', 'total'])
 </script>
 

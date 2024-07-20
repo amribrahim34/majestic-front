@@ -13,7 +13,7 @@
         </div>
         <div>
           <h4 class="font-semibold">{{ item.book.title }}</h4>
-          <p class="text-sm text-gray-600">{{ item.book.category?.name }}</p>
+          <p class="text-sm text-gray-600">{{ item.book.category?.category_name }}</p>
         </div>
       </div>
     </td>

@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { BookOrder } from '@/types'
+import { BookOrder } from '@/types/BookOrder'
 
 defineProps<{
   order: BookOrder

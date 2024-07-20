@@ -1,4 +1,3 @@
-// types.ts
 export interface BookOrder {
   id: string
   book: string

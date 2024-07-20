@@ -14,7 +14,7 @@ import { defineProps, defineEmits } from 'vue'
 import ProductCard from './ProductCard.vue'
 import Pagination from './Pagination.vue'
 
-const props = defineProps<{
+defineProps<{
   books: any[]
   currentPage: number
   lastPage: number

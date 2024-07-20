@@ -31,6 +31,16 @@ const debouncedEmitFilterUpdated = debounce((filters: Record<string, any>) => {
   emit('filterUpdated', filters)
 }, 300)
 
+interface RangeFilterType {
+  min: number
+  max: number
+  selected: [number, number] // Add this line
+  title: string
+  isOpen: boolean
+  key: string
+  componentType: 'RangeFilter'
+}
+
 const filters = ref<Filter[]>([
   {
     title: 'Category',
@@ -102,8 +112,8 @@ const getFiltersForAPI = () => {
 watch(
   () => props.categories,
   (newCategories) => {
-    const categoryFilter = filters.value.find((f) => f.title === 'Category')
-    if (categoryFilter) {
+    const categoryFilter = filters.value.find((f) => f.title === 'Categories')
+    if (categoryFilter && 'options' in categoryFilter) {
       categoryFilter.options = newCategories.map((category) => ({
         value: category.id,
         label: category.category_name
@@ -117,8 +127,8 @@ watch(
 watch(
   () => props.formats,
   (newFormats) => {
-    const formatFilter = filters.value.find((f) => f.title === 'Book Format')
-    if (formatFilter) {
+    const formatFilter = filters.value.find((f) => f.title === 'Formats')
+    if (formatFilter && 'options' in formatFilter) {
       formatFilter.options = newFormats.map((format) => ({
         value: format,
         label: format
@@ -132,7 +142,9 @@ watch(
 watch(
   () => props.priceRange,
   (newPriceRange) => {
-    const priceFilter = filters.value.find((f) => f.title === 'Price Range') as RangeFilterType
+    const priceFilter = filters.value.find((f) => f.title === 'Price Range') as
+      | RangeFilterType
+      | undefined
     if (priceFilter) {
       priceFilter.min = newPriceRange.min
       priceFilter.max = newPriceRange.max
@@ -145,7 +157,7 @@ watch(
 watch(
   () => props.yearRange,
   (newYearRange) => {
-    const yearFilter = filters.value.find((f) => f.title === 'Publishing Year')
+    const yearFilter = filters.value.find((f) => f.title === 'Year') as RangeFilterType | undefined
     if (yearFilter) {
       yearFilter.min = newYearRange.min
       yearFilter.max = newYearRange.max

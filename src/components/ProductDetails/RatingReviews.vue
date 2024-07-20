@@ -3,7 +3,7 @@
     <div class="rating-summary">
       <h2>Rating</h2>
       <div class="average-rating">
-        <span class="rating-number">{{ averageRating }}/5</span>
+        <span class="rating-number">{{ averageRating.toFixed(1) }}/5</span>
         <star-rating :rating="averageRating" />
         <span class="review-count">{{ reviews.length }} ratings</span>
       </div>
@@ -30,7 +30,7 @@
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue'
 import StarRating from '@/components/shared/StarRating.vue'
-import { Review } from '@/types/Review'
+import type { Review } from '@/types/Review'
 
 export default defineComponent({
   name: 'RatingReviews',
@@ -48,9 +48,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const averageRating = computed(() => {
-      return props.rating.toFixed(1)
-    })
+    const averageRating = computed(() => props.rating)
 
     const formatDate = (date: string) => {
       return new Date(date).toLocaleDateString()

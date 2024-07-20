@@ -4,12 +4,12 @@
     <div v-for="option in displayedOptions" :key="option.value" class="flex items-center">
       <input
         type="checkbox"
-        :id="option.value"
+        :id="String(option.value)"
         :value="option.value"
         v-model="selectedOptions"
         @change="updateModelValue"
       />
-      <label :for="option.value" class="ml-2">{{ option.label }}</label>
+      <label :for="String(option.value)" class="ml-2">{{ option.label }}</label>
     </div>
   </div>
 </template>

@@ -72,8 +72,6 @@ const emit = defineEmits(['pageChange'])
 const visiblePages = computed(() => {
   const delta = 3 // Number of pages to show on each side of the current page
   const range = []
-  let rangeWithDots = []
-  let l
 
   for (
     let i = Math.max(2, props.currentPage - delta);
