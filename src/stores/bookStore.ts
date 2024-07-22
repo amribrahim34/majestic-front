@@ -138,6 +138,7 @@ export const useBookStore = defineStore('bookStore', {
       try {
         const response = await api.get('/categories')
         this.categories = response.data
+        // console.log(response.data)
       } catch (error) {
         console.error('Error fetching categories:', error)
       }

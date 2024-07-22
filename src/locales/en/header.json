@@ -1,0 +1,28 @@
+{
+  "header": {
+    "search": {
+      "placeholder": "Search for a book, author or category"
+    },
+    "nav": {
+      "books": "Books",
+      "login": "Log in",
+      "signup": "Sign up"
+    },
+    "cart": {
+      "title": "Your Cart",
+      "empty": "Your cart is empty",
+      "loading": "Loading cart...",
+      "total": "Cart Total: LE {total}",
+      "checkout": "Checkout"
+    },
+    "user": {
+      "account": "Account",
+      "orders": "Orders",
+      "logout": "Log out"
+    },
+    "languages": {
+      "en": "English",
+      "ar": "Arabic"
+    }
+  }
+}

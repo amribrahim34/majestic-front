@@ -17,177 +17,34 @@
           v-model="searchQuery"
           @keyup.enter="performSearch"
           type="search"
-          placeholder="Search for a book, author or category"
+          :placeholder="$t('header.search.placeholder')"
           class="w-full px-4 py-2 border rounded-md text-gray-700 focus:ring focus:ring-opacity-50"
         />
       </div>
 
       <!-- Navigation Links -->
-      <div class="flex items-center">
-        <!-- <router-link
-          to="/papers"
-          class="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100"
-          >papers</router-link
-        > -->
-        <router-link
-          to="/books"
-          class="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100"
-          >books</router-link
-        >
-        <!-- <router-link
-          to="/bulk-order"
-          class="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100"
-          >bulk order</router-link
-        > -->
-        <!-- Cart Icon -->
-        <div class="relative">
-          <button @click="toggleCartPreview" class="relative px-3 py-2" ref="cartButton">
-            <font-awesome-icon icon="shopping-cart" class="text-gray-700 text-xl" />
-            <span
-              v-if="cartItemCount > 0"
-              class="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center"
-            >
-              {{ cartItemCount }}
-            </span>
-          </button>
-
-          <div
-            v-if="showCartPreview"
-            class="absolute right-0 mt-2 w-96 bg-white rounded-md shadow-lg py-4 px-6 z-50"
-            ref="cartPreview"
-            @click.stop
-          >
-            <h3 class="font-bold text-xl mb-4">Your Cart</h3>
-            <div v-if="cartItemCount > 0">
-              <ul v-if="!loading" class="divide-y divide-gray-200">
-                <li v-for="item in items" :key="item.id" class="py-4 flex">
-                  <img
-                    :src="item.book.image"
-                    alt="Book cover"
-                    class="h-24 w-16 object-cover mr-4"
-                  />
-                  <div class="flex-1">
-                    <h4 class="font-semibold">{{ item.book.title }}</h4>
-                    <p class="text-gray-600">Price: LE {{ formatPrice(item.book.price) }}</p>
-                    <div class="flex items-center mt-2">
-                      <button
-                        @click="decreaseQuantity(item.book.id)"
-                        class="bg-gray-200 text-gray-700 px-2 py-1 rounded-l hover:bg-gray-300"
-                      >
-                        -
-                      </button>
-                      <span class="bg-gray-100 px-3 py-1">{{ item.quantity }}</span>
-                      <button
-                        @click="increaseQuantity(item.book.id)"
-                        class="bg-gray-200 text-gray-700 px-2 py-1 rounded-r hover:bg-gray-300"
-                      >
-                        +
-                      </button>
-                      <button
-                        @click="removeFromCart(item.book.id)"
-                        class="ml-4 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                      >
-                        <font-awesome-icon icon="trash-alt" />
-                      </button>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-              <div class="mt-4 border-t pt-4">
-                <p class="font-semibold text-lg">Cart Total: LE {{ cartTotal.toFixed(2) }}</p>
-              </div>
-              <div class="mt-4 flex space-x-4">
-                <!-- <button
-                  @click="goToCart"
-                  class="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300"
-                >
-                  Go to Cart
-                </button> -->
-                <button
-                  @click="goToCheckout"
-                  class="flex-1 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                  Checkout
-                </button>
-              </div>
-            </div>
-            <div v-else>
-              <p>Your cart is empty</p>
-            </div>
-            <p v-if="loading">Loading cart...</p>
-            <p v-if="error" class="text-red-500">{{ error }}</p>
-          </div>
-        </div>
-
-        <!-- User Icon/Avatar -->
-        <div class="relative px-3 py-2">
-          <template v-if="isLoggedIn">
-            <button @click="toggleUserMenu" class="focus:outline-none">
-              <font-awesome-icon icon="user-circle" class="text-gray-700 text-xl" />
-            </button>
-            <!-- User Dropdown Menu -->
-            <div
-              v-if="showUserMenu"
-              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1"
-            >
-              <router-link
-                to="/account"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >Account</router-link
-              >
-              <router-link
-                to="/orders"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >Orders</router-link
-              >
-              <button
-                @click="logout"
-                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Log out
-              </button>
-            </div>
-          </template>
-          <template v-else>
-            <router-link
-              to="/login"
-              class="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100"
-              >Log in</router-link
-            >
-            <router-link
-              to="/signup"
-              class="bg-black text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-90"
-              >Sign up</router-link
-            >
-          </template>
-        </div>
-      </div>
+      <nav class="flex items-center space-x-4">
+        <router-link to="/books">{{ $t('header.nav.books') }}</router-link>
+        <cart-icon />
+        <user-menu />
+        <language-switcher />
+      </nav>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useLoginStore } from '@/stores/auth'
-import { useCartStore } from '@/stores/cart'
-import { ref, onMounted, onUnmounted, watch } from 'vue'
-import { storeToRefs } from 'pinia'
 import { useBookStore } from '@/stores/bookStore'
+import CartIcon from '@/components/shared/Header/CartIcon.vue'
+import UserMenu from '@/components/shared/Header/UserMenu.vue'
+import LanguageSwitcher from '@/components/shared/Header/LanguageSwitcher.vue'
 
 const router = useRouter()
-const loginStore = useLoginStore()
-const cartStore = useCartStore()
 const bookStore = useBookStore()
+
 const searchQuery = ref('')
-const showUserMenu = ref(false)
-const showCartPreview = ref(false)
-
-const cartButton = ref<HTMLElement | null>(null)
-const cartPreview = ref<HTMLElement | null>(null)
-
-const toggleUserMenu = () => {
-  showUserMenu.value = !showUserMenu.value
-}
 
 const performSearch = () => {
   if (searchQuery.value.trim()) {
@@ -195,87 +52,6 @@ const performSearch = () => {
     router.push({ path: '/books', query: { search: searchQuery.value } })
   }
 }
-
-const toggleCartPreview = (event: Event) => {
-  event.stopPropagation()
-  showCartPreview.value = !showCartPreview.value
-}
-
-const { isLoggedIn } = storeToRefs(loginStore)
-const { cartItemCount, cartTotal, items, loading, error } = storeToRefs(cartStore)
-
-const handleOutsideClick = (event: MouseEvent) => {
-  if (
-    showCartPreview.value &&
-    cartPreview.value &&
-    cartButton.value &&
-    !cartPreview.value.contains(event.target as Node) &&
-    !cartButton.value.contains(event.target as Node)
-  ) {
-    showCartPreview.value = false
-  }
-}
-
-const logout = () => {
-  loginStore.handleLogout()
-  router.push('/')
-  showUserMenu.value = false
-}
-
-// const addToCart = (bookId: number) => {
-//   cartStore.addItem(bookId, 1)
-// }
-
-const removeFromCart = (bookId: number) => {
-  cartStore.removeItem(bookId)
-}
-
-const goToCheckout = () => {
-  router.push('/checkout')
-  showCartPreview.value = false
-}
-
-const decreaseQuantity = (bookId: number) => {
-  const item = cartStore.items.find((item) => item.book.id === bookId)
-  if (item && item.quantity > 1) {
-    cartStore.updateItemQuantity(bookId, item.quantity - 1)
-  } else if (item && item.quantity === 1) {
-    cartStore.removeItem(bookId)
-  }
-}
-
-const increaseQuantity = (bookId: number) => {
-  const item = cartStore.items.find((item) => item.book.id === bookId)
-  if (item) {
-    cartStore.updateItemQuantity(bookId, item.quantity + 1)
-  }
-}
-
-const formatPrice = (price: number | string): string => {
-  const numPrice = typeof price === 'string' ? parseFloat(price) : price
-  return isNaN(numPrice) ? '0.00' : numPrice.toFixed(2)
-}
-
-// const goToCart = () => {
-//   router.push('/cart')
-//   showCartPreview.value = false
-// }
-
-onMounted(() => {
-  cartStore.fetchCart()
-  document.addEventListener('click', handleOutsideClick)
-})
-
-onUnmounted(() => {
-  document.removeEventListener('click', handleOutsideClick)
-})
-
-watch(
-  () => router.currentRoute.value,
-  () => {
-    showCartPreview.value = false
-  }
-)
 </script>
 <style scoped>
 @media (min-width: 768px) {

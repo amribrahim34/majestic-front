@@ -35,7 +35,7 @@ const props = defineProps<{
     isOpen: boolean
     componentType: string
     key: string
-    options?: Array<{ value: string | number; label: string }>
+    options?: Array<{ value: string | number; label: string; books_count?: number }>
     selected: any
     displayLimit?: number
     totalOptions?: number

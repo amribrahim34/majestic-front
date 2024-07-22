@@ -1,6 +1,6 @@
 <!-- FilterSection.vue -->
 <template>
-  <div class="filter-section">
+  <div class="filter-section p-10 bg-white shadow-lg">
     <FilterGroup
       v-for="filter in filters"
       :key="filter.title"
@@ -19,7 +19,7 @@ import { debounce } from '@/utils/debounce'
 
 const props = defineProps<{
   initialFilters: Record<string, any>
-  categories: { id: number; category_name: string }[]
+  categories: { id: number; category_name: string; books_count?: number }[]
   formats: string[]
   priceRange: { min: number; max: number }
   yearRange: { min: number; max: number }
@@ -52,19 +52,19 @@ const filters = ref<Filter[]>([
     displayLimit: 10,
     totalOptions: 0
   },
-  {
-    title: 'Book Format',
-    isOpen: false,
-    componentType: 'CheckboxFilter',
-    key: 'formats[]',
-    options: [],
-    selected: [],
-    displayLimit: 10,
-    totalOptions: 0
-  },
+  // {
+  //   title: 'Book Format',
+  //   isOpen: false,
+  //   componentType: 'CheckboxFilter',
+  //   key: 'formats[]',
+  //   options: [],
+  //   selected: [],
+  //   displayLimit: 10,
+  //   totalOptions: 0
+  // },
   {
     title: 'Price Range',
-    isOpen: false,
+    isOpen: true,
     componentType: 'RangeFilter',
     key: 'price_range[]',
     min: 0,
@@ -73,7 +73,7 @@ const filters = ref<Filter[]>([
   },
   {
     title: 'Publishing Year',
-    isOpen: false,
+    isOpen: true,
     componentType: 'DateRangeFilter',
     key: 'year_range[]',
     min: 1900,
@@ -116,7 +116,8 @@ watch(
     if (categoryFilter && 'options' in categoryFilter) {
       categoryFilter.options = newCategories.map((category) => ({
         value: category.id,
-        label: category.category_name
+        label: category.category_name,
+        books_count: category.books_count
       }))
       categoryFilter.totalOptions = newCategories.length
     }

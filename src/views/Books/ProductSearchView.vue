@@ -15,6 +15,7 @@
       </div>
       <SearchResults
         :books="books"
+        :total="total"
         :current-page="currentPage"
         :last-page="lastPage"
         :search-term="searchTerm"
@@ -40,7 +41,7 @@ const route = useRoute()
 const router = useRouter()
 const bookStore = useBookStore()
 
-const { books, currentPage, lastPage, categories, formats, priceRange, yearRange } =
+const { books, currentPage, lastPage, categories, formats, priceRange, yearRange, total } =
   storeToRefs(bookStore)
 const { fetchAllBooks, setPage, fetchAllFilterData } = bookStore
 

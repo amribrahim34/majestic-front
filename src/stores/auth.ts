@@ -1,141 +1,151 @@
 import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
 import api from '@/api'
 import type { User } from '@/types/user'
 
-export const useLoginStore = defineStore('login', {
-  state: () => ({
-    userData: null as User | null,
-    isInitialized: false
-  }),
-  getters: {
-    isLoggedIn: (state) => !!state.userData
-  },
-  actions: {
-    async handleLogin(email: string, password: string) {
-      try {
-        const response = await api.post('/login', { email, password })
-        this.userData = response.data
-        this.setToken(response.data?.token)
-        await this.transferGuestCart() // Add this line
-      } catch (error) {
-        throw new Error(error instanceof Error ? error.message : 'An unknown error occurred')
-      }
-    },
-    async handleSignup(user: Omit<User, 'id'>) {
-      try {
-        const response = await api.post('/signup', user)
-        this.userData = response.data
-        this.setToken(response.data?.token)
-        await this.transferGuestCart() // Add this line
-      } catch (error) {
-        throw new Error(error instanceof Error ? error.message : 'An unknown error occurred')
-      }
-    },
-    async initializeAuth() {
-      this.isInitialized = false // Reset initialization state
-      const token = localStorage.getItem('auth_token')
+export const useLoginStore = defineStore('login', () => {
+  const userData = ref<User | null>(null)
+  const isInitialized = ref(false)
 
-      if (!token) {
-        this.handleLogout() // Ensure user is logged out if no token exists
-        this.isInitialized = true
-        return
-      }
+  const isLoggedIn = computed(() => !!userData.value)
 
-      try {
-        // Set the token in the API instance
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  async function handleLogin(email: string, password: string) {
+    try {
+      const response = await api.post('/login', { email, password })
+      userData.value = response.data
+      setToken(response.data?.token)
+      await transferGuestCart()
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : 'An unknown error occurred')
+    }
+  }
 
-        const response = await api.get('/user')
+  async function handleSignup(user: Omit<User, 'id'>) {
+    try {
+      const response = await api.post('/signup', user)
+      userData.value = response.data
+      setToken(response.data?.token)
+      await transferGuestCart()
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : 'An unknown error occurred')
+    }
+  }
 
-        if (response.data) {
-          this.userData = response.data
-          this.setToken(token) // Ensure token is set in the store
-        } else {
-          throw new Error('User data not found')
-        }
-      } catch (error) {
-        console.error('Failed to initialize auth:', error)
-        this.handleLogout() // Clear any invalid session data
+  async function initializeAuth() {
+    isInitialized.value = false
+    const token = localStorage.getItem('auth_token')
 
-        // Optionally, you can handle specific error cases here
-        // For example, if the error is due to an expired token, you might want to refresh it
-        // if (error.response && error.response.status === 401) {
-        //   await this.refreshToken()
-        // }
-      } finally {
-        this.isInitialized = true
-      }
-    },
-    handleLogout() {
-      this.userData = null
-      localStorage.removeItem('auth_token')
-      delete api.defaults.headers.common['Authorization']
-      // Any other cleanup needed
-    },
-    setUser(user: User) {
-      console.log('Setting user:', user)
-      this.userData = user
-    },
-    setToken(token: string) {
-      console.log('Setting token:', token)
-      localStorage.setItem('auth_token', token)
+    if (!token) {
+      handleLogout()
+      isInitialized.value = true
+      return
+    }
+
+    try {
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    },
-    async handleSocialLogin(userData: User) {
-      this.userData = userData
-      if (userData.token) {
-        this.setToken(userData.token)
-      }
-    },
+      const response = await api.get('/user')
 
-    async handleSocialLoginCallback(queryParams: string) {
-      console.log('Handling social login callback')
-      const params = new URLSearchParams(queryParams)
-      const token = params.get('token')
-      const userJson = params.get('user')
-
-      if (token && userJson) {
-        try {
-          const user = JSON.parse(decodeURIComponent(userJson))
-          this.setUser(user)
-          this.setToken(token)
-          await this.transferGuestCart()
-          return true
-        } catch (error) {
-          console.error('Error processing social login callback:', error)
-          return false
-        }
+      if (response.data) {
+        userData.value = response.data
+        setToken(token)
+      } else {
+        throw new Error('User data not found')
       }
-      return false
-    },
+    } catch (error) {
+      console.error('Failed to initialize auth:', error)
+      handleLogout()
+    } finally {
+      isInitialized.value = true
+    }
+  }
 
-    async checkAuthStatus() {
-      const token = localStorage.getItem('auth_token')
-      if (token) {
-        try {
-          const response = await api.get('/user', {
-            headers: { Authorization: `Bearer ${token}` }
-          })
-          this.setUser(response.data)
-          return true
-        } catch (error) {
-          this.handleLogout()
-          return false
-        }
-      }
-      return false
-    },
-    async transferGuestCart() {
-      console.log('Transferring guest cart')
-      if (this.isLoggedIn) {
-        try {
-          const response = await api.post('/cart/transfer')
-          console.log('Cart transfer response:', response.data)
-          // You might want to update the cart store here
-        } catch (error) {
-          console.error('Failed to transfer guest cart:', error)
-        }
+  function handleLogout() {
+    userData.value = null
+    localStorage.removeItem('auth_token')
+    delete api.defaults.headers.common['Authorization']
+  }
+
+  function setUser(user: User) {
+    console.log('Setting user:', user)
+    userData.value = user
+  }
+
+  function setToken(token: string) {
+    console.log('Setting token:', token)
+    localStorage.setItem('auth_token', token)
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  }
+
+  async function handleSocialLogin(user: User) {
+    userData.value = user
+    if (user.token) {
+      setToken(user.token)
+    }
+  }
+
+  async function handleSocialLoginCallback(queryParams: string) {
+    console.log('Handling social login callback')
+    const params = new URLSearchParams(queryParams)
+    const token = params.get('token')
+    const userJson = params.get('user')
+
+    if (token && userJson) {
+      try {
+        const user = JSON.parse(decodeURIComponent(userJson))
+        setUser(user)
+        setToken(token)
+        await transferGuestCart()
+        return true
+      } catch (error) {
+        console.error('Error processing social login callback:', error)
+        return false
       }
     }
+    return false
+  }
+
+  async function checkAuthStatus() {
+    const token = localStorage.getItem('auth_token')
+    if (token) {
+      try {
+        const response = await api.get('/user', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        setUser(response.data)
+        return true
+      } catch (error) {
+        handleLogout()
+        return false
+      }
+    }
+    return false
+  }
+
+  async function transferGuestCart() {
+    console.log('Transferring guest cart')
+    if (isLoggedIn.value) {
+      try {
+        const response = await api.post('/cart/transfer')
+        console.log('Cart transfer response:', response.data)
+      } catch (error) {
+        console.error('Failed to transfer guest cart:', error)
+      }
+    }
+  }
+
+  return {
+    userData,
+    isInitialized,
+    isLoggedIn,
+    handleLogin,
+    handleSignup,
+    initializeAuth,
+    handleLogout,
+    setUser,
+    setToken,
+    handleSocialLogin,
+    handleSocialLoginCallback,
+    checkAuthStatus,
+    transferGuestCart
   }
 })

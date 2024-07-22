@@ -10,6 +10,7 @@
         @change="updateModelValue"
       />
       <label :for="String(option.value)" class="ml-2">{{ option.label }}</label>
+      <span> &nbsp; ({{ option.books_count || 0 }})</span>
     </div>
   </div>
 </template>
@@ -19,7 +20,7 @@ import { ref, computed, watch } from 'vue'
 
 const props = defineProps<{
   filter: {
-    options: Array<{ value: string | number; label: string }>
+    options: Array<{ value: string | number; label: string; books_count: number }>
     selected: Array<string | number>
     displayLimit: number
   }
