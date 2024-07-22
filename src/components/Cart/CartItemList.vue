@@ -70,7 +70,7 @@ import type { CartItem } from '@/types/CartItem'
 
 const { t } = useI18n()
 
-const props = defineProps<{
+defineProps<{
   items: CartItem[]
 }>()
 

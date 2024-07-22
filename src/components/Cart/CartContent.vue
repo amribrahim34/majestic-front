@@ -34,7 +34,7 @@ const { updateItemQuantity, removeItem } = cartStore
 const cartItems = computed((): CartItem[] => items.value)
 
 const subtotal = computed(() => {
-  return items.value.reduce((acc, item) => acc + item.price * item.quantity, 0)
+  return items.value.reduce((acc, item) => acc + item.book.price * item.quantity, 0)
 })
 
 const shipping = computed(() => {
