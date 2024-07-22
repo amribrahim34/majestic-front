@@ -44,7 +44,8 @@ import { useBlogStore } from '@/stores/blogStore'
 
 const blogStore = useBlogStore()
 
-const recentPosts = computed(() => blogStore.getRecentPosts)
+const recentPosts = computed(() => blogStore.getRecentPosts || [])
+
 const isLoading = computed(() => blogStore.isLoading)
 const error = computed(() => blogStore.getError)
 

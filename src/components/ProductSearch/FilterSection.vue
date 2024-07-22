@@ -112,7 +112,7 @@ const getFiltersForAPI = () => {
 watch(
   () => props.categories,
   (newCategories) => {
-    const categoryFilter = filters.value.find((f) => f.title === 'Categories')
+    const categoryFilter = filters.value.find((f) => f.title === 'Category')
     if (categoryFilter && 'options' in categoryFilter) {
       categoryFilter.options = newCategories.map((category) => ({
         value: category.id,
@@ -127,7 +127,7 @@ watch(
 watch(
   () => props.formats,
   (newFormats) => {
-    const formatFilter = filters.value.find((f) => f.title === 'Formats')
+    const formatFilter = filters.value.find((f) => f.title === 'Book Format')
     if (formatFilter && 'options' in formatFilter) {
       formatFilter.options = newFormats.map((format) => ({
         value: format,
