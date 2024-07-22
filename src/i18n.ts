@@ -6,16 +6,16 @@ import arHeader from '@/locales/ar/header.json'
 export type SupportedLocale = 'en' | 'ar'
 
 export interface MessageSchema {
-  header: typeof enHeader
+  header: {}
   [key: string]: any
 }
 
 const messages: Record<SupportedLocale, MessageSchema> = {
   ar: {
-    header: arHeader
+    ...arHeader
   },
   en: {
-    header: enHeader
+    ...enHeader
   }
 }
 
