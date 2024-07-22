@@ -23,6 +23,11 @@
     "languages": {
       "en": "الإنجليزية",
       "ar": "العربية"
-    }
+    },
+    "yourCart": "عربة التسوق",
+    "itemsInCart": "{count} عنصر في عربة التسوق",
+    "total": "المجموع: ${amount}",
+    "checkout": "الدفع",
+    "emptyCart": "عربة التسوق فارغة"
   }
 }

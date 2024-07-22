@@ -1,22 +1,18 @@
 import { createI18n, useI18n } from 'vue-i18n'
 import { Ref } from 'vue'
-import enHeader from '@/locales/en/header.json'
-import arHeader from '@/locales/ar/header.json'
+
+import en from '@/locales/en'
+import ar from '@/locales/ar'
 
 export type SupportedLocale = 'en' | 'ar'
 
 export interface MessageSchema {
-  header: {}
   [key: string]: any
 }
 
 const messages: Record<SupportedLocale, MessageSchema> = {
-  ar: {
-    ...arHeader
-  },
-  en: {
-    ...enHeader
-  }
+  ar,
+  en
 }
 
 // Create the i18n instance

@@ -23,6 +23,11 @@
     "languages": {
       "en": "English",
       "ar": "Arabic"
-    }
+    },
+    "yourCart": "Your Cart",
+    "itemsInCart": "{count} items in your cart",
+    "total": "Total: ${amount}",
+    "checkout": "Checkout",
+    "emptyCart": "Your cart is empty"
   }
 }

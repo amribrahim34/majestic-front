@@ -1,0 +1,42 @@
+{
+  "home": {
+    "booksYouMayEnjoy": "Books You May Enjoy",
+    "viewDetails": "View Details",
+    "featuredBooks": {
+      "title": "Featured Books",
+      "description": "Our books are carefully curated to provide the best reading experience.",
+      "browseButton": "Browse Top Picks",
+      "antiqueBook": "Antique Book",
+      "historicalBook": "Historical Book",
+      "pdfBook": "PDF Book"
+    },
+    "features": {
+      "title": "Features of our Academic Book App",
+      "exploreNow": "Explore Now",
+      "personalized": {
+        "title": "Personalized",
+        "description": "Discover the best academic books recommended just for you based on your interests and studies."
+      },
+      "bookRequest": {
+        "title": "Book Request",
+        "description": "Request a book that you can't find in our collection. We'll do our best to fulfill your request."
+      },
+      "bookReviews": {
+        "title": "Book Reviews",
+        "description": "Read and share book reviews to help other students make informed decisions about their academic book choices."
+      }
+    },
+    "features-section": {
+      "bestsellers": "Bestsellers",
+      "recommendedBooks": "Recommended Books",
+      "fastDelivery": "Fast Delivery",
+      "trackOrder": "Track Your Order"
+    },
+    "blog": {
+      "title": "Read our Blog",
+      "emptyMessage": "Oops! It looks like our blog is empty at the moment.",
+      "checkBackSoon": "Check back soon for exciting new content!",
+      "readMore": "Read more"
+    }
+  }
+}
