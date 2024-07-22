@@ -1,0 +1,14 @@
+{
+  "shipping": {
+    "title": "معلومات الشحن",
+    "name": "الاسم",
+    "institution": "المؤسسة",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "address": "العنوان",
+    "zip": "الرمز البريدي",
+    "country": "الدولة",
+    "useBillingAddress": "استخدم كعنوان للفواتير",
+    "continueToPayment": "المتابعة إلى الدفع"
+  }
+}

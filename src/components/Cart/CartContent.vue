@@ -1,6 +1,6 @@
 <template>
   <div class="cart-content">
-    <h2 class="text-2xl font-bold mb-4">Shopping Cart</h2>
+    <h2 class="text-2xl font-bold mb-4">{{ t('cart.title') }}</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <div class="md:col-span-2">
         <CartItemList
@@ -10,35 +10,36 @@
         />
       </div>
       <div class="md:col-span-1">
-        <CartSummary :subtotal="0" :shipping="0" :total="total" />
+        <CartSummary :subtotal="subtotal" :shipping="shipping" :total="total" />
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapState, mapActions } from 'pinia'
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
 import { useCartStore } from '@/stores/cart'
 import CartItemList from './CartItemList.vue'
 import CartSummary from './CartSummary.vue'
 import type { CartItem } from '@/types/CartItem'
 
-export default defineComponent({
-  name: 'CartContent',
-  components: {
-    CartItemList,
-    CartSummary
-  },
-  computed: {
-    ...mapState(useCartStore, ['items', 'total']),
-    cartItems(): CartItem[] {
-      return this.items
-    }
-  },
-  methods: {
-    ...mapActions(useCartStore, ['updateItemQuantity', 'removeItem'])
-  }
+const { t } = useI18n()
+const cartStore = useCartStore()
+
+const { items, total } = storeToRefs(cartStore)
+const { updateItemQuantity, removeItem } = cartStore
+
+const cartItems = computed((): CartItem[] => items.value)
+
+const subtotal = computed(() => {
+  return items.value.reduce((acc, item) => acc + item.price * item.quantity, 0)
+})
+
+const shipping = computed(() => {
+  // You can implement your shipping calculation logic here
+  return 0
 })
 </script>
 

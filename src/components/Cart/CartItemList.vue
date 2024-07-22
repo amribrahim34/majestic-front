@@ -3,10 +3,10 @@
     <table class="w-full">
       <thead>
         <tr class="border-b">
-          <th class="text-left py-2">Book Title</th>
-          <th class="text-left py-2">ISBN</th>
-          <th class="text-left py-2">Quantity</th>
-          <th class="text-right py-2">Total price</th>
+          <th class="text-left py-2">{{ t('cart.bookTitle') }}</th>
+          <th class="text-left py-2">{{ t('cart.isbn') }}</th>
+          <th class="text-left py-2">{{ t('cart.quantity') }}</th>
+          <th class="text-right py-2">{{ t('cart.totalPrice') }}</th>
           <th class="py-2"></th>
         </tr>
       </thead>
@@ -40,7 +40,7 @@
           <td class="text-right">{{ formatPrice(item.book.price * item.quantity) }}</td>
           <td class="text-right">
             <button @click="removeItem(item)" class="text-red-500 hover:text-red-700">
-              <span class="sr-only">Remove</span>
+              <span class="sr-only">{{ t('cart.remove') }}</span>
               <svg
                 class="w-5 h-5"
                 fill="none"
@@ -63,35 +63,39 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue'
+<script setup lang="ts">
+import { defineProps, defineEmits } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { CartItem } from '@/types/CartItem'
 
-export default defineComponent({
-  name: 'CartItemList',
-  props: {
-    items: {
-      type: Array as PropType<CartItem[]>,
-      required: true
-    }
-  },
-  methods: {
-    formatPrice(price: number): string {
-      return `$${price.toFixed(2)}`
-    },
-    increaseQuantity(item: CartItem): void {
-      this.$emit('update-quantity', item.id, item.quantity + 1)
-    },
-    decreaseQuantity(item: CartItem): void {
-      if (item.quantity > 1) {
-        this.$emit('update-quantity', item.id, item.quantity - 1)
-      }
-    },
-    removeItem(item: CartItem): void {
-      this.$emit('remove-item', item.id)
-    }
+const { t } = useI18n()
+
+const props = defineProps<{
+  items: CartItem[]
+}>()
+
+const emit = defineEmits<{
+  (e: 'update-quantity', id: number, quantity: number): void
+  (e: 'remove-item', id: number): void
+}>()
+
+const formatPrice = (price: number): string => {
+  return t('cart.currency', { price: price.toFixed(2) })
+}
+
+const increaseQuantity = (item: CartItem): void => {
+  emit('update-quantity', item.id, item.quantity + 1)
+}
+
+const decreaseQuantity = (item: CartItem): void => {
+  if (item.quantity > 1) {
+    emit('update-quantity', item.id, item.quantity - 1)
   }
-})
+}
+
+const removeItem = (item: CartItem): void => {
+  emit('remove-item', item.id)
+}
 </script>
 
 <style scoped>

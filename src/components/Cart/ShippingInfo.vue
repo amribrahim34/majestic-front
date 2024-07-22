@@ -1,12 +1,12 @@
 <template>
   <div class="shipping-info bg-black text-white p-6 rounded-lg">
-    <h2 class="text-xl font-bold mb-4">Checkout: Step 1/2</h2>
-    <h3 class="text-2xl font-bold mb-6">Shipping Info</h3>
+    <h2 class="text-xl font-bold mb-4">{{ t('checkout.step', { step: 1, total: 2 }) }}</h2>
+    <h3 class="text-2xl font-bold mb-6">{{ t('checkout.shippingInfo') }}</h3>
 
     <form @submit.prevent="submitShippingInfo">
       <div class="grid grid-cols-2 gap-4">
         <div class="col-span-2 sm:col-span-1">
-          <label for="name" class="block mb-1">Name</label>
+          <label for="name" class="block mb-1">{{ t('checkout.name') }}</label>
           <input
             v-model="shippingInfo.name"
             type="text"
@@ -16,7 +16,7 @@
           />
         </div>
         <div class="col-span-2 sm:col-span-1">
-          <label for="contact" class="block mb-1">Contact</label>
+          <label for="contact" class="block mb-1">{{ t('checkout.contact') }}</label>
           <input
             v-model="shippingInfo.contact"
             type="text"
@@ -26,7 +26,7 @@
           />
         </div>
         <div class="col-span-2">
-          <label for="institution" class="block mb-1">Institution</label>
+          <label for="institution" class="block mb-1">{{ t('checkout.institution') }}</label>
           <input
             v-model="shippingInfo.institution"
             type="text"
@@ -36,7 +36,7 @@
           />
         </div>
         <div class="col-span-2">
-          <label for="email" class="block mb-1">E-mail</label>
+          <label for="email" class="block mb-1">{{ t('checkout.email') }}</label>
           <input
             v-model="shippingInfo.email"
             type="email"
@@ -46,7 +46,7 @@
           />
         </div>
         <div class="col-span-2">
-          <label for="phoneNumber" class="block mb-1">Phone Number</label>
+          <label for="phoneNumber" class="block mb-1">{{ t('checkout.phoneNumber') }}</label>
           <input
             v-model="shippingInfo.phoneNumber"
             type="tel"
@@ -56,7 +56,7 @@
           />
         </div>
         <div class="col-span-2">
-          <label for="address" class="block mb-1">Address</label>
+          <label for="address" class="block mb-1">{{ t('checkout.address') }}</label>
           <textarea
             v-model="shippingInfo.address"
             id="address"
@@ -66,7 +66,7 @@
           ></textarea>
         </div>
         <div class="col-span-2 sm:col-span-1">
-          <label for="zipCode" class="block mb-1">ZIP/ Postal code</label>
+          <label for="zipCode" class="block mb-1">{{ t('checkout.zipCode') }}</label>
           <input
             v-model="shippingInfo.zipCode"
             type="text"
@@ -76,14 +76,14 @@
           />
         </div>
         <div class="col-span-2 sm:col-span-1">
-          <label for="country" class="block mb-1">Country</label>
+          <label for="country" class="block mb-1">{{ t('checkout.country') }}</label>
           <select
             v-model="shippingInfo.country"
             id="country"
             class="w-full p-2 text-black rounded"
             required
           >
-            <option value="United States">United States</option>
+            <option value="United States">{{ t('countries.unitedStates') }}</option>
             <!-- Add more country options as needed -->
           </select>
         </div>
@@ -92,7 +92,7 @@
       <div class="mt-4">
         <label class="flex items-center">
           <input v-model="shippingInfo.useAsBillingAddress" type="checkbox" class="mr-2" />
-          <span>Use as billing address</span>
+          <span>{{ t('checkout.useAsBillingAddress') }}</span>
         </label>
       </div>
 
@@ -100,43 +100,39 @@
         type="submit"
         class="mt-6 w-full bg-white text-black py-2 px-4 rounded hover:bg-gray-200 transition duration-300"
       >
-        Continue to Payment >
+        {{ t('checkout.continueToPayment') }}
       </button>
     </form>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { ShippingInfo } from '@/types/ShippingInfo'
-import { defineComponent } from 'vue'
 
-export default defineComponent({
-  name: 'ShippingInfo',
-  data() {
-    return {
-      shippingInfo: {
-        name: '',
-        contact: '',
-        institution: '',
-        email: '',
-        phoneNumber: '',
-        address: '',
-        zipCode: '',
-        country: 'United States',
-        useAsBillingAddress: false
-      } as ShippingInfo
-    }
-  },
-  methods: {
-    submitShippingInfo() {
-      // Here you would typically dispatch an action to save the shipping info
-      // For now, we'll just log it to the console
-      console.log('Shipping Info:', this.shippingInfo)
-      // You could emit an event here to notify the parent component
-      this.$emit('shipping-info-submitted', this.shippingInfo)
-    }
-  }
+const { t } = useI18n()
+
+const emit = defineEmits<{
+  (e: 'shipping-info-submitted', shippingInfo: ShippingInfo): void
+}>()
+
+const shippingInfo = ref<ShippingInfo>({
+  name: '',
+  contact: '',
+  institution: '',
+  email: '',
+  phoneNumber: '',
+  address: '',
+  zipCode: '',
+  country: 'United States',
+  useAsBillingAddress: false
 })
+
+const submitShippingInfo = () => {
+  console.log('Shipping Info:', shippingInfo.value)
+  emit('shipping-info-submitted', shippingInfo.value)
+}
 </script>
 
 <style scoped>

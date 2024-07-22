@@ -19,36 +19,41 @@
       <button @click="updateQuantity(item.quantity + 1)" class="bg-gray-200 px-2 py-1 rounded-r">
         +
       </button>
-      <button @click="removeItem" class="ml-4 text-red-500 hover:text-red-700">Remove</button>
+      <button @click="removeItem" class="ml-4 text-red-500 hover:text-red-700">
+        {{ t('cart.remove') }}
+      </button>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue'
+<script setup lang="ts">
+import { defineProps, defineEmits } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { CartItem } from '@/types/CartItem'
 
-export default defineComponent({
-  name: 'CartItem',
-  props: {
-    item: {
-      type: Object as PropType<CartItem>,
-      required: true
-    }
-  },
-  methods: {
-    formatPrice(price: number | string): string {
-      const numPrice = typeof price === 'string' ? parseFloat(price) : price
-      return isNaN(numPrice) ? '0.00' : numPrice.toFixed(2)
-    },
-    updateQuantity(newQuantity: number) {
-      if (newQuantity > 0) {
-        this.$emit('update-quantity', this.item.book.id, newQuantity)
-      }
-    },
-    removeItem() {
-      this.$emit('remove-item', this.item.book.id)
-    }
+const { t } = useI18n()
+
+const props = defineProps<{
+  item: CartItem
+}>()
+
+const emit = defineEmits<{
+  (e: 'update-quantity', id: number, quantity: number): void
+  (e: 'remove-item', id: number): void
+}>()
+
+const formatPrice = (price: number | string): string => {
+  const numPrice = typeof price === 'string' ? parseFloat(price) : price
+  return isNaN(numPrice) ? '0.00' : numPrice.toFixed(2)
+}
+
+const updateQuantity = (newQuantity: number) => {
+  if (newQuantity > 0) {
+    emit('update-quantity', props.item.book.id, newQuantity)
   }
-})
+}
+
+const removeItem = () => {
+  emit('remove-item', props.item.book.id)
+}
 </script>

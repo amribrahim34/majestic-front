@@ -1,0 +1,18 @@
+{
+  "cart": {
+    "title": "Shopping Cart",
+    "remove": "Remove",
+    "bookTitle": "Book Title",
+    "isbn": "ISBN",
+    "quantity": "Quantity",
+    "totalPrice": "Total Price",
+    "currency": "${price}",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
+    "price": "${price}",
+    "removeItem": "Remove item",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "total": "Total"
+  }
+}

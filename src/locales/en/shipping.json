@@ -1,0 +1,14 @@
+{
+  "shipping": {
+    "title": "Shipping Info",
+    "name": "Name",
+    "institution": "Institution",
+    "email": "E-mail",
+    "phone": "Phone Number",
+    "address": "Address",
+    "zip": "ZIP/ Postal code",
+    "country": "Country",
+    "useBillingAddress": "Use as billing address",
+    "continueToPayment": "Continue to Payment"
+  }
+}

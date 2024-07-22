@@ -1,40 +1,30 @@
 <!-- CartSummary.vue -->
 <template>
-  <div class="cart-summary">
-    <div class="summary-row">
-      <span>Subtotal:</span>
-      <span>${{ subtotal.toFixed(2) }}</span>
+  <div class="mt-6 border-t border-gray-200 pt-4">
+    <div class="flex justify-between mb-2">
+      <span>{{ t('cart.subtotal') }}:</span>
+      <span>{{ t('cart.price', { price: subtotal.toFixed(2) }) }}</span>
     </div>
-    <div class="summary-row">
-      <span>Shipping:</span>
-      <span>${{ shipping.toFixed(2) }}</span>
+    <div class="flex justify-between mb-2">
+      <span>{{ t('cart.shipping') }}:</span>
+      <span>{{ t('cart.price', { price: shipping.toFixed(2) }) }}</span>
     </div>
-    <div class="summary-row total">
-      <span>Total:</span>
-      <span>${{ total.toFixed(2) }}</span>
+    <div class="flex justify-between font-bold text-lg">
+      <span>{{ t('cart.total') }}:</span>
+      <span>{{ t('cart.price', { price: total.toFixed(2) }) }}</span>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-defineProps(['subtotal', 'shipping', 'total'])
+import { defineProps } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
+defineProps<{
+  subtotal: number
+  shipping: number
+  total: number
+}>()
 </script>
-
-<style scoped>
-.cart-summary {
-  margin-top: 20px;
-  border-top: 1px solid #eee;
-  padding-top: 20px;
-}
-
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.total {
-  font-weight: bold;
-  font-size: 1.2em;
-}
-</style>

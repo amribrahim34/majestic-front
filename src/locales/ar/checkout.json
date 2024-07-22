@@ -1,0 +1,19 @@
+{
+  "checkout": {
+    "step": "الدفع: الخطوة {step}/{total}",
+    "shippingInfo": "معلومات الشحن",
+    "name": "الاسم",
+    "contact": "جهة الاتصال",
+    "institution": "المؤسسة",
+    "email": "البريد الإلكتروني",
+    "phoneNumber": "رقم الهاتف",
+    "address": "العنوان",
+    "zipCode": "الرمز البريدي",
+    "country": "الدولة",
+    "useAsBillingAddress": "استخدم كعنوان للفواتير",
+    "continueToPayment": "المتابعة إلى الدفع >"
+  },
+  "countries": {
+    "unitedStates": "الولايات المتحدة"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "checkout": {
+    "step": "Checkout: Step {step}/{total}",
+    "shippingInfo": "Shipping Info",
+    "name": "Name",
+    "contact": "Contact",
+    "institution": "Institution",
+    "email": "E-mail",
+    "phoneNumber": "Phone Number",
+    "address": "Address",
+    "zipCode": "ZIP/ Postal code",
+    "country": "Country",
+    "useAsBillingAddress": "Use as billing address",
+    "continueToPayment": "Continue to Payment >"
+  },
+  "countries": {
+    "unitedStates": "United States"
+  }
+}

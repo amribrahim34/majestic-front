@@ -1,0 +1,18 @@
+{
+  "cart": {
+    "title": "عربة التسوق",
+    "remove": "إزالة",
+    "bookTitle": "عنوان الكتاب",
+    "isbn": "الرقم التسلسلي الدولي",
+    "quantity": "الكمية",
+    "totalPrice": "السعر الإجمالي",
+    "currency": "${price} $",
+    "decreaseQuantity": "تقليل الكمية",
+    "increaseQuantity": "زيادة الكمية",
+    "price": "${price} $",
+    "removeItem": "إزالة العنصر",
+    "subtotal": "المجموع الفرعي",
+    "shipping": "الشحن",
+    "total": "المجموع"
+  }
+}
