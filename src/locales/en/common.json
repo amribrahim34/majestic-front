@@ -1,6 +1,9 @@
 {
   "common": {
     "loading": "Loading...",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel"
   }
 }

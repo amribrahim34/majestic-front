@@ -1,0 +1,11 @@
+{
+  "blogPost": {
+    "notFound": {
+      "title": "Oops! Blog Post Not Found",
+      "message": "The blog post you're looking for doesn't seem to exist.",
+      "backToBlog": "Back to Blog"
+    },
+    "tags": "Tags",
+    "publishedOn": "Published on {date}"
+  }
+}

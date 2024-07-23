@@ -1,0 +1,20 @@
+{
+  "accountDetails": {
+    "title": "تفاصيل الحساب",
+    "subtitle": "قم بتحديث تفاصيل حسابك",
+    "fields": {
+      "fullName": "الاسم الكامل",
+      "university": "الجامعة",
+      "email": "البريد الإلكتروني",
+      "fieldOfStudy": "مجال الدراسة",
+      "dateOfBirth": "تاريخ الميلاد"
+    },
+    "placeholders": {
+      "fullName": "أدخل اسمك الكامل",
+      "university": "أدخل اسم جامعتك",
+      "email": "أدخل بريدك الإلكتروني",
+      "fieldOfStudy": "أدخل مجال دراستك",
+      "dateOfBirth": "أدخل تاريخ ميلادك"
+    }
+  }
+}

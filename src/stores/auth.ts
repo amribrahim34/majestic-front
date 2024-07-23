@@ -83,6 +83,19 @@ export const useLoginStore = defineStore('login', () => {
     }
   }
 
+  async function updateUserField(field: string, value: string) {
+    try {
+      const response = await api.patch('/user', { [field]: value })
+      if (response.data) {
+        const user = response.data
+        setUser(user)
+      }
+    } catch (error) {
+      console.error('Failed to update user field:', error)
+      throw error
+    }
+  }
+
   async function loginWithProvider(provider: string) {
     try {
       const response = await api.get(`/auth/${provider}`)
@@ -158,6 +171,7 @@ export const useLoginStore = defineStore('login', () => {
     handleSocialLogin,
     handleSocialLoginCallback,
     checkAuthStatus,
+    updateUserField,
     transferGuestCart
   }
 })

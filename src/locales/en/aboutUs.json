@@ -1,0 +1,23 @@
+{
+  "aboutUs": {
+    "title": "About us",
+    "subtitle": "Discover and Share Book Reviews",
+    "imageAlt": "About Us",
+    "description": "At Academic Book Store, we are committed to providing excellent services to our customers and clients..."
+  },
+  "team": {
+    "title": "Team",
+    "subtitle": "Meet the People Behind Our Magical Product",
+    "roles": {
+      "CEO": "CEO",
+      "CTO": "CTO",
+      "HeadOfOperations": "Head of Operations"
+    }
+  },
+  "cta": {
+    "title": "Start Your Reading Journey",
+    "subtitle": "Explore Different Genres",
+    "buttonText": "Sign up now",
+    "imageAlt": "Reading journey"
+  }
+}

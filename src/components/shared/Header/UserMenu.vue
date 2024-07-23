@@ -8,7 +8,10 @@
         v-if="showUserMenu"
         class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1"
       >
-        <router-link to="/account" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+        <router-link
+          to="/account-details"
+          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+        >
           {{ $t('header.user.account') }}
         </router-link>
         <router-link to="/orders" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">

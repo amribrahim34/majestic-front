@@ -1,0 +1,20 @@
+{
+  "accountDetails": {
+    "title": "Account Details",
+    "subtitle": "Update your account details",
+    "fields": {
+      "fullName": "Full Name",
+      "university": "University",
+      "email": "Email",
+      "fieldOfStudy": "Field of Study",
+      "dateOfBirth": "Date of Birth"
+    },
+    "placeholders": {
+      "fullName": "Enter your full name",
+      "university": "Enter your university",
+      "email": "Enter your email",
+      "fieldOfStudy": "Enter your field of study",
+      "dateOfBirth": "Enter your date of birth"
+    }
+  }
+}

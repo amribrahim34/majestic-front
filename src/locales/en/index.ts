@@ -7,6 +7,9 @@ import shipping from './shipping.json'
 import login from './login.json'
 import signup from './signup.json'
 import footer from './footer.json'
+import aboutUs from './aboutUs.json'
+import accountDetails from './accountDetails.json'
+import blogPost from './blogPost.json'
 
 const en = {
   ...header,
@@ -17,6 +20,9 @@ const en = {
   ...login,
   ...signup,
   ...footer,
+  ...aboutUs,
+  ...accountDetails,
+  ...blogPost,
   ...home
 }
 

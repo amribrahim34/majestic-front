@@ -11,7 +11,15 @@
     "zipCode": "ZIP/ Postal code",
     "country": "Country",
     "useAsBillingAddress": "Use as billing address",
-    "continueToPayment": "Continue to Payment >"
+    "continueToPayment": "Continue to Payment >",
+    "shoppingCart": "Shopping Cart",
+    "bookTitle": "Book Title",
+    "quantity": "Quantity",
+    "totalPrice": "Total Price",
+    "continueShopping": "< continue shopping",
+    "emptyCart": "Your cart is empty",
+    "startShopping": "Start Shopping",
+    "shippingInfoSubmitted": "Shipping info submitted:"
   },
   "countries": {
     "unitedStates": "United States"
