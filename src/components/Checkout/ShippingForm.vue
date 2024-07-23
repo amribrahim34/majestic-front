@@ -19,7 +19,6 @@
           type="text"
           id="institution"
           v-model="form.institution"
-          required
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           :placeholder="t('shipping.institution')"
         />
@@ -33,6 +32,7 @@
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           :placeholder="t('shipping.email')"
         />
+        <span v-if="errors.email" class="text-red-500 text-sm">{{ errors.email }}</span>
       </div>
       <div>
         <input
@@ -43,6 +43,7 @@
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           :placeholder="t('shipping.phone')"
         />
+        <span v-if="errors.phone" class="text-red-500 text-sm">{{ errors.phone }}</span>
       </div>
       <div>
         <input
@@ -53,6 +54,39 @@
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           :placeholder="t('shipping.address')"
         />
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-1">
+          <select
+            id="city"
+            v-model="form.cityId"
+            required
+            @change="onCityChange"
+            class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
+          >
+            <option value="">{{ t('shipping.selectCity') }}</option>
+            <option v-for="city in bostaStore.cities" :key="city.id" :value="city.id">
+              {{ city.name }}
+            </option>
+          </select>
+        </div>
+        <div class="flex-1">
+          <select
+            id="district"
+            v-model="form.districtId"
+            required
+            class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
+          >
+            <option value="">{{ t('shipping.selectDistrict') }}</option>
+            <option
+              v-for="district in bostaStore.districts"
+              :key="district.id"
+              :value="district.id"
+            >
+              {{ district.name }}
+            </option>
+          </select>
+        </div>
       </div>
       <div class="flex gap-4">
         <div class="flex-1">
@@ -73,8 +107,8 @@
             class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
             :placeholder="t('shipping.country')"
           >
-            <option value="United States">{{ t('countries.unitedStates') }}</option>
-            <!-- Add more country options -->
+            <option value="Egypt">{{ t('countries.egypt') }}</option>
+            <!-- Add more country options if needed -->
           </select>
         </div>
       </div>
@@ -90,6 +124,7 @@
       <button
         type="submit"
         class="w-full bg-white text-black py-2 px-4 rounded hover:bg-gray-200 transition-colors"
+        :disabled="!isFormValid"
       >
         {{ t('shipping.continueToPayment') }} &gt;
       </button>
@@ -98,10 +133,12 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue'
+import { reactive, ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useBostaStore } from '@/stores/bostaStore'
 
 const { t } = useI18n()
+const bostaStore = useBostaStore()
 
 const form = reactive({
   name: '',
@@ -109,15 +146,69 @@ const form = reactive({
   email: '',
   phone: '',
   address: '',
+  cityId: '',
+  districtId: '',
   zip: '',
-  country: 'United States',
+  country: 'Egypt',
   useBillingAddress: false
 })
 
-const submitForm = () => {
-  // Emit the form data to the parent component
-  emit('submit', form)
+const errors = reactive({
+  email: '',
+  phone: ''
+})
+
+const isFormValid = computed(() => {
+  return (
+    form.name &&
+    form.email &&
+    form.phone &&
+    form.address &&
+    form.cityId &&
+    form.districtId &&
+    form.zip &&
+    form.country &&
+    !errors.email &&
+    !errors.phone
+  )
+})
+
+const validateEmail = () => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(form.email)) {
+    errors.email = t('validation.invalidEmail')
+  } else {
+    errors.email = ''
+  }
 }
+
+const validatePhone = () => {
+  const phoneRegex = /^\+?[0-9]{10,14}$/
+  if (!phoneRegex.test(form.phone)) {
+    errors.phone = t('validation.invalidPhone')
+  } else {
+    errors.phone = ''
+  }
+}
+
+const onCityChange = () => {
+  form.districtId = ''
+  if (form.cityId) {
+    bostaStore.fetchDistricts(form.cityId)
+  }
+}
+
+const submitForm = () => {
+  validateEmail()
+  validatePhone()
+  if (isFormValid.value) {
+    emit('submit', form)
+  }
+}
+
+onMounted(() => {
+  bostaStore.fetchCities()
+})
 
 const emit = defineEmits(['submit'])
 </script>

@@ -10,6 +10,8 @@ import qs from 'qs'
 export const useBookStore = defineStore('bookStore', {
   state: () => ({
     books: [] as Book[],
+    latestBooks: [] as Book[],
+    bestSellerBooks: [] as Book[],
     currentBook: {} as Book,
     currentPage: 1,
     lastPage: 1,
@@ -57,7 +59,7 @@ export const useBookStore = defineStore('bookStore', {
     async fetchBookById(id: number | string) {
       this.loading = true
       try {
-        const response = await api.get(`/books/${id}`)
+        const response = await api.get(`/books/${id}/show`)
         this.currentBook = response.data.data
       } catch (error) {
         this.error = 'Error fetching book details'
@@ -98,9 +100,9 @@ export const useBookStore = defineStore('bookStore', {
     async fetchLatestBooks(page: number = 1) {
       this.loading = true
       try {
-        const response = await api.get('/books/latest', { params: { page } })
-        this.books = response.data.data
-        this.updatePaginationInfo(response.data)
+        const response = await api.get('/books/latest', { params: { page, limit: 6 } })
+        this.latestBooks = response.data.data
+        // this.updatePaginationInfo(response.data)
       } catch (error) {
         this.error = 'Error fetching latest books'
         console.error(error)
@@ -112,8 +114,8 @@ export const useBookStore = defineStore('bookStore', {
     async fetchBestSellers(page: number = 1) {
       this.loading = true
       try {
-        const response = await api.get('/books/best-sellers', { params: { page } })
-        this.books = response.data.data
+        const response = await api.get('/books/best-sellers', { params: { page, limit: 3 } })
+        this.bestSellerBooks = response.data.data
         this.updatePaginationInfo(response.data)
       } catch (error) {
         this.error = 'Error fetching best sellers'
