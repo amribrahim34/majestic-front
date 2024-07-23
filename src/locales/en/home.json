@@ -37,6 +37,35 @@
       "emptyMessage": "Oops! It looks like our blog is empty at the moment.",
       "checkBackSoon": "Check back soon for exciting new content!",
       "readMore": "Read more"
+    },
+    "welcomeSection": {
+      "title": "Welcome to our Book Store!",
+      "description": "At our shop, we believe in the power of knowledge and the importance of academic books. That's why we've carefully selected a wide range of academic books from various disciplines. From medical textbooks to commerce guides, we have books for every field of study.",
+      "imageAlt": "Reading books",
+      "shopLink": "/shop",
+      "shopNow": "Shop now"
+    },
+    "recentlyListed": {
+      "title": "Recently Listed Books",
+      "loading": "Loading...",
+      "viewDetails": "View Details"
+    },
+    "formatsSection": {
+      "audio": {
+        "alt": "Audio Books",
+        "title": "Audio Books",
+        "description": "Explore our collection of audiobooks"
+      },
+      "hardcopy": {
+        "alt": "Hardcopy Books",
+        "title": "Hardcopy Books",
+        "description": "Discover our selection of printed books"
+      },
+      "pdf": {
+        "alt": "PDF Books",
+        "title": "PDF Books",
+        "description": "Find books available in PDF format"
+      }
     }
   }
 }

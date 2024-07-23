@@ -6,6 +6,7 @@ import checkout from './checkout.json'
 import shipping from './shipping.json'
 import login from './login.json'
 import signup from './signup.json'
+import footer from './footer.json'
 
 const ar = {
   ...header,
@@ -15,6 +16,7 @@ const ar = {
   ...shipping,
   ...login,
   ...signup,
+  ...footer,
   ...home
 }
 

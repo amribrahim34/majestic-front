@@ -1,57 +1,49 @@
 <template>
-  <section class="bg-white py-12 md:py-20">
+  <section class="bg-white py-12 md:py-20" :dir="direction">
     <div
       class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-between md:px-8 lg:px-16"
     >
-      <div class="w-full lg:w-1/2 mb-10 lg:mb-0">
+      <div class="w-full lg:w-1/2 mb-10 lg:mb-0" :class="imageOrder">
         <img
           src="@/assets/home/welcome.jpeg"
-          alt="Reading books"
+          :alt="t('home.welcomeSection.imageAlt')"
           class="w-full rounded-lg shadow-lg"
         />
       </div>
-      <div class="w-full lg:w-1/2 lg:pl-20">
-        <h1 class="text-4xl font-bold text-gray-800 mb-6">Welcome to our Book Store!</h1>
+      <div class="w-full lg:w-1/2" :class="textOrder">
+        <h1 class="text-4xl font-bold text-gray-800 mb-6">
+          {{ t('home.welcomeSection.title') }}
+        </h1>
         <p class="text-lg text-gray-600 mb-6">
-          At our shop, we believe in the power of knowledge and the importance of academic books.
-          That's why we've carefully selected a wide range of academic books from various
-          disciplines. From medical textbooks to commerce guides, we have books for every field of
-          study.
+          {{ t('home.welcomeSection.description') }}
         </p>
 
         <a
-          href="/shop"
+          :href="t('home.welcomeSection.shopLink')"
           class="bg-black text-white py-2 px-4 inline-block font-medium hover:bg-gray-800 transition duration-300"
         >
-          Shop now
+          {{ t('home.welcomeSection.shopNow') }}
         </a>
       </div>
     </div>
   </section>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-export default defineComponent({
-  name: 'WelcomeSection'
-})
+const { t, locale } = useI18n()
+
+const direction = computed(() => (locale.value === 'ar' ? 'rtl' : 'ltr'))
+const imageOrder = computed(() => (locale.value === 'ar' ? 'lg:order-2' : 'lg:order-1'))
+const textOrder = computed(() =>
+  locale.value === 'ar' ? 'lg:order-1 lg:pr-20' : 'lg:order-2 lg:pl-20'
+)
 </script>
 
 <style scoped>
 a {
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.bg-white {
-  background-color: #ffffff;
-}
-.text-gray-800 {
-  color: #2d3748;
-}
-.text-gray-600 {
-  color: #718096;
+  @apply no-underline uppercase tracking-wider;
 }
 </style>

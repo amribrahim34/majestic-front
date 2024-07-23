@@ -1,9 +1,9 @@
 <template>
-  <section class="bg-white py-20">
+  <section class="bg-white py-20" :dir="direction">
     <div class="container mx-auto text-center">
-      <h2 class="text-3xl font-bold mb-8">Recently Listed Books</h2>
+      <h2 class="text-3xl font-bold mb-8">{{ t('home.recentlyListed.title') }}</h2>
       <div v-if="loading" class="text-center">
-        <p>Loading...</p>
+        <p>{{ t('home.recentlyListed.loading') }}</p>
       </div>
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
         <div
@@ -22,7 +22,7 @@
             @click="viewBookDetails(book.id)"
             class="mt-2 bg-black text-white py-2 px-4 rounded hover:bg-gray-800 transition duration-300"
           >
-            View Details
+            {{ t('home.recentlyListed.viewDetails') }}
           </button>
         </div>
       </div>
@@ -31,15 +31,19 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useBookStore } from '@/stores/bookStore'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 const bookStore = useBookStore()
 const router = useRouter()
+const { t, locale } = useI18n()
 
 const { latestBooks, loading } = storeToRefs(bookStore)
+
+const direction = computed(() => (locale.value === 'ar' ? 'rtl' : 'ltr'))
 
 onMounted(() => {
   bookStore.fetchLatestBooks()
@@ -50,6 +54,9 @@ const viewBookDetails = (bookId: number) => {
 }
 
 const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)
+  return new Intl.NumberFormat(locale.value, {
+    style: 'currency',
+    currency: locale.value === 'ar' ? 'AED' : 'USD'
+  }).format(price)
 }
 </script>

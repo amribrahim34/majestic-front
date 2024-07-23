@@ -1,49 +1,36 @@
 <template>
-  <section class="bg-white py-12 md:py-20">
+  <section class="bg-white py-12 md:py-20" :dir="direction">
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-        <div class="text-center">
+        <div v-for="format in bookFormats" :key="format.id" class="text-center">
           <img
-            src="@/assets/home/audioBook.jpeg"
-            alt="Audio Books"
+            :src="format.image"
+            :alt="t(`home.formatsSection.${format.id}.alt`)"
             class="mx-auto mb-4 w-24 h-24 object-cover rounded-full"
           />
-          <h3 class="text-lg font-semibold mb-2">Audio Books</h3>
-          <p class="text-sm text-gray-600">Explore our collection of audiobooks</p>
-        </div>
-        <div class="text-center">
-          <img
-            src="@/assets/home/hardcopyBook.jpeg"
-            alt="Hardcopy Books"
-            class="mx-auto mb-4 w-24 h-24 object-cover rounded-full"
-          />
-          <h3 class="text-lg font-semibold mb-2">Hardcopy Books</h3>
-          <p class="text-sm text-gray-600">Discover our selection of printed books</p>
-        </div>
-        <div class="text-center">
-          <img
-            src="@/assets/home/pdf.png"
-            alt="PDF Books"
-            class="mx-auto mb-4 w-24 h-24 object-cover rounded-full"
-          />
-          <h3 class="text-lg font-semibold mb-2">PDF Books</h3>
-          <p class="text-sm text-gray-600">Find books available in PDF format</p>
+          <h3 class="text-lg font-semibold mb-2">
+            {{ t(`home.formatsSection.${format.id}.title`) }}
+          </h3>
+          <p class="text-sm text-gray-600">
+            {{ t(`home.formatsSection.${format.id}.description`) }}
+          </p>
         </div>
       </div>
     </div>
   </section>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-export default defineComponent({
-  name: 'FormatsSection'
-})
+const { t, locale } = useI18n()
+
+const direction = computed(() => (locale.value === 'ar' ? 'rtl' : 'ltr'))
+
+const bookFormats = [
+  { id: 'audio', image: new URL('@/assets/home/audioBook.jpeg', import.meta.url).href },
+  { id: 'hardcopy', image: new URL('@/assets/home/hardcopyBook.jpeg', import.meta.url).href },
+  { id: 'pdf', image: new URL('@/assets/home/pdf.png', import.meta.url).href }
+]
 </script>
-
-<style scoped>
-.text-gray-600 {
-  color: #718096;
-}
-</style>

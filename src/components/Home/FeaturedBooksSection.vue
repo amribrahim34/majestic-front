@@ -22,7 +22,7 @@
               @click="viewBookDetails(book.id)"
               class="w-full bg-black text-white py-2 px-4 text-sm font-medium hover:bg-gray-800 transition duration-300"
             >
-              {{ t('home.featuredBooks.viewDetailsButton') }}
+              {{ t('home.viewDetails') }}
             </button>
           </div>
         </div>
