@@ -4,6 +4,20 @@
     "refresh": "Refresh",
     "edit": "Edit",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "first": "First",
+    "last": "Last",
+    "by": "by",
+    "uncategorized": "Uncategorized",
+    "adding": "Adding...",
+    "addToCart": "Add to cart",
+    "price": "LE {price}",
+    "priceNotAvailable": "Price not available",
+    "searchResultsFor": "Search results for \"{term}\"",
+    "numberOfBooks": "Number of Books: {count}",
+    "category": "Category",
+    "bookFormat": "Book Format",
+    "priceRange": "Price Range",
+    "publishingYear": "Publishing Year"
   }
 }

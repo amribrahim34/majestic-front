@@ -1,35 +1,31 @@
 <template>
   <div class="rounded shadow-lg w-80 mb-16">
-    <div class="">
+    <div>
       <img class="w-full object-cover h-56" :src="book.image" :alt="book.title" />
     </div>
     <div class="px-5 pb-5">
-      <div class="">
-        <a href="#">
-          <router-link
-            :to="{ name: 'BookDetails', params: { id: book.id } }"
-            :id="book.id"
-            class=""
-          >
-            <h5 class="text-xl font-semibold tracking-tight text-gray-900">
-              {{ book.title }}
-            </h5>
-          </router-link>
-        </a>
+      <div>
+        <router-link
+          :to="{ name: 'BookDetails', params: { id: book.id } }"
+          :id="book.id"
+          class="text-xl font-semibold tracking-tight text-gray-900"
+        >
+          {{ book.title }}
+        </router-link>
         <p>
-          by
+          {{ t('common.by') }}
           <span v-for="author in book.authors" :key="author.id">{{ author.name }}</span>
         </p>
       </div>
 
       <div class="flex items-center mt-2.5 mb-5">
         <div class="flex items-center space-x-1 rtl:space-x-reverse">
-          <!-- Star rating SVGs here (you might want to make this dynamic based on a rating property) -->
+          <!-- Star rating SVGs here -->
         </div>
         <span
           class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3"
         >
-          {{ book.category?.category_name || 'Uncategorized' }}
+          {{ book.category?.category_name || t('common.uncategorized') }}
         </span>
       </div>
       <div class="flex items-center justify-between">
@@ -40,6 +36,7 @@
           <button
             @click="toggleWishlist"
             class="p-2.5 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            :disabled="wishlistStore.loading"
           >
             <svg
               class="w-5 h-5"
@@ -83,7 +80,7 @@
             class="text-white bg-black hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             :disabled="isAddingToCart"
           >
-            {{ isAddingToCart ? 'Adding...' : 'Add to cart' }}
+            {{ isAddingToCart ? t('common.adding') : t('common.addToCart') }}
           </button>
         </div>
       </div>
@@ -91,83 +88,76 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
-import type { Book } from '@/types/Book'
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useCartStore } from '@/stores/cart'
-import { mapState, mapActions } from 'pinia'
+import { useWishlistStore } from '@/stores/wishlist'
+import type { Book } from '@/types/Book'
 
-export default defineComponent({
-  name: 'ProductCard',
-  props: {
-    book: {
-      type: Object as PropType<Book>,
-      required: true
-    }
-  },
-  data() {
-    return {
-      isWishlisted: false,
-      isAddingToCart: false
-    }
-  },
-  computed: {
-    ...mapState(useCartStore, ['items']),
-    cartItem() {
-      return this.items.find((item) => item.book.id === this.book.id)
-    }
-  },
-  methods: {
-    ...mapActions(useCartStore, ['addItem', 'updateItemQuantity', 'removeItem']),
-    toggleWishlist() {
-      this.isWishlisted = !this.isWishlisted
-      // Here you would typically also update the wishlist status on the server
-    },
-    async addToCart() {
-      if (this.isAddingToCart) return
+const props = defineProps<{
+  book: Book
+}>()
 
-      this.isAddingToCart = true
-      try {
-        await this.addItem(this.book.id, 1)
-        // Optionally, you can show a success message here
-      } catch (error) {
-        console.error('Failed to add item to cart:', error)
-        // Optionally, you can show an error message here
-      } finally {
-        this.isAddingToCart = false
-      }
-    },
-    async increaseQuantity() {
-      if (this.cartItem) {
-        await this.updateItemQuantity(this.book.id, this.cartItem.quantity + 1)
-      }
-    },
-    async decreaseQuantity() {
-      if (this.cartItem && this.cartItem.quantity > 1) {
-        await this.updateItemQuantity(this.book.id, this.cartItem.quantity - 1)
-      } else if (this.cartItem && this.cartItem.quantity === 1) {
-        await this.removeFromCart()
-      }
-    },
-    async removeFromCart() {
-      await this.removeItem(this.book.id)
-    },
-    formatPrice(price: number | string | undefined): string {
-      if (typeof price === 'number') {
-        return `LE ${price.toFixed(2)}`
-      } else if (typeof price === 'string') {
-        const numPrice = parseFloat(price)
-        if (!isNaN(numPrice)) {
-          return `LE ${numPrice.toFixed(2)}`
-        }
-      }
-      return 'Price not available'
+const { t } = useI18n()
+const cartStore = useCartStore()
+const wishlistStore = useWishlistStore()
+
+const isAddingToCart = ref(false)
+
+const cartItem = computed(() => cartStore.items.find((item) => item.book.id === props.book.id))
+const isWishlisted = computed(() => wishlistStore.isItemWishlisted(props.book.id))
+
+onMounted(() => {
+  wishlistStore.fetchWishlist()
+})
+
+const toggleWishlist = async () => {
+  await wishlistStore.toggleWishlistItem(props.book.id)
+}
+
+const addToCart = async () => {
+  if (isAddingToCart.value) return
+
+  isAddingToCart.value = true
+  try {
+    await cartStore.addItem(props.book.id, 1)
+    // Optionally, you can show a success message here
+  } catch (error) {
+    console.error('Failed to add item to cart:', error)
+    // Optionally, you can show an error message here
+  } finally {
+    isAddingToCart.value = false
+  }
+}
+
+const increaseQuantity = async () => {
+  if (cartItem.value) {
+    await cartStore.updateItemQuantity(props.book.id, cartItem.value.quantity + 1)
+  }
+}
+
+const decreaseQuantity = async () => {
+  if (cartItem.value && cartItem.value.quantity > 1) {
+    await cartStore.updateItemQuantity(props.book.id, cartItem.value.quantity - 1)
+  } else if (cartItem.value && cartItem.value.quantity === 1) {
+    await removeFromCart()
+  }
+}
+
+const removeFromCart = async () => {
+  await cartStore.removeItem(props.book.id)
+}
+
+const formatPrice = (price: number | string | undefined): string => {
+  if (typeof price === 'number') {
+    return t('common.price', { price: price.toFixed(2) })
+  } else if (typeof price === 'string') {
+    const numPrice = parseFloat(price)
+    if (!isNaN(numPrice)) {
+      return t('common.price', { price: numPrice.toFixed(2) })
     }
   }
-})
+  return t('common.priceNotAvailable')
+}
 </script>
-
-<style scoped>
-/* Tailwind CSS does most of the styling. Add any additional custom styles here. */
-</style>

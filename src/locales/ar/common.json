@@ -4,6 +4,20 @@
     "edit": "تعديل",
     "save": "حفظ",
     "cancel": "إلغاء",
-    "refresh": "تحديث"
+    "refresh": "تحديث",
+    "first": "الأول",
+    "last": "الأخير",
+    "by": "بواسطة",
+    "uncategorized": "غير مصنف",
+    "adding": "جاري الإضافة...",
+    "addToCart": "أضف إلى السلة",
+    "price": "{price} جنيه",
+    "priceNotAvailable": "السعر غير متوفر",
+    "searchResultsFor": "نتائج البحث عن \"{term}\"",
+    "numberOfBooks": "عدد الكتب: {count}",
+    "category": "الفئة",
+    "bookFormat": "تنسيق الكتاب",
+    "priceRange": "نطاق السعر",
+    "publishingYear": "سنة النشر"
   }
 }

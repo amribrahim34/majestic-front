@@ -1,4 +1,3 @@
-<!-- FilterSection.vue -->
 <template>
   <div class="filter-section p-10 bg-white shadow-lg">
     <FilterGroup
@@ -12,38 +11,40 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import FilterGroup from './FilterGroup.vue'
-import type { Filter } from '@/types/Filter'
+import type {
+  Filter,
+  CheckboxFilterType,
+  RangeFilterType,
+  DateRangeFilterType
+} from '@/types/Filter'
 import { debounce } from '@/utils/debounce'
 
-const props = defineProps<{
+interface Props {
   initialFilters: Record<string, any>
   categories: { id: number; category_name: string; books_count?: number }[]
   formats: string[]
   priceRange: { min: number; max: number }
   yearRange: { min: number; max: number }
+}
+
+const props = defineProps<Props>()
+
+const emit = defineEmits<{
+  (e: 'filterUpdated', filters: Record<string, any>): void
 }>()
 
-const emit = defineEmits(['filterUpdated'])
+const { t } = useI18n()
 
 const debouncedEmitFilterUpdated = debounce((filters: Record<string, any>) => {
   emit('filterUpdated', filters)
 }, 300)
 
-interface RangeFilterType {
-  min: number
-  max: number
-  selected: [number, number] // Add this line
-  title: string
-  isOpen: boolean
-  key: string
-  componentType: 'RangeFilter'
-}
-
 const filters = ref<Filter[]>([
   {
-    title: 'Category',
+    title: t('common.category'),
     isOpen: true,
     componentType: 'CheckboxFilter',
     key: 'category_ids[]',
@@ -51,35 +52,25 @@ const filters = ref<Filter[]>([
     selected: [],
     displayLimit: 10,
     totalOptions: 0
-  },
-  // {
-  //   title: 'Book Format',
-  //   isOpen: false,
-  //   componentType: 'CheckboxFilter',
-  //   key: 'formats[]',
-  //   options: [],
-  //   selected: [],
-  //   displayLimit: 10,
-  //   totalOptions: 0
-  // },
+  } as CheckboxFilterType,
   {
-    title: 'Price Range',
+    title: t('common.priceRange'),
     isOpen: true,
     componentType: 'RangeFilter',
     key: 'price_range[]',
     min: 0,
     max: 1000,
     selected: [0, 1000]
-  },
+  } as RangeFilterType,
   {
-    title: 'Publishing Year',
+    title: t('common.publishingYear'),
     isOpen: true,
     componentType: 'DateRangeFilter',
     key: 'year_range[]',
     min: 1900,
     max: new Date().getFullYear(),
     selected: [1900, new Date().getFullYear()]
-  }
+  } as DateRangeFilterType
 ])
 
 const updateFilter = (updatedFilter: Filter) => {
@@ -91,9 +82,9 @@ const updateFilter = (updatedFilter: Filter) => {
 }
 
 const loadMore = (filterTitle: string) => {
-  const filter = filters.value.find((f) => f.title === filterTitle)
+  const filter = filters.value.find((f) => f.title === filterTitle) as CheckboxFilterType
   if (filter && filter.componentType === 'CheckboxFilter') {
-    filter.displayLimit! += 10
+    filter.displayLimit += 10
   }
 }
 
@@ -109,18 +100,34 @@ const getFiltersForAPI = () => {
   )
 }
 
+const updateFilterOptions = (filterTitle: string, newOptions: any[]) => {
+  const filter = filters.value.find((f) => f.title === filterTitle) as CheckboxFilterType
+  if (filter && 'options' in filter) {
+    filter.options = newOptions
+    filter.totalOptions = newOptions.length
+  }
+}
+
+const updateRangeFilter = (filterTitle: string, newRange: { min: number; max: number }) => {
+  const filter = filters.value.find((f) => f.title === filterTitle) as RangeFilterType
+  if (filter) {
+    filter.min = newRange.min
+    filter.max = newRange.max
+    filter.selected = [newRange.min, newRange.max]
+  }
+}
+
 watch(
   () => props.categories,
   (newCategories) => {
-    const categoryFilter = filters.value.find((f) => f.title === 'Category')
-    if (categoryFilter && 'options' in categoryFilter) {
-      categoryFilter.options = newCategories.map((category) => ({
+    updateFilterOptions(
+      t('category'),
+      newCategories.map((category) => ({
         value: category.id,
         label: category.category_name,
         books_count: category.books_count
       }))
-      categoryFilter.totalOptions = newCategories.length
-    }
+    )
   },
   { immediate: true }
 )
@@ -128,14 +135,13 @@ watch(
 watch(
   () => props.formats,
   (newFormats) => {
-    const formatFilter = filters.value.find((f) => f.title === 'Book Format')
-    if (formatFilter && 'options' in formatFilter) {
-      formatFilter.options = newFormats.map((format) => ({
+    updateFilterOptions(
+      t('bookFormat'),
+      newFormats.map((format) => ({
         value: format,
         label: format
       }))
-      formatFilter.totalOptions = newFormats.length
-    }
+    )
   },
   { immediate: true }
 )
@@ -143,14 +149,7 @@ watch(
 watch(
   () => props.priceRange,
   (newPriceRange) => {
-    const priceFilter = filters.value.find((f) => f.title === 'Price Range') as
-      | RangeFilterType
-      | undefined
-    if (priceFilter) {
-      priceFilter.min = newPriceRange.min
-      priceFilter.max = newPriceRange.max
-      priceFilter.selected = [newPriceRange.min, newPriceRange.max]
-    }
+    updateRangeFilter(t('priceRange'), newPriceRange)
   },
   { immediate: true }
 )
@@ -158,12 +157,7 @@ watch(
 watch(
   () => props.yearRange,
   (newYearRange) => {
-    const yearFilter = filters.value.find((f) => f.title === 'Year') as RangeFilterType | undefined
-    if (yearFilter) {
-      yearFilter.min = newYearRange.min
-      yearFilter.max = newYearRange.max
-      yearFilter.selected = [newYearRange.min, newYearRange.max]
-    }
+    updateRangeFilter(t('publishingYear'), newYearRange)
   },
   { immediate: true }
 )
@@ -179,4 +173,8 @@ watch(
   },
   { immediate: true }
 )
+
+onMounted(() => {
+  debouncedEmitFilterUpdated(getFiltersForAPI())
+})
 </script>

@@ -1,0 +1,19 @@
+{
+  "productInfo": {
+    "reviews": "{count} Reviews",
+    "currency": "LE {price}",
+    "type": "Type",
+    "quantity": "Qty",
+    "addToWishlist": "Add to Wishlist",
+    "removeFromWishlist": "Remove from Wishlist",
+    "decreaseQuantity": "Decrease Quantity",
+    "increaseQuantity": "Increase Quantity",
+    "removeFromCart": "Remove from Cart",
+    "adding": "Adding...",
+    "addToCart": "Add to Cart",
+    "relatedProducts": {
+      "title": "You might also like",
+      "price": "${price}"
+    }
+  }
+}

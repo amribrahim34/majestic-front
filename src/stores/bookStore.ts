@@ -125,6 +125,10 @@ export const useBookStore = defineStore('bookStore', {
       }
     },
 
+    async submitBookRequest(bookRequest: any) {
+      await api.post('/book-requests', bookRequest)
+    },
+
     updatePaginationInfo(data: any) {
       this.currentPage = data.meta.current_page
       this.lastPage = data.meta.last_page

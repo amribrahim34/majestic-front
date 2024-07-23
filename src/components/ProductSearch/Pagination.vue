@@ -1,29 +1,23 @@
 <template>
   <div class="flex justify-center mt-8">
     <button
-      @click="$emit('pageChange', 1)"
+      @click="changePage(1)"
       :disabled="currentPage === 1"
-      class="mx-1 px-3 py-2 rounded"
-      :class="
-        currentPage === 1 ? 'bg-gray-200 cursor-not-allowed' : 'bg-gray-200 hover:bg-gray-300'
-      "
+      :class="buttonClass(currentPage === 1)"
     >
-      First
+      {{ t('common.first') }}
     </button>
     <button
-      @click="$emit('pageChange', currentPage - 1)"
+      @click="changePage(currentPage - 1)"
       :disabled="currentPage === 1"
-      class="mx-1 px-3 py-2 rounded"
-      :class="
-        currentPage === 1 ? 'bg-gray-200 cursor-not-allowed' : 'bg-gray-200 hover:bg-gray-300'
-      "
+      :class="buttonClass(currentPage === 1)"
     >
       &lt;
     </button>
     <button
       v-for="page in visiblePages"
       :key="page"
-      @click="$emit('pageChange', page)"
+      @click="changePage(typeof page === 'number' ? page : currentPage)"
       :class="[
         'mx-1 px-3 py-2 rounded',
         currentPage === page ? 'bg-black text-white' : 'bg-gray-200 hover:bg-gray-300'
@@ -32,45 +26,45 @@
       {{ page }}
     </button>
     <button
-      @click="$emit('pageChange', currentPage + 1)"
+      @click="changePage(currentPage + 1)"
       :disabled="currentPage === lastPage"
-      class="mx-1 px-3 py-2 rounded"
-      :class="
-        currentPage === lastPage
-          ? 'bg-gray-200 cursor-not-allowed'
-          : 'bg-gray-200 hover:bg-gray-300'
-      "
+      :class="buttonClass(currentPage === lastPage)"
     >
       &gt;
     </button>
     <button
-      @click="$emit('pageChange', lastPage)"
+      @click="changePage(lastPage)"
       :disabled="currentPage === lastPage"
-      class="mx-1 px-3 py-2 rounded"
-      :class="
-        currentPage === lastPage
-          ? 'bg-gray-200 cursor-not-allowed'
-          : 'bg-gray-200 hover:bg-gray-300'
-      "
+      :class="buttonClass(currentPage === lastPage)"
     >
-      Last
+      {{ t('common.last') }}
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-const props = defineProps<{
+interface Props {
   currentPage: number
   lastPage: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  currentPage: 1,
+  lastPage: 1
+})
+
+const emit = defineEmits<{
+  (e: 'pageChange', page: number): void
 }>()
 
-const emit = defineEmits(['pageChange'])
+const { t } = useI18n()
 
 const visiblePages = computed(() => {
-  const delta = 3 // Number of pages to show on each side of the current page
-  const range = []
+  const delta = 3
+  const range: (number | string)[] = []
 
   for (
     let i = Math.max(2, props.currentPage - delta);
@@ -80,18 +74,21 @@ const visiblePages = computed(() => {
     range.push(i)
   }
 
-  if (props.currentPage - delta > 2) {
-    range.unshift('...')
-  }
-  if (props.currentPage + delta < props.lastPage - 1) {
-    range.push('...')
-  }
+  if (props.currentPage - delta > 2) range.unshift('...')
+  if (props.currentPage + delta < props.lastPage - 1) range.push('...')
 
   range.unshift(1)
-  if (props.lastPage !== 1) {
-    range.push(props.lastPage)
-  }
+  if (props.lastPage !== 1) range.push(props.lastPage)
 
   return range
 })
+
+const buttonClass = (disabled: boolean) =>
+  disabled
+    ? 'mx-1 px-3 py-2 rounded bg-gray-200 cursor-not-allowed'
+    : 'mx-1 px-3 py-2 rounded bg-gray-200 hover:bg-gray-300'
+
+const changePage = (page: number) => {
+  emit('pageChange', page)
+}
 </script>

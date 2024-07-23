@@ -1,0 +1,17 @@
+{
+  "requestBook": {
+    "title": "طلب كتاب",
+    "bookTitle": "عنوان الكتاب",
+    "bookTitlePlaceholder": "عنوان الكتاب",
+    "edition": "الطبعة",
+    "editionPlaceholder": "رقم الطبعة",
+    "authorName": "اسم المؤلف",
+    "authorNamePlaceholder": "الاسم الكامل للمؤلف",
+    "dateOfPublication": "تاريخ النشر",
+    "publisher": "الناشر",
+    "publisherPlaceholder": "اسم الناشر",
+    "submit": "إرسال",
+    "successMessage": "تم إرسال طلب الكتاب بنجاح!",
+    "errorMessage": "حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى."
+  }
+}

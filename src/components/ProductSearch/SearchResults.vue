@@ -1,8 +1,11 @@
-<!-- SearchResults.vue -->
 <template>
   <div class="p-5 mx-10 w-4/5">
-    <h2 v-if="searchTerm" class="text-xl font-bold mb-5">Search results for "{{ searchTerm }}"</h2>
-    <h2 class="text-xl font-bold mb-5">Number Of Books {{ total }}</h2>
+    <h2 v-if="searchTerm" class="text-xl font-bold mb-5">
+      {{ t('common.searchResultsFor', { term: searchTerm }) }}
+    </h2>
+    <h2 class="text-xl font-bold mb-5">
+      {{ t('common.numberOfBooks', { count: total }) }}
+    </h2>
     <div class="flex justify-between flex-wrap">
       <ProductCard v-for="book in books" :key="book.id" :book="book" />
     </div>
@@ -12,18 +15,26 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
+import { useI18n } from 'vue-i18n'
 import ProductCard from './ProductCard.vue'
 import Pagination from './Pagination.vue'
+import type { Book } from '@/types/Book' // Ensure you have this type defined
 
-defineProps<{
-  books: any[]
+interface Props {
+  books: Book[]
   currentPage: number
   lastPage: number
   total: number
   searchTerm: string
+}
+
+defineProps<Props>()
+
+const emit = defineEmits<{
+  (e: 'pageChange', page: number): void
 }>()
 
-const emit = defineEmits(['pageChange'])
+const { t } = useI18n()
 
 const onPageChange = (page: number) => {
   emit('pageChange', page)

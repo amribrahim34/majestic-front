@@ -1,0 +1,8 @@
+{
+  "ratingReviews": {
+    "rating": "Rating",
+    "ratingsCount": "{count} ratings",
+    "reviews": "Reviews",
+    "loadMore": "Load more"
+  }
+}

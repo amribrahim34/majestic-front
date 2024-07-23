@@ -1,0 +1,19 @@
+{
+  "productInfo": {
+    "reviews": "{count} تقييمات",
+    "currency": "{price} جنيه",
+    "type": "النوع",
+    "quantity": "الكمية",
+    "addToWishlist": "أضف إلى قائمة الرغبات",
+    "removeFromWishlist": "إزالة من قائمة الرغبات",
+    "decreaseQuantity": "تقليل الكمية",
+    "increaseQuantity": "زيادة الكمية",
+    "removeFromCart": "إزالة من السلة",
+    "adding": "جاري الإضافة...",
+    "addToCart": "أضف إلى السلة",
+    "relatedProducts": {
+      "title": "قد يعجبك أيضًا",
+      "price": "${price} $"
+    }
+  }
+}

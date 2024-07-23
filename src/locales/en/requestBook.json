@@ -1,0 +1,17 @@
+{
+  "requestBook": {
+    "title": "Request a book",
+    "bookTitle": "Book Title",
+    "bookTitlePlaceholder": "Book Title",
+    "edition": "Edition",
+    "editionPlaceholder": "Edition Number",
+    "authorName": "Author Name",
+    "authorNamePlaceholder": "Author's Full Name",
+    "dateOfPublication": "Date of Publication",
+    "publisher": "Publisher",
+    "publisherPlaceholder": "Publisher name",
+    "submit": "Submit",
+    "successMessage": "Book request submitted successfully!",
+    "errorMessage": "An error occurred while submitting the request. Please try again."
+  }
+}

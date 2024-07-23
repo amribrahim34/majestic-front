@@ -10,6 +10,9 @@ import footer from './footer.json'
 import aboutUs from './aboutUs.json'
 import accountDetails from './accountDetails.json'
 import blogPost from './blogPost.json'
+import requestBook from './requestBook.json'
+import productInfo from './productInfo.json'
+import ratingReviews from './ratingReviews.json'
 
 const en = {
   ...header,
@@ -23,6 +26,9 @@ const en = {
   ...aboutUs,
   ...accountDetails,
   ...blogPost,
+  ...requestBook,
+  ...productInfo,
+  ...ratingReviews,
   ...home
 }
 
