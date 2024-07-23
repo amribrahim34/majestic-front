@@ -133,7 +133,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, computed, onMounted } from 'vue'
+import { reactive, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useBostaStore } from '@/stores/bostaStore'
 
@@ -146,7 +146,7 @@ const form = reactive({
   email: '',
   phone: '',
   address: '',
-  cityId: '',
+  cityId: 0,
   districtId: '',
   zip: '',
   country: 'Egypt',
