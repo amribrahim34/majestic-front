@@ -1,5 +1,16 @@
 export interface City {
-  id: number
+  _id: string
   name: string
-  // Add other properties as needed
+  nameAr: string
+  code: string
+  alias: string
+  hub?: {
+    _id: string
+    name: string
+  }
+  sector: number
+  pickupAvailability: boolean
+  dropOffAvailability: boolean
+  showAsDropOff: boolean
+  showAsPickup: boolean
 }

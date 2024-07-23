@@ -15,6 +15,12 @@ const api: AxiosInstance = axios.create({
   }
 })
 
+interface BostaResponse<T> {
+  success: boolean
+  message: string
+  data: T
+}
+
 export const useBostaStore = defineStore('bosta', {
   state: (): BostaState => ({
     cities: [],
@@ -28,8 +34,10 @@ export const useBostaStore = defineStore('bosta', {
       this.loading = true
       this.error = null
       try {
-        const response = await api.get<City[]>('http://app.bosta.co/api/v2/cities')
-        this.cities = response.data
+        const response = await api.get<BostaResponse<{ list: City[] }>>(
+          'https://app.bosta.co/api/v2/cities'
+        )
+        this.cities = response.data.data.list
       } catch (error) {
         console.error('Error fetching cities:', error)
         this.error = 'Failed to fetch cities'
@@ -38,19 +46,14 @@ export const useBostaStore = defineStore('bosta', {
       }
     },
 
-    async fetchDistricts(cityId: number) {
+    async fetchDistricts(cityId: string) {
       this.loading = true
       this.error = null
       try {
-        const response = await axios.get<District[]>(
-          `https://api.bosta.co/cities/${cityId}/districts`,
-          {
-            headers: {
-              Authorization: `Bearer ${import.meta.env.VITE_BOSTA_API_KEY}`
-            }
-          }
+        const response = await api.get<BostaResponse<District[]>>(
+          `https://app.bosta.co/api/v2/cities/${cityId}/districts`
         )
-        this.districts = response.data
+        this.districts = response.data.data
       } catch (error) {
         console.error('Error fetching districts:', error)
         this.error = 'Failed to fetch districts'
@@ -61,8 +64,8 @@ export const useBostaStore = defineStore('bosta', {
   },
 
   getters: {
-    getCityById: (state) => (id: number) => state.cities.find((city) => city.id === id),
-    getDistrictById: (state) => (id: number) =>
-      state.districts.find((district) => district.id === id)
+    getCityById: (state) => (id: string) => state.cities.find((city) => city._id === id),
+    getDistrictById: (state) => (id: string) =>
+      state.districts.find((district) => district.districtId === id)
   }
 })

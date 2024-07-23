@@ -64,9 +64,14 @@
             @change="onCityChange"
             class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           >
-            <option value="">{{ t('shipping.selectCity') }}</option>
-            <option v-for="city in bostaStore.cities" :key="city.id" :value="city.id">
-              {{ city.name }}
+            <option value="" class="bg-black">{{ t('shipping.selectCity') }}</option>
+            <option
+              v-for="city in bostaStore.cities"
+              :key="city._id"
+              :value="city._id"
+              class="bg-black"
+            >
+              {{ currentLocale === 'ar' ? city.nameAr : city.name }}
             </option>
           </select>
         </div>
@@ -77,13 +82,14 @@
             required
             class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           >
-            <option value="">{{ t('shipping.selectDistrict') }}</option>
+            <option value="" class="bg-black">{{ t('shipping.selectDistrict') }}</option>
             <option
               v-for="district in bostaStore.districts"
-              :key="district.id"
-              :value="district.id"
+              :key="district.districtId"
+              :value="district.districtId"
+              class="bg-black"
             >
-              {{ district.name }}
+              {{ currentLocale === 'ar' ? district.districtName : district.districtOtherName }}
             </option>
           </select>
         </div>
@@ -137,8 +143,10 @@ import { reactive, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useBostaStore } from '@/stores/bostaStore'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const bostaStore = useBostaStore()
+
+const currentLocale = computed(() => locale.value)
 
 const form = reactive({
   name: '',
@@ -146,7 +154,7 @@ const form = reactive({
   email: '',
   phone: '',
   address: '',
-  cityId: 0,
+  cityId: '',
   districtId: '',
   zip: '',
   country: 'Egypt',

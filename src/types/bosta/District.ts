@@ -1,6 +1,10 @@
 export interface District {
-  id: number
-  name: string
-  cityId: number
-  // Add other properties as needed
+  zoneId: string
+  zoneName: string
+  zoneOtherName: string
+  districtId: string
+  districtName: string
+  districtOtherName: string
+  pickupAvailability: boolean
+  dropOffAvailability: boolean
 }
