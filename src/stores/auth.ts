@@ -14,18 +14,18 @@ export const useLoginStore = defineStore('login', () => {
       const response = await api.post('/login', { email, password })
       userData.value = response.data
       setToken(response.data?.token)
-      await transferGuestCart()
+      // await transferGuestCart()
     } catch (error) {
       throw new Error(error instanceof Error ? error.message : 'An unknown error occurred')
     }
   }
 
-  async function handleSignup(user: Omit<User, 'id'>) {
+  async function handleSignup(user: User) {
     try {
-      const response = await api.post('/signup', user)
+      const response = await api.post('/register', user)
       userData.value = response.data
       setToken(response.data?.token)
-      await transferGuestCart()
+      // await transferGuestCart()
     } catch (error) {
       throw new Error(error instanceof Error ? error.message : 'An unknown error occurred')
     }
@@ -83,6 +83,17 @@ export const useLoginStore = defineStore('login', () => {
     }
   }
 
+  async function loginWithProvider(provider: string) {
+    try {
+      const response = await api.get(`/auth/${provider}`)
+      if (response.data.url) {
+        window.location.href = response.data.url
+      }
+    } catch (error) {
+      console.error(`Error logging in with ${provider}:`, error)
+    }
+  }
+
   async function handleSocialLoginCallback(queryParams: string) {
     console.log('Handling social login callback')
     const params = new URLSearchParams(queryParams)
@@ -94,7 +105,7 @@ export const useLoginStore = defineStore('login', () => {
         const user = JSON.parse(decodeURIComponent(userJson))
         setUser(user)
         setToken(token)
-        await transferGuestCart()
+        // await transferGuestCart()
         return true
       } catch (error) {
         console.error('Error processing social login callback:', error)
@@ -137,6 +148,7 @@ export const useLoginStore = defineStore('login', () => {
     userData,
     isInitialized,
     isLoggedIn,
+    loginWithProvider,
     handleLogin,
     handleSignup,
     initializeAuth,

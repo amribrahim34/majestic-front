@@ -18,8 +18,8 @@ const messages: Record<SupportedLocale, MessageSchema> = {
 // Create the i18n instance
 export const i18n = createI18n({
   legacy: false,
-  locale: 'en',
-  fallbackLocale: 'en',
+  locale: 'ar',
+  fallbackLocale: 'ar',
   messages
 })
 

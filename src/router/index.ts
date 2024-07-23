@@ -11,6 +11,7 @@ import AuthCallback from '@/components/AuthCallback.vue'
 import books from './books'
 import orders from './orders'
 import carts from './carts'
+import requireGuest from '@/utils/requireGuest'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,12 +43,14 @@ const router = createRouter({
     {
       path: '/login',
       name: 'Login',
-      component: LoginView
+      component: LoginView,
+      beforeEnter: requireGuest
     },
     {
       path: '/signup',
       name: 'Signup',
-      component: SignupView
+      component: SignupView,
+      beforeEnter: requireGuest
     },
     {
       path: '/request-book',
@@ -57,7 +60,8 @@ const router = createRouter({
     {
       path: '/reset-password',
       name: 'ResetPassword',
-      component: ResetPasswordView
+      component: ResetPasswordView,
+      beforeEnter: requireGuest
     },
     {
       path: '/new-password',

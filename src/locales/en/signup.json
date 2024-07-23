@@ -1,0 +1,27 @@
+{
+  "signup": {
+    "title": "Sign up",
+    "subtitle": "Join our academic community!",
+    "fullName": "Full name",
+    "fullNamePlaceholder": "First Last",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "mobileNumber": "Mobile number",
+    "mobileNumberPlaceholder": "Enter your mobile number",
+    "password": "Create your password",
+    "passwordPlaceholder": "Create your password",
+    "confirmPassword": "Confirm password",
+    "confirmPasswordPlaceholder": "Confirm password",
+    "termsAgreement": "By signing up, you agree to our <a href='#' class='text-blue-500 hover:text-blue-800'>Terms</a> and <a href='#' class='text-blue-500 hover:text-blue-800'>Privacy Policy</a>.",
+    "signupButton": "Sign up",
+    "signupWithGoogle": "Sign up with Google",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Log in",
+    "errors": {
+      "acceptTerms": "Please accept the terms and privacy policy.",
+      "passwordMismatch": "Passwords do not match.",
+      "registrationFailed": "Registration failed. Please try again.",
+      "googleSignupFailed": "Google signup failed. Please try again."
+    }
+  }
+}
