@@ -95,7 +95,6 @@
 
 <script setup lang="ts">
 import { ref, computed, PropType, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
 import StarRating from '@/components/shared/StarRating.vue'
 import { Book } from '@/types/Book'
 import { useCartStore } from '@/stores/cart'
@@ -109,7 +108,6 @@ const props = defineProps({
   }
 })
 
-const { t } = useI18n()
 const cartStore = useCartStore()
 const wishlistStore = useWishlistStore()
 const { items: cartItems } = storeToRefs(cartStore)

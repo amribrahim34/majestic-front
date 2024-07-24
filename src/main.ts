@@ -15,6 +15,7 @@ import {
   faMinus,
   faPlus
 } from '@fortawesome/free-solid-svg-icons'
+import { createMetaManager } from 'vue-meta'
 
 library.add(
   faGoogle,
@@ -33,6 +34,32 @@ const pinia = createPinia()
 app.use(pinia)
 app.use(router)
 app.use(i18n)
+
+interface MetaInfo {
+  title?: string
+  description?: string
+  url?: string
+  [key: string]: any // For any additional properties
+}
+
+app.use(
+  createMetaManager(
+    {
+      // Config options if needed
+    },
+    (metaInfo: MetaInfo) => {
+      return {
+        title: metaInfo.title,
+        meta: [
+          { name: 'description', content: metaInfo.description },
+          { property: 'og:title', content: metaInfo.title },
+          { property: 'og:description', content: metaInfo.description }
+        ],
+        link: [{ rel: 'canonical', href: metaInfo.url }]
+      }
+    }
+  )
+)
 
 app.component('font-awesome-icon', FontAwesomeIcon)
 

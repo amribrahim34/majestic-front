@@ -61,7 +61,7 @@ const props = defineProps({
   }
 })
 
-const { t, d } = useI18n()
+const { d } = useI18n()
 
 const averageRating = computed(() => props.rating)
 const reviewsPerPage = 5

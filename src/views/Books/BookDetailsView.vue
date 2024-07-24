@@ -1,4 +1,10 @@
 <template>
+  <SEOMetaTags
+    :title="book.title + ' | MajesticMinds'"
+    :description="book.description"
+    :image="book.image"
+    :url="currentURL"
+  />
   <div class="container mx-auto">
     <HeaderComponent />
     <div class="book-display">
@@ -10,45 +16,74 @@
   </div>
 </template>
 
-<script lang="ts">
-import HeaderComponent from '@/components/Header.vue'
-import ProductInfo from '@/components/ProductDetails/ProductInfo.vue'
-// import RelatedProducts from '@/components/ProductDetails/RelatedProducts.vue'
-// import RatingReviews from '@/components/ProductDetails/RatingReviews.vue'
-import FooterComponent from '@/components/FooterComponent.vue'
-import { defineComponent, ref, onMounted, computed } from 'vue'
+<script setup lang="ts">
+import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useBookStore } from '@/stores/bookStore'
+import { useMeta } from 'vue-meta'
+import HeaderComponent from '@/components/Header.vue'
+import ProductInfo from '@/components/ProductDetails/ProductInfo.vue'
+import FooterComponent from '@/components/FooterComponent.vue'
 
-export default defineComponent({
-  name: 'BookDetailsView',
-  components: {
-    ProductInfo,
-    // RelatedProducts,
-    // RatingReviews,
-    HeaderComponent,
-    FooterComponent
-  },
+const route = useRoute()
+const bookStore = useBookStore()
+const book = computed(() => bookStore.currentBook)
+const currentURL = computed(() => window.location.href)
 
-  setup() {
-    const relatedProducts = ref([])
-    const route = useRoute()
-    const bookStore = useBookStore()
-    const book = computed(() => bookStore.currentBook)
-
-    const fetchBook = async () => {
-      const id = route.params.id as string
-      await bookStore.fetchBookById(id)
-    }
-
-    onMounted(fetchBook)
-
-    return {
-      book,
-      relatedProducts
-    }
-  }
+const author = computed(() => {
+  return book.value?.authors && book.value.authors.length > 0
+    ? book.value.authors[0].name
+    : 'Unknown Author'
 })
+
+computed(() => ({
+  '@context': 'https://schema.org',
+  '@type': 'Book',
+  name: book.value.title,
+  author: author,
+  isbn10: book.value.isbn10,
+  isbn13: book.value.isbn13,
+  numberOfPages: book.value.num_pages,
+  publisher: book.value.publisher,
+  datePublished: book.value.publication_date,
+  description: book.value.description
+}))
+
+const fetchBook = async () => {
+  const id = route.params.id as string
+  await bookStore.fetchBookById(id)
+}
+
+onMounted(fetchBook)
+
+// Use vue-meta to set meta tags and structured data
+useMeta(() => ({
+  title: `${book.value.title} | MajesticMinds`,
+  meta: [
+    { name: 'description', content: book.value.description },
+    { property: 'og:title', content: `${book.value.title} | MajesticMinds` },
+    { property: 'og:description', content: book.value.description },
+    { property: 'og:image', content: book.value.image },
+    { property: 'og:url', content: window.location.href }
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      json: {
+        '@context': 'https://schema.org',
+        '@type': 'Book',
+        name: book.value.title,
+        author: author,
+        isbn10: book.value.isbn10,
+        isbn13: book.value.isbn13,
+        numberOfPages: book.value.num_pages,
+        publisher: book.value.publisher,
+        datePublished: book.value.publication_date,
+        description: book.value.description
+      }
+    }
+  ]
+}))
 </script>
 
 <style scoped>

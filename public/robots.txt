@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /checkout/
+Disallow: /cart/
+
+# Allow CSS, JS, and image files
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.gif$
+Allow: /*.svg$
+
+# Sitemap
+Sitemap: https://majesticminds.net/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 10

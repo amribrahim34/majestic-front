@@ -21,17 +21,14 @@
 
 <script setup lang="ts">
 import { ref, PropType } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { Book } from '@/types/Book'
 
-const props = defineProps({
+defineProps({
   books: {
     type: Array as PropType<Book[]>,
     required: true
   }
 })
-
-const { t } = useI18n()
 
 const wishlist = ref<Set<number>>(new Set())
 

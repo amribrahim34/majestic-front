@@ -1,87 +1,15 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/LoginView.vue'
-import SignupView from '@/views/SignupView.vue'
-import ResetPasswordView from '@/views/ResetPasswordView.vue'
-import NewPasswordView from '@/views/NewPasswordView.vue'
-import RequestBookView from '@/views/RequestBookView.vue'
-import AccountDetailsView from '@/views/AccountDetailsView.vue'
-import AuthCallback from '@/components/AuthCallback.vue'
+import { createRouter, createWebHistory, Router } from 'vue-router'
+import routes from './routes'
+import { beforeEach, onError } from './guards'
+import scrollBehavior from './scrollBehavior'
 
-import books from './books'
-import orders from './orders'
-import carts from './carts'
-import requireGuest from '@/utils/requireGuest'
-
-const router = createRouter({
+const router: Router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    ...books,
-    ...orders,
-    ...carts,
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView
-    },
-
-    // {
-    //   path: '/papers',
-    //   name: 'Papers',
-    //   component: () => import('../views/Papers.vue')
-    // },
-    // {
-    //   path: '/bulk-order',
-    //   name: 'BulkOrder',
-    //   component: () => import('../views/BulkOrder.vue')
-    // },
-    {
-      path: '/auth/callback',
-      name: 'AuthCallback',
-      component: AuthCallback
-    },
-    {
-      path: '/login',
-      name: 'Login',
-      component: LoginView,
-      beforeEnter: requireGuest
-    },
-    {
-      path: '/signup',
-      name: 'Signup',
-      component: SignupView,
-      beforeEnter: requireGuest
-    },
-    {
-      path: '/request-book',
-      name: 'RequestBook',
-      component: RequestBookView
-    },
-    {
-      path: '/reset-password',
-      name: 'ResetPassword',
-      component: ResetPasswordView,
-      beforeEnter: requireGuest
-    },
-    {
-      path: '/new-password',
-      name: 'NewPassword',
-      component: NewPasswordView
-    },
-    {
-      path: '/account-details',
-      name: 'AccountDetails',
-      component: AccountDetailsView
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutUsView.vue')
-    }
-  ]
+  routes,
+  scrollBehavior
 })
+
+router.beforeEach(beforeEach)
+router.onError(onError)
 
 export default router
