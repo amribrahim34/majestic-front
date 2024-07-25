@@ -28,19 +28,26 @@
           {{ book.category?.category_name || t('common.uncategorized') }}
         </span>
       </div>
-      <div class="flex items-center justify-between">
+      <div
+        class="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-4 rtl:space-x-reverse"
+      >
         <span class="text-xl font-bold text-gray-900">
           {{ formatPrice(book.price) }}
         </span>
-        <div class="flex space-x-2">
+        <div
+          class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 rtl:space-x-reverse"
+        >
           <button
             @click="toggleWishlist"
             class="p-2.5 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            :disabled="wishlistStore.loading"
+            v-if="isAuthenticated()"
           >
             <svg
               class="w-5 h-5"
-              :class="{ 'text-red-500 fill-current': isWishlisted, 'text-gray-600': !isWishlisted }"
+              :class="{
+                'text-red-500 fill-current': book.is_wishlisted,
+                'text-gray-600': !book.is_wishlisted
+              }"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -53,7 +60,7 @@
               />
             </svg>
           </button>
-          <div v-if="cartItem" class="flex items-center space-x-2">
+          <div v-if="cartItem" class="flex items-center space-x-2 rtl:space-x-reverse">
             <button
               @click="decreaseQuantity"
               class="px-2 py-1 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
@@ -89,11 +96,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useCartStore } from '@/stores/cart'
 import { useWishlistStore } from '@/stores/wishlist'
 import type { Book } from '@/types/Book'
+import { isAuthenticated } from '@/utils/auth'
 
 const props = defineProps<{
   book: Book
@@ -106,14 +114,10 @@ const wishlistStore = useWishlistStore()
 const isAddingToCart = ref(false)
 
 const cartItem = computed(() => cartStore.items.find((item) => item.book.id === props.book.id))
-const isWishlisted = computed(() => wishlistStore.isItemWishlisted(props.book.id))
-
-onMounted(() => {
-  wishlistStore.fetchWishlist()
-})
 
 const toggleWishlist = async () => {
   await wishlistStore.toggleWishlistItem(props.book.id)
+  props.book.is_wishlisted = !props.book.is_wishlisted
 }
 
 const addToCart = async () => {

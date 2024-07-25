@@ -26,6 +26,7 @@ export interface Book {
   originalPrice?: number
   rating: number
   reviewCount: number
+  is_wishlisted: boolean
   // Relations
   authors?: Author[]
   category?: Category
