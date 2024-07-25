@@ -120,8 +120,9 @@ const updateRangeFilter = (filterTitle: string, newRange: { min: number; max: nu
 watch(
   () => props.categories,
   (newCategories) => {
+    console.log('New categories received:', newCategories)
     updateFilterOptions(
-      t('category'),
+      t('common.category'),
       newCategories.map((category) => ({
         value: category.id,
         label: category.category_name,
@@ -136,7 +137,7 @@ watch(
   () => props.formats,
   (newFormats) => {
     updateFilterOptions(
-      t('bookFormat'),
+      t('common.bookFormat'),
       newFormats.map((format) => ({
         value: format,
         label: format
@@ -149,7 +150,7 @@ watch(
 watch(
   () => props.priceRange,
   (newPriceRange) => {
-    updateRangeFilter(t('priceRange'), newPriceRange)
+    updateRangeFilter(t('common.priceRange'), newPriceRange)
   },
   { immediate: true }
 )
@@ -157,7 +158,7 @@ watch(
 watch(
   () => props.yearRange,
   (newYearRange) => {
-    updateRangeFilter(t('publishingYear'), newYearRange)
+    updateRangeFilter(t('common.publishingYear'), newYearRange)
   },
   { immediate: true }
 )
