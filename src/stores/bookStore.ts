@@ -6,6 +6,7 @@ import type { Publisher } from '@/types/Publisher'
 import type { Author } from '@/types/Author'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import qs from 'qs'
+import { RangeFilterType } from '@/types/Filter'
 
 export const useBookStore = defineStore('bookStore', {
   state: () => ({
@@ -22,7 +23,7 @@ export const useBookStore = defineStore('bookStore', {
     publishers: [] as Publisher[],
     authors: [] as Author[],
     formats: [],
-    priceRange: { min: 0, max: 0 },
+    priceRange: {} as RangeFilterType,
     yearRange: { min: 0, max: 0 },
     route: null as RouteLocationNormalizedLoaded | null,
     error: '',

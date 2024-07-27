@@ -1,181 +1,132 @@
 <template>
   <div class="filter-section p-10 bg-white shadow-lg">
-    <FilterGroup
-      v-for="filter in filters"
-      :key="filter.title"
-      :filter="filter"
-      @update:filter="updateFilter"
-      @load-more="loadMore"
+    <!-- Other filters -->
+    <DateRangeFilter
+      v-model="selectedYearRange"
+      :filter="{ min: yearRange.min, max: yearRange.max, selected: selectedYearRange }"
+      @update:modelValue="updateYearRange"
     />
+    <CategoryFilter
+      v-model="selectedCategories"
+      :display-limit="categoryDisplayLimit"
+      @load-more="loadMoreCategories"
+    />
+
+    <!-- Price filter -->
+    <div class="mb-6">
+      <h3 class="font-bold mb-2">{{ t('common.priceRange') }}</h3>
+      <PriceFilter v-model="selectedPriceRange" :min="priceRange.min" :max="priceRange.max" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import FilterGroup from './FilterGroup.vue'
-import type {
-  Filter,
-  CheckboxFilterType,
-  RangeFilterType,
-  DateRangeFilterType
-} from '@/types/Filter'
+import CategoryFilter from './Filters/CategoryFilter.vue'
+import PriceFilter from './Filters/PriceFilter.vue'
+import DateRangeFilter from './Filters/DateRangeFilter.vue'
+import { useBookStore } from '@/stores/bookStore'
+import { storeToRefs } from 'pinia'
 import { debounce } from '@/utils/debounce'
 
-interface Props {
-  initialFilters: Record<string, any>
-  categories: { id: number; category_name: string; books_count?: number }[]
-  formats: string[]
-  priceRange: { min: number; max: number }
-  yearRange: { min: number; max: number }
-}
+const { t } = useI18n()
+const bookStore = useBookStore()
+const { categories, priceRange, yearRange } = storeToRefs(bookStore)
 
-const props = defineProps<Props>()
+const props = defineProps<{
+  initialFilters: Record<string, any>
+}>()
+
+const filters = ref([
+  {
+    title: t('common.publishingYear'),
+    key: 'year_range[]',
+    componentType: 'DateRangeFilter',
+    min: yearRange.value.min,
+    max: yearRange.value.max,
+    selected: [yearRange.value.min, yearRange.value.max]
+  }
+])
 
 const emit = defineEmits<{
   (e: 'filterUpdated', filters: Record<string, any>): void
 }>()
 
-const { t } = useI18n()
+const selectedCategories = ref<(string | number)[]>([])
+const categoryDisplayLimit = ref(10)
+const selectedPriceRange = ref<[number, number]>([
+  priceRange.value?.min || 0,
+  priceRange.value?.max || 0
+])
+const minYear = new Date().getFullYear() - 100
+const maxYear = new Date().getFullYear()
+const selectedYearRange = ref<[number, number]>([
+  yearRange.value?.min || minYear,
+  yearRange.value?.max || maxYear
+])
+
+const loadMoreCategories = () => {
+  categoryDisplayLimit.value += 10
+}
+
+const updateYearRange = (newRange: { min: number; max: number }) => {
+  selectedYearRange.value = [newRange.min, newRange.max]
+  emitFilterUpdated()
+}
 
 const debouncedEmitFilterUpdated = debounce((filters: Record<string, any>) => {
   emit('filterUpdated', filters)
 }, 300)
 
-const filters = ref<Filter[]>([
-  {
-    title: t('common.category'),
-    isOpen: true,
-    componentType: 'CheckboxFilter',
-    key: 'category_ids[]',
-    options: [],
-    selected: [],
-    displayLimit: 10,
-    totalOptions: 0
-  } as CheckboxFilterType,
-  {
-    title: t('common.priceRange'),
-    isOpen: true,
-    componentType: 'RangeFilter',
-    key: 'price_range[]',
-    min: 0,
-    max: 1000,
-    selected: [0, 1000]
-  } as RangeFilterType,
-  {
-    title: t('common.publishingYear'),
-    isOpen: true,
-    componentType: 'DateRangeFilter',
-    key: 'year_range[]',
-    min: 1900,
-    max: new Date().getFullYear(),
-    selected: [1900, new Date().getFullYear()]
-  } as DateRangeFilterType
-])
-
-const updateFilter = (updatedFilter: Filter) => {
-  const index = filters.value.findIndex((f) => f.title === updatedFilter.title)
-  if (index !== -1) {
-    filters.value[index] = updatedFilter
-  }
-  debouncedEmitFilterUpdated(getFiltersForAPI())
-}
-
-const loadMore = (filterTitle: string) => {
-  const filter = filters.value.find((f) => f.title === filterTitle) as CheckboxFilterType
-  if (filter && filter.componentType === 'CheckboxFilter') {
-    filter.displayLimit += 10
-  }
-}
-
-const getFiltersForAPI = () => {
-  return filters.value.reduce(
-    (acc, filter) => {
-      if (filter.selected && filter.selected.length > 0) {
+const emitFilterUpdated = () => {
+  const updatedFilters = {
+    ...filters.value.reduce(
+      (acc, filter) => {
         acc[filter.key] = filter.selected
-      }
-      return acc
-    },
-    {} as Record<string, any>
-  )
-}
-
-const updateFilterOptions = (filterTitle: string, newOptions: any[]) => {
-  const filter = filters.value.find((f) => f.title === filterTitle) as CheckboxFilterType
-  if (filter && 'options' in filter) {
-    filter.options = newOptions
-    filter.totalOptions = newOptions.length
+        return acc
+      },
+      {} as Record<string, any>
+    ),
+    'category_ids[]': selectedCategories.value,
+    'price_range[]': selectedPriceRange.value,
+    'year_range[]': selectedYearRange.value
   }
-}
-
-const updateRangeFilter = (filterTitle: string, newRange: { min: number; max: number }) => {
-  const filter = filters.value.find((f) => f.title === filterTitle) as RangeFilterType
-  if (filter) {
-    filter.min = newRange.min
-    filter.max = newRange.max
-    filter.selected = [newRange.min, newRange.max]
-  }
+  debouncedEmitFilterUpdated(updatedFilters)
 }
 
 watch(
-  () => props.categories,
-  (newCategories) => {
-    console.log('New categories received:', newCategories)
-    updateFilterOptions(
-      t('common.category'),
-      newCategories.map((category) => ({
-        value: category.id,
-        label: category.category_name,
-        books_count: category.books_count
-      }))
-    )
+  [selectedCategories, selectedPriceRange, selectedYearRange],
+  () => {
+    emitFilterUpdated()
   },
-  { immediate: true }
-)
-
-watch(
-  () => props.formats,
-  (newFormats) => {
-    updateFilterOptions(
-      t('common.bookFormat'),
-      newFormats.map((format) => ({
-        value: format,
-        label: format
-      }))
-    )
-  },
-  { immediate: true }
-)
-
-watch(
-  () => props.priceRange,
-  (newPriceRange) => {
-    updateRangeFilter(t('common.priceRange'), newPriceRange)
-  },
-  { immediate: true }
-)
-
-watch(
-  () => props.yearRange,
-  (newYearRange) => {
-    updateRangeFilter(t('common.publishingYear'), newYearRange)
-  },
-  { immediate: true }
+  { deep: true }
 )
 
 watch(
   () => props.initialFilters,
   (newFilters) => {
-    filters.value.forEach((filter) => {
-      if (newFilters[filter.key]) {
-        filter.selected = newFilters[filter.key]
-      }
-    })
+    if (newFilters['category_ids[]']) {
+      selectedCategories.value = newFilters['category_ids[]']
+    }
+    if (newFilters['price_range[]']) {
+      selectedPriceRange.value = newFilters['price_range[]']
+    }
+    if (newFilters['year_range[]']) {
+      selectedYearRange.value = newFilters['year_range[]']
+    }
   },
   { immediate: true }
 )
 
 onMounted(() => {
-  debouncedEmitFilterUpdated(getFiltersForAPI())
+  if (categories.value.length === 0) {
+    bookStore.fetchCategories()
+  }
+  if (!priceRange.value?.min || !priceRange.value?.max) {
+    bookStore.fetchPriceRange().then(() => {
+      selectedPriceRange.value = [priceRange.value.min, priceRange.value.max]
+    })
+  }
 })
 </script>

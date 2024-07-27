@@ -14,7 +14,7 @@
           :aria-label="t('shipping.name')"
         />
       </div>
-      <div>
+      <!-- <div>
         <input
           type="text"
           id="institution"
@@ -22,8 +22,8 @@
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           :placeholder="t('shipping.institution')"
         />
-      </div>
-      <div>
+      </div> -->
+      <!-- <div>
         <input
           type="email"
           id="email"
@@ -33,7 +33,7 @@
           :placeholder="t('shipping.email')"
         />
         <span v-if="errors.email" class="text-red-500 text-sm">{{ errors.email }}</span>
-      </div>
+      </div> -->
       <div>
         <input
           type="tel"
@@ -42,6 +42,7 @@
           required
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           :placeholder="t('shipping.phone')"
+          :aria-label="t('shipping.phone')"
         />
         <span v-if="errors.phone" class="text-red-500 text-sm">{{ errors.phone }}</span>
       </div>
@@ -54,6 +55,13 @@
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           :placeholder="t('shipping.address')"
         />
+        <button
+          type="button"
+          @click="getGeolocation"
+          class="mt-2 bg-gray-700 text-white py-1 px-2 rounded text-sm"
+        >
+          {{ t('shipping.useMyLocation') }}
+        </button>
       </div>
       <div class="flex gap-4">
         <div class="flex-1">
@@ -94,7 +102,7 @@
           </select>
         </div>
       </div>
-      <div class="flex gap-4">
+      <!-- <div class="flex gap-4">
         <div class="flex-1">
           <input
             type="text"
@@ -113,12 +121,11 @@
             class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
             :placeholder="t('shipping.country')"
           >
-            <option value="Egypt">{{ t('countries.egypt') }}</option>
-            <!-- Add more country options if needed -->
+            <option value="Egypt" selected>{{ t('countries.egypt') }}</option>
           </select>
         </div>
-      </div>
-      <div class="flex items-center">
+      </div> -->
+      <!-- <div class="flex items-center">
         <input
           type="checkbox"
           id="useBillingAddress"
@@ -126,7 +133,7 @@
           class="mr-2"
         />
         <label for="useBillingAddress">{{ t('shipping.useBillingAddress') }}</label>
-      </div>
+      </div> -->
       <button
         type="submit"
         class="w-full bg-white text-black py-2 px-4 rounded hover:bg-gray-200 transition-colors"
@@ -211,6 +218,28 @@ const submitForm = () => {
   validatePhone()
   if (isFormValid.value) {
     emit('submit', form)
+  }
+}
+
+const getGeolocation = () => {
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords
+        // You might want to use these coordinates to fetch the address
+        // For now, we'll just update the form with the coordinates
+        form.address = `Lat: ${latitude}, Lon: ${longitude}`
+        // You could also use these coordinates to determine the city and district
+        // This would require reverse geocoding, which typically needs an API
+      },
+      (error) => {
+        console.error('Error getting location:', error.message)
+        // Handle error (e.g., show a message to the user)
+      }
+    )
+  } else {
+    console.error('Geolocation is not supported by this browser.')
+    // Handle lack of support (e.g., show a message to the user)
   }
 }
 

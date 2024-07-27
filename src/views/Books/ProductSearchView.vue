@@ -58,17 +58,22 @@ const fetchBooks = async () => {
 const debouncedOnFilterUpdated = debounce((filters: Record<string, any>) => {
   const query = { ...route.query, ...filters }
   const processedQuery = Object.fromEntries(
-    Object.entries(query).map(([key, value]) => [
-      key,
-      Array.isArray(value) ? value.join(',') : value
-    ])
+    Object.entries(query).map(([key, value]) => {
+      if (key === 'year_range[]') {
+        // Ensure year range is always an array of two numbers
+        return [key, Array.isArray(value) ? value.join(',') : value]
+      }
+      return [key, Array.isArray(value) ? value.join(',') : value]
+    })
   )
   router.push({ query: processedQuery })
 }, 300)
 
 const fetchFilters = async () => {
   try {
+    // console.log('this is the price range in the view ', priceRange)
     await fetchAllFilterData()
+    console.log('this is the price range in the view ', priceRange.value)
   } catch (error) {
     console.error('Error fetching filter data:', error)
   }
@@ -78,7 +83,10 @@ const filtersFromURL = computed(() => {
   return Object.fromEntries(
     Object.entries(route.query).map(([key, value]) => {
       if (typeof value === 'string') {
-        return [key, key === 'year_range' ? value.split(',').map(Number) : value.split(',')]
+        if (key === 'year_range[]') {
+          return [key, value.split(',').map(Number)]
+        }
+        return [key, value.split(',')]
       }
       return [key, value]
     })

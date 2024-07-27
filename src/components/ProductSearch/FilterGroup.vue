@@ -1,4 +1,3 @@
-<!-- FilterGroup.vue -->
 <template>
   <div class="pb-5 border-b">
     <div class="filter-header font-bold text-lg cursor-pointer" @click="toggleOpen">
