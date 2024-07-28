@@ -78,37 +78,36 @@ const loadMoreCategories = () => {
 
 const updateYearRange = (newRange: { min: number; max: number }) => {
   selectedYearRange.value = [newRange.min, newRange.max]
-  emitFilterUpdated()
+  emitFilterUpdated('year_range[]', selectedYearRange.value)
 }
 
 const updatePriceRange = (newRange: number[]) => {
   selectedPriceRange.value = [newRange[0], newRange[1]]
-  emitFilterUpdated()
+  emitFilterUpdated('price_range[]', selectedPriceRange.value)
 }
 
 const updateCategory = (ids: number[]) => {
   selectedCategories.value = ids
-  emitFilterUpdated()
+  emitFilterUpdated('category_ids[]', selectedCategories.value)
 }
 
 const debouncedEmitFilterUpdated = debounce((filters: Record<string, any>) => {
   emit('filterUpdated', filters)
 }, 300)
 
-const emitFilterUpdated = () => {
-  const updatedFilters = {
-    ...filters.value.reduce(
-      (acc, filter) => {
-        acc[filter.key] = filter.selected
-        return acc
-      },
-      {} as Record<string, any>
-    ),
-    'category_ids[]': selectedCategories.value,
-    'price_range[]': selectedPriceRange.value,
-    'year_range[]': selectedYearRange.value
+const previousFilters = ref<Record<string, any>>({})
+
+const emitFilterUpdated = (changedFilterKey: string, value: any) => {
+  const updatedFilters: Record<string, any> = {}
+
+  if (JSON.stringify(previousFilters.value[changedFilterKey]) !== JSON.stringify(value)) {
+    updatedFilters[changedFilterKey] = value
+    previousFilters.value[changedFilterKey] = value
   }
-  debouncedEmitFilterUpdated(updatedFilters)
+
+  if (Object.keys(updatedFilters).length > 0) {
+    debouncedEmitFilterUpdated(updatedFilters)
+  }
 }
 
 // watch(
@@ -135,6 +134,25 @@ const emitFilterUpdated = () => {
 //   { immediate: true }
 // )
 
+watch(
+  () => props.initialFilters,
+  (newFilters) => {
+    if (newFilters['category_ids[]']) {
+      selectedCategories.value = newFilters['category_ids[]']
+      previousFilters.value['category_ids[]'] = newFilters['category_ids[]']
+    }
+    if (newFilters['price_range[]']) {
+      selectedPriceRange.value = newFilters['price_range[]']
+      previousFilters.value['price_range[]'] = newFilters['price_range[]']
+    }
+    if (newFilters['year_range[]']) {
+      selectedYearRange.value = newFilters['year_range[]']
+      previousFilters.value['year_range[]'] = newFilters['year_range[]']
+    }
+  },
+  { immediate: true }
+)
+
 onMounted(() => {
   if (categories.value.length === 0) {
     bookStore.fetchCategories()
@@ -142,7 +160,10 @@ onMounted(() => {
   if (!priceRange.value?.min || !priceRange.value?.max) {
     bookStore.fetchPriceRange().then(() => {
       selectedPriceRange.value = [priceRange.value.min, priceRange.value.max]
+      previousFilters.value['price_range[]'] = selectedPriceRange.value
     })
   }
+  previousFilters.value['year_range[]'] = selectedYearRange.value
+  previousFilters.value['category_ids[]'] = selectedCategories.value
 })
 </script>
