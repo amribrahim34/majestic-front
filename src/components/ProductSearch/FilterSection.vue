@@ -10,12 +10,18 @@
       v-model="selectedCategories"
       :display-limit="categoryDisplayLimit"
       @load-more="loadMoreCategories"
+      @update:modelValue="updateCategory"
     />
 
     <!-- Price filter -->
     <div class="mb-6">
       <h3 class="font-bold mb-2">{{ t('common.priceRange') }}</h3>
-      <PriceFilter v-model="selectedPriceRange" :min="priceRange.min" :max="priceRange.max" />
+      <PriceFilter
+        v-model="selectedPriceRange"
+        :min="priceRange.min"
+        :max="priceRange.max"
+        @update:modelValue="updatePriceRange"
+      />
     </div>
   </div>
 </template>
@@ -75,6 +81,16 @@ const updateYearRange = (newRange: { min: number; max: number }) => {
   emitFilterUpdated()
 }
 
+const updatePriceRange = (newRange: number[]) => {
+  selectedPriceRange.value = [newRange[0], newRange[1]]
+  emitFilterUpdated()
+}
+
+const updateCategory = (ids: number[]) => {
+  selectedCategories.value = ids
+  emitFilterUpdated()
+}
+
 const debouncedEmitFilterUpdated = debounce((filters: Record<string, any>) => {
   emit('filterUpdated', filters)
 }, 300)
@@ -95,29 +111,29 @@ const emitFilterUpdated = () => {
   debouncedEmitFilterUpdated(updatedFilters)
 }
 
-watch(
-  [selectedCategories, selectedPriceRange, selectedYearRange],
-  () => {
-    emitFilterUpdated()
-  },
-  { deep: true }
-)
+// watch(
+//   [selectedCategories, selectedPriceRange, selectedYearRange],
+//   () => {
+//     emitFilterUpdated()
+//   },
+//   { deep: true }
+// )
 
-watch(
-  () => props.initialFilters,
-  (newFilters) => {
-    if (newFilters['category_ids[]']) {
-      selectedCategories.value = newFilters['category_ids[]']
-    }
-    if (newFilters['price_range[]']) {
-      selectedPriceRange.value = newFilters['price_range[]']
-    }
-    if (newFilters['year_range[]']) {
-      selectedYearRange.value = newFilters['year_range[]']
-    }
-  },
-  { immediate: true }
-)
+// watch(
+//   () => props.initialFilters,
+//   (newFilters) => {
+//     if (newFilters['category_ids[]']) {
+//       selectedCategories.value = newFilters['category_ids[]']
+//     }
+//     if (newFilters['price_range[]']) {
+//       selectedPriceRange.value = newFilters['price_range[]']
+//     }
+//     if (newFilters['year_range[]']) {
+//       selectedYearRange.value = newFilters['year_range[]']
+//     }
+//   },
+//   { immediate: true }
+// )
 
 onMounted(() => {
   if (categories.value.length === 0) {

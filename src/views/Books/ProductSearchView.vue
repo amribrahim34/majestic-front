@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, watch } from 'vue'
+import { onMounted, computed, watch, onBeforeMount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useBookStore } from '@/stores/bookStore'
@@ -71,7 +71,6 @@ const debouncedOnFilterUpdated = debounce((filters: Record<string, any>) => {
 
 const fetchFilters = async () => {
   try {
-    // console.log('this is the price range in the view ', priceRange)
     await fetchAllFilterData()
     console.log('this is the price range in the view ', priceRange.value)
   } catch (error) {
@@ -109,11 +108,14 @@ const onPageChange = (page: number) => {
   fetchBooks()
 }
 
+onBeforeMount(async () => {
+  await fetchFilters()
+})
+
 onMounted(async () => {
   if (route.query.search) {
     bookStore.setSearchQuery(route.query.search as string)
   }
-  await fetchFilters()
   await fetchBooks()
 })
 

@@ -8,6 +8,7 @@
         :step="10"
         :min="minValue"
         :max="maxValue"
+        @dragend="updateValue"
       />
       <n-space>
         <n-input-number
@@ -15,12 +16,14 @@
           size="small"
           :min="minValue"
           :max="maxValue"
+          @blur="updateValue"
         />
         <n-input-number
           v-model:value="localValue[1]"
           size="small"
           :min="minValue"
           :max="maxValue"
+          @blur="updateValue"
         />
       </n-space>
     </n-space>
@@ -30,6 +33,7 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted } from 'vue'
 import { NSpace, NSlider, NInputNumber } from 'naive-ui'
+import debounce from 'lodash/debounce'
 
 const props = defineProps({
   modelValue: {
@@ -55,25 +59,27 @@ const marks = computed(() => ({
 
 const isRtl = computed(() => props.language === 'ar')
 
+const updateValue = debounce(() => {
+  emit('update:modelValue', localValue.value)
+}, 300)
+
 watch(
   () => props.modelValue,
   (newValue) => {
-    if (newValue[0] !== localValue.value[0] || newValue[1] !== localValue.value[1]) {
+    if (
+      newValue &&
+      newValue.length === 2 &&
+      (newValue[0] !== localValue.value[0] || newValue[1] !== localValue.value[1])
+    ) {
       localValue.value = [...newValue]
     }
   },
   { immediate: true, deep: true }
 )
 
-watch(
-  () => localValue.value,
-  (newValue) => {
-    emit('update:modelValue', newValue)
-  },
-  { deep: true }
-)
-
 onMounted(() => {
-  localValue.value = [...props.modelValue]
+  if (props.modelValue && props.modelValue.length === 2) {
+    localValue.value = [...props.modelValue]
+  }
 })
 </script>
