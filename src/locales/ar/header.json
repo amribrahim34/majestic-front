@@ -26,7 +26,7 @@
     },
     "yourCart": "عربة التسوق",
     "itemsInCart": "{count} عنصر في عربة التسوق",
-    "total": "المجموع: ${amount}",
+    "total": "الاجمالي: {amount} ج.م",
     "checkout": "الدفع",
     "emptyCart": "عربة التسوق فارغة"
   }

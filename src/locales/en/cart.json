@@ -6,13 +6,14 @@
     "isbn": "ISBN",
     "quantity": "Quantity",
     "totalPrice": "Total Price",
-    "currency": "${price}",
+    "currency": "LE",
     "decreaseQuantity": "Decrease quantity",
     "increaseQuantity": "Increase quantity",
-    "price": "${price}",
+    "price": "{price}",
     "removeItem": "Remove item",
     "subtotal": "Subtotal",
     "shipping": "Shipping",
+    "itemPrice": "price",
     "total": "Total"
   }
 }

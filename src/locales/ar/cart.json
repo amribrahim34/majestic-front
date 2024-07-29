@@ -6,13 +6,14 @@
     "isbn": "الرقم التسلسلي الدولي",
     "quantity": "الكمية",
     "totalPrice": "السعر الإجمالي",
-    "currency": "${price} $",
+    "currency": "{price} ج.م",
     "decreaseQuantity": "تقليل الكمية",
     "increaseQuantity": "زيادة الكمية",
-    "price": "${price} $",
+    "price": "{price} جم",
     "removeItem": "إزالة العنصر",
     "subtotal": "المجموع الفرعي",
     "shipping": "الشحن",
+    "itemPrice": "السعر",
     "total": "المجموع"
   }
 }
