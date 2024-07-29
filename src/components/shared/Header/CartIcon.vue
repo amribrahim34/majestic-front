@@ -1,38 +1,4 @@
 <template>
-  <!-- <div class="relative">
-    <button @click="toggleCartPreview" class="relative p-2">
-      <font-awesome-icon icon="shopping-cart" class="text-gray-700 text-xl" />
-      <span
-        v-if="cartItemCount > 0"
-        class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
-      >
-        {{ cartItemCount }}
-      </span>
-    </button>
-    <div
-      v-if="showCartPreview"
-      class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-4 px-6 z-50"
-    >
-      <h3 class="font-bold text-lg mb-3">{{ t('header.yourCart') }}</h3>
-      <div v-if="cartItemCount > 0">
-        <p class="text-gray-600">
-          {{ t('header.itemsInCart', { count: cartItemCount }) }}
-        </p>
-        <div class="mt-4 pt-4 border-t border-gray-200">
-          <p class="font-semibold">{{ t('header.total', { amount: 'XX.XX' }) }}</p>
-        </div>
-        <button
-          @click="goToCheckout"
-          class="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
-        >
-          {{ t('header.checkout') }}
-        </button>
-      </div>
-      <div v-else>
-        <p class="text-gray-600">{{ t('header.emptyCart') }}</p>
-      </div>
-    </div>
-  </div> -->
   <div class="relative">
     <button @click="toggleCartPreview" class="relative px-3 py-2" ref="cartButton">
       <font-awesome-icon icon="shopping-cart" class="text-gray-700 text-xl" />
@@ -52,37 +18,39 @@
       <h3 class="font-bold text-xl mb-4">{{ t('header.yourCart') }}</h3>
       <div v-if="cartItemCount > 0">
         <ul v-if="!loading" class="divide-y divide-gray-200">
-          <li v-for="item in items" :key="item.id" class="py-4 flex">
-            <img :src="item.book.image" alt="Book cover" class="h-24 w-16 object-cover mr-4" />
-            <div class="flex-1">
-              <h4 class="font-semibold">{{ item.book.title }}</h4>
-              <p class="text-gray-600">
-                {{ t('cart.itemPrice') }} {{ formatPrice(item.book.price * item.quantity) }}
-                {{ t('cart.currency') }}
-              </p>
-              <div class="flex items-center mt-2">
-                <button
-                  @click="decreaseQuantity(item.book.id)"
-                  class="bg-gray-200 text-gray-700 px-2 py-1 rounded-l hover:bg-gray-300"
-                >
-                  -
-                </button>
-                <span class="bg-gray-100 px-3 py-1">{{ item.quantity }}</span>
-                <button
-                  @click="increaseQuantity(item.book.id)"
-                  class="bg-gray-200 text-gray-700 px-2 py-1 rounded-r hover:bg-gray-300"
-                >
-                  +
-                </button>
-                <button
-                  @click="removeFromCart(item.book.id)"
-                  class="ml-4 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                >
-                  <font-awesome-icon icon="trash-alt" />
-                </button>
+          <n-scrollbar style="max-height: 200px">
+            <li v-for="item in items" :key="item.id" class="py-4 flex">
+              <img :src="item.book.image" alt="Book cover" class="h-24 w-16 object-cover mr-4" />
+              <div class="flex-1">
+                <h4 class="font-semibold">{{ item.book.title }}</h4>
+                <p class="text-gray-600">
+                  {{ t('cart.itemPrice') }} {{ formatPrice(item.book.price * item.quantity) }}
+                  {{ t('cart.currency') }}
+                </p>
+                <div class="flex items-center mt-2 gap-1">
+                  <button
+                    @click="decreaseQuantity(item.book.id)"
+                    class="bg-black text-white px-2 py-1 hover:bg-red-700"
+                  >
+                    -
+                  </button>
+                  <span class="bg-gray-100 px-3 py-1">{{ item.quantity }}</span>
+                  <button
+                    @click="increaseQuantity(item.book.id)"
+                    class="bg-black text-white px-2 py-1 hover:bg-green-700"
+                  >
+                    +
+                  </button>
+                  <button
+                    @click="removeFromCart(item.book.id)"
+                    class="ml-4 bg-red-500 text-white px-2 py-1 hover:bg-red-700"
+                  >
+                    <font-awesome-icon icon="trash-alt" />
+                  </button>
+                </div>
               </div>
-            </div>
-          </li>
+            </li>
+          </n-scrollbar>
         </ul>
         <div class="mt-4 border-t pt-4">
           <p class="font-semibold text-lg">
@@ -92,13 +60,13 @@
         <div class="mt-4 flex space-x-4">
           <button
             @click="goToCart"
-            class="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300"
+            class="flex-1 bg-gray-200 text-gray-800 px-4 py-2 hover:bg-gray-300"
           >
             Go to Cart
           </button>
           <button
             @click="goToCheckout"
-            class="flex-1 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            class="flex-1 bg-black text-white px-4 py-2 hover:bg-green-700"
           >
             {{ t('header.checkout') }}
           </button>
@@ -108,7 +76,7 @@
         <p>{{ t('header.emptyCart') }}</p>
       </div>
       <p v-if="loading">Loading cart...</p>
-      <p v-if="error" class="text-red-500">{{ error }}</p>
+      <p v-if="error" class="text-red-700">{{ error }}</p>
     </div>
   </div>
 </template>
@@ -119,7 +87,7 @@ import { storeToRefs } from 'pinia'
 import { useCartStore } from '@/stores/cart'
 import { useRouter } from 'vue-router'
 import { useTypedI18n } from '@/i18n'
-
+import { NScrollbar } from 'naive-ui'
 const router = useRouter()
 const cartStore = useCartStore()
 const { cartItemCount, loading, items, cartTotal, error } = storeToRefs(cartStore)
