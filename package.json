@@ -22,7 +22,6 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.8",
-    "@sentry/vue": "^8.20.0",
     "axios": "^1.6.7",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
