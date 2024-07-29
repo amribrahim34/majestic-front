@@ -37,7 +37,7 @@ import debounce from 'lodash/debounce'
 
 const props = defineProps({
   modelValue: {
-    type: Array as () => [number, number],
+    type: Array as unknown as () => [number, number],
     required: true
   },
   min: { type: Number, default: 10 },

@@ -43,7 +43,7 @@ Sentry.init({
   // Performance Monitoring
   tracesSampleRate: 1.0, //  Capture 100% of the transactions
   // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-  tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/],
+  tracePropagationTargets: ['localhost', 'majesticminds.net'],
   // Session Replay
   replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
   replaysOnErrorSampleRate: 1.0 // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
@@ -51,28 +51,33 @@ Sentry.init({
 
 interface MetaInfo {
   title?: string
+  titleTemplate?: string
   description?: string
   url?: string
   [key: string]: any // For any additional properties
 }
 
 app.use(
-  createMetaManager(
-    {
-      // Config options if needed
-    },
-    (metaInfo: MetaInfo) => {
-      return {
-        title: metaInfo.title,
-        meta: [
-          { name: 'description', content: metaInfo.description },
-          { property: 'og:title', content: metaInfo.title },
-          { property: 'og:description', content: metaInfo.description }
-        ],
-        link: [{ rel: 'canonical', href: metaInfo.url }]
-      }
+  createMetaManager(undefined, (metaInfo: MetaInfo) => {
+    return {
+      title: 'Majestic Minds',
+      titleTemplate: '%s | Majestic Minds Bookstore',
+      meta: [
+        {
+          name: 'description',
+          content:
+            'Discover a world of knowledge at Majestic Minds Bookstore. Browse our vast collection of books across all genres and expand your horizons.'
+        },
+        { property: 'og:title', content: 'Majestic Minds Bookstore - Your Gateway to Knowledge' },
+        {
+          property: 'og:description',
+          content:
+            'Explore our curated selection of books, from bestsellers to rare finds. Majestic Minds Bookstore: Where curious minds find their next great read.'
+        }
+      ],
+      link: [{ rel: 'canonical', href: metaInfo.url }]
     }
-  )
+  })
 )
 
 app.component('font-awesome-icon', FontAwesomeIcon)

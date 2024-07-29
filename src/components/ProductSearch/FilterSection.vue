@@ -44,16 +44,16 @@ const props = defineProps<{
   initialFilters: Record<string, any>
 }>()
 
-const filters = ref([
-  {
-    title: t('common.publishingYear'),
-    key: 'year_range[]',
-    componentType: 'DateRangeFilter',
-    min: yearRange.value.min,
-    max: yearRange.value.max,
-    selected: [yearRange.value.min, yearRange.value.max]
-  }
-])
+// const filters = ref([
+//   {
+//     title: t('common.publishingYear'),
+//     key: 'year_range[]',
+//     componentType: 'DateRangeFilter',
+//     min: yearRange.value.min,
+//     max: yearRange.value.max,
+//     selected: [yearRange.value.min, yearRange.value.max]
+//   }
+// ])
 
 const emit = defineEmits<{
   (e: 'filterUpdated', filters: Record<string, any>): void
