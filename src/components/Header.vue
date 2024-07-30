@@ -23,7 +23,7 @@
       </div>
 
       <!-- Navigation Links -->
-      <nav class="flex items-center space-x-4">
+      <nav class="flex items-center space-x-5">
         <router-link to="/books">{{ $t('header.nav.books') }}</router-link>
         <cart-icon />
         <user-menu />

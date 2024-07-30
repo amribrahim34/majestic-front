@@ -28,7 +28,7 @@
     <template v-else>
       <router-link
         to="/login"
-        class="text-gray-700 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100"
+        class="text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-100"
       >
         {{ $t('header.nav.login') }}
       </router-link>
