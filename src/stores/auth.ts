@@ -5,13 +5,29 @@ import type { User } from '@/types/user'
 import axios from 'axios'
 
 export const useLoginStore = defineStore('login', () => {
+  // State
   const userData = ref<User | null>(null)
   const isInitialized = ref(false)
   const errors = ref<null | [] | Error>(null)
   const successMessage = ref<string | null>(null)
   const errorMessage = ref<string | null>(null)
+
+  // Computed
   const isLoggedIn = computed(() => !!userData.value)
 
+  // Private Methods
+  function setToken(token: string) {
+    localStorage.setItem('auth_token', token)
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  }
+
+  function clearAuthData() {
+    userData.value = null
+    localStorage.removeItem('auth_token')
+    delete api.defaults.headers.common['Authorization']
+  }
+
+  // Public Methods
   async function handleLogin(email: string, password: string) {
     try {
       const response = await api.post('/login', { email, password })
@@ -19,20 +35,9 @@ export const useLoginStore = defineStore('login', () => {
       setToken(response.data?.token)
       successMessage.value = 'Login successful!'
       errorMessage.value = null
-      // await transferGuestCart()
+      // await transferGuestCart();
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        errorMessage.value = error.response.data.message || 'An error occurred during login.'
-      } else {
-        errorMessage.value = 'An unknown error occurred'
-      }
-      errors.value = error as Error | [] | null
-      successMessage.value = null
-      if (errorMessage.value === null) {
-        throw new Error('An unexpected error occurred')
-      } else {
-        throw new Error(errorMessage.value)
-      }
+      handleError(error, 'An error occurred during login.')
     }
   }
 
@@ -43,20 +48,9 @@ export const useLoginStore = defineStore('login', () => {
       setToken(response.data?.token)
       successMessage.value = 'Signup successful!'
       errorMessage.value = null
-      // await transferGuestCart()
+      // await transferGuestCart();
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        errorMessage.value = error.response.data.message || 'An error occurred '
-      } else {
-        errorMessage.value = 'An unknown error occurred'
-      }
-      errors.value = error as Error | [] | null
-      successMessage.value = null
-      if (errorMessage.value === null) {
-        throw new Error('An unexpected error occurred')
-      } else {
-        throw new Error(errorMessage.value)
-      }
+      handleError(error, 'An error occurred during signup.')
     }
   }
 
@@ -65,44 +59,33 @@ export const useLoginStore = defineStore('login', () => {
     const token = localStorage.getItem('auth_token')
 
     if (!token) {
-      handleLogout()
+      clearAuthData()
       isInitialized.value = true
       return
     }
 
     try {
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      setToken(token)
       const response = await api.get('/user')
-
       if (response.data) {
         userData.value = response.data
-        setToken(token)
       } else {
         throw new Error('User data not found')
       }
     } catch (error) {
       console.error('Failed to initialize auth:', error)
-      handleLogout()
+      clearAuthData()
     } finally {
       isInitialized.value = true
     }
   }
 
   function handleLogout() {
-    userData.value = null
-    localStorage.removeItem('auth_token')
-    delete api.defaults.headers.common['Authorization']
+    clearAuthData()
   }
 
   function setUser(user: User) {
-    console.log('Setting user:', user)
     userData.value = user
-  }
-
-  function setToken(token: string) {
-    console.log('Setting token:', token)
-    localStorage.setItem('auth_token', token)
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
   }
 
   async function handleSocialLogin(user: User) {
@@ -116,8 +99,7 @@ export const useLoginStore = defineStore('login', () => {
     try {
       const response = await api.patch('/user', { [field]: value })
       if (response.data) {
-        const user = response.data
-        setUser(user)
+        setUser(response.data)
       }
     } catch (error) {
       console.error('Failed to update user field:', error)
@@ -147,7 +129,7 @@ export const useLoginStore = defineStore('login', () => {
         const user = JSON.parse(decodeURIComponent(userJson))
         setUser(user)
         setToken(token)
-        // await transferGuestCart()
+        // await transferGuestCart();
         return true
       } catch (error) {
         console.error('Error processing social login callback:', error)
@@ -186,6 +168,21 @@ export const useLoginStore = defineStore('login', () => {
     }
   }
 
+  function handleError(error: unknown, defaultMessage: string) {
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage.value = error.response.data.message || defaultMessage
+    } else {
+      errorMessage.value = 'An unknown error occurred'
+    }
+    errors.value = error as Error | [] | null
+    successMessage.value = null
+    if (errorMessage.value === null) {
+      throw new Error('An unexpected error occurred') // Provide a default error message
+    } else {
+      throw new Error(errorMessage.value)
+    }
+  }
+
   return {
     userData,
     isInitialized,
@@ -199,7 +196,6 @@ export const useLoginStore = defineStore('login', () => {
     initializeAuth,
     handleLogout,
     setUser,
-    setToken,
     handleSocialLogin,
     handleSocialLoginCallback,
     checkAuthStatus,
