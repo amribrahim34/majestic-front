@@ -4,12 +4,18 @@ export interface User {
   mobile: string
   password: string
   password_confirmation?: string
-  // userType: 'student' | 'teacher' | 'admin' // Assuming these are the possible user types
   termsAccepted?: boolean
   token?: string
   university?: string
   fieldOfStudy?: string
   dateOfBirth?: string
+  address?: string
+  city?: string
+  state_province?: string
+  country?: string
+  gender?: string
+  avatar?: string
+  birthday?: string
 }
 
 export interface UserDetails {

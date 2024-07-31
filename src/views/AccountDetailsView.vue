@@ -5,7 +5,6 @@ import { useLoginStore } from '@/stores/auth'
 import FooterComponent from '../components/FooterComponent.vue'
 import HeaderComponent from '../components/Header.vue'
 import { UserDetails, EditableField } from '@/types/user'
-import { NSpace, NInput } from 'naive-ui'
 
 const { t } = useI18n()
 const loginStore = useLoginStore()
