@@ -4,42 +4,55 @@ import { useI18n } from 'vue-i18n'
 import { useLoginStore } from '@/stores/auth'
 import FooterComponent from '../components/FooterComponent.vue'
 import HeaderComponent from '../components/Header.vue'
+import { UserDetails, EditableField } from '@/types/user'
+import { NSpace, NInput } from 'naive-ui'
 
 const { t } = useI18n()
 const loginStore = useLoginStore()
 
-const editingField = ref<string | null>(null)
-const tempEditValue = ref('')
+const userDetails = computed<UserDetails>(() => loginStore.userData || {})
+const editingFields = ref<Set<EditableField>>(new Set())
 
-const userDetails = computed(() => ({
-  fullName: loginStore.userData?.user_name || '',
-  university: loginStore.userData?.university || '',
-  email: loginStore.userData?.email || '',
-  fieldOfStudy: loginStore.userData?.fieldOfStudy || '',
-  dateOfBirth: loginStore.userData?.dateOfBirth || ''
-}))
+const fullName = ref(userDetails.value.user_name || '')
+const email = ref(userDetails.value.email || '')
+const mobile = ref(userDetails.value.mobile || '')
+const address = ref(userDetails.value.address || '')
+const birthday = ref(userDetails.value.birthday || '')
 
-const startEdit = (field: string) => {
-  editingField.value = field
-  tempEditValue.value = userDetails.value[field as keyof typeof userDetails.value]
-}
-
-const saveEdit = async () => {
-  if (editingField.value) {
-    try {
-      await loginStore.updateUserField(editingField.value, tempEditValue.value)
-      editingField.value = null
-      tempEditValue.value = ''
-    } catch (error) {
-      console.error('Failed to update user field:', error)
-      // Handle error (e.g., show error message to user)
-    }
+const toggleEdit = (field: EditableField) => {
+  if (editingFields.value.has(field)) {
+    editingFields.value.delete(field)
+  } else {
+    editingFields.value.add(field)
   }
 }
 
-const cancelEdit = () => {
-  editingField.value = null
-  tempEditValue.value = ''
+const saveEdit = async (field: EditableField) => {
+  try {
+    let value: string = ''
+    switch (field) {
+      case 'user_name':
+        value = fullName.value
+        break
+      case 'email':
+        value = email.value
+        break
+      case 'mobile':
+        value = mobile.value
+        break
+      case 'address':
+        value = address.value
+        break
+      case 'birthday':
+        value = birthday.value
+        break
+    }
+    await loginStore.updateUserField(field, value)
+    editingFields.value.delete(field)
+  } catch (error) {
+    console.error('Failed to update user field:', error)
+    // Handle error (e.g., show error message to user)
+  }
 }
 
 onMounted(async () => {
@@ -51,29 +64,123 @@ onMounted(async () => {
 
 <template>
   <HeaderComponent />
-  <div class="mx-auto p-6 bg-white shadow-md rounded w-full max-w-2xl m-20">
+  <div class="p-6 bg-white m-20">
     <h1 class="text-2xl font-bold mb-4 text-center">{{ t('accountDetails.title') }}</h1>
     <p class="mb-16 text-center text-gray-500">{{ t('accountDetails.subtitle') }}</p>
-    <div class="space-y-4">
-      <div v-for="(value, key) in userDetails" :key="key" class="flex justify-between items-center">
-        <span class="font-medium">{{ t(`accountDetails.fields.${key}`) }}</span>
-        <div v-if="editingField === key" class="flex items-center">
-          <input
-            v-model="tempEditValue"
-            :placeholder="t(`accountDetails.placeholders.${key}`)"
-            class="mr-2 p-1 border rounded"
+    <div class="space-y-6">
+      <!-- <div class="flex justify-between">
+        <div class="w-1/5 font-bold">
+          <span>{{ t('accountDetails.fields.user_name') }} :</span>
+        </div>
+        <div class="w-4/5">
+          <n-input
+            v-if="editingFields.has('user_name')"
+            v-model="fullName"
+            type="text"
+            :placeholder="t('accountDetails.placeholders.fullName')"
+            class="w-full"
           />
-          <button @click="saveEdit" class="text-green-600 hover:text-green-800 mr-2">
-            {{ t('common.save') }}
-          </button>
-          <button @click="cancelEdit" class="text-red-600 hover:text-red-800">
-            {{ t('common.cancel') }}
+
+          <p class="w-full text-gray-600">{{ fullName }}</p>
+        </div>
+      </div> -->
+      <div class="">
+        <label class="font-medium mb-2">{{ t('accountDetails.fields.user_name') }}</label>
+        <div class="flex items-center">
+          <input
+            v-if="editingFields.has('user_name')"
+            v-model="fullName"
+            type="text"
+            :placeholder="t('accountDetails.placeholders.fullName')"
+            class="flex-grow p-2 border mr-2"
+          />
+          <span v-else class="flex-grow p-2">{{ userDetails.user_name }}</span>
+          <button
+            @click="
+              editingFields.has('user_name') ? saveEdit('user_name') : toggleEdit('user_name')
+            "
+            class="px-4 py-2 bg-black text-white hover:bg-blue-600"
+          >
+            {{ editingFields.has('user_name') ? t('common.save') : t('common.edit') }}
           </button>
         </div>
-        <div v-else class="flex items-center">
-          <span class="mr-2 text-gray-500">{{ value }}</span>
-          <button @click="startEdit(key)" class="text-blue-600 hover:text-blue-800">
-            {{ t('common.edit') }}
+      </div>
+
+      <div class="flex flex-col">
+        <label class="font-medium mb-2">{{ t('accountDetails.fields.email') }}</label>
+        <div class="flex items-center">
+          <input
+            v-if="editingFields.has('email')"
+            v-model="email"
+            type="email"
+            :placeholder="t('accountDetails.placeholders.email')"
+            class="flex-grow p-2 border mr-2"
+          />
+          <span v-else class="flex-grow p-2">{{ userDetails.email }}</span>
+          <button
+            @click="editingFields.has('email') ? saveEdit('email') : toggleEdit('email')"
+            class="px-4 py-2 bg-black text-white hover:bg-blue-600"
+          >
+            {{ editingFields.has('email') ? t('common.save') : t('common.edit') }}
+          </button>
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="font-medium mb-2">{{ t('accountDetails.fields.mobile') }}</label>
+        <div class="flex items-center">
+          <input
+            v-if="editingFields.has('mobile')"
+            v-model="mobile"
+            type="tel"
+            :placeholder="t('accountDetails.placeholders.mobile')"
+            class="flex-grow p-2 border mr-2"
+          />
+          <span v-else class="flex-grow p-2">{{ userDetails.mobile }}</span>
+          <button
+            @click="editingFields.has('mobile') ? saveEdit('mobile') : toggleEdit('mobile')"
+            class="px-4 py-2 bg-black text-white hover:bg-blue-600"
+          >
+            {{ editingFields.has('mobile') ? t('common.save') : t('common.edit') }}
+          </button>
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="font-medium mb-2">{{ t('accountDetails.fields.address') }}</label>
+        <div class="flex items-center">
+          <textarea
+            v-if="editingFields.has('address')"
+            v-model="address"
+            :placeholder="t('accountDetails.placeholders.address')"
+            class="flex-grow p-2 border mr-2"
+            rows="3"
+          ></textarea>
+          <span v-else class="flex-grow p-2">{{ userDetails.address }}</span>
+          <button
+            @click="editingFields.has('address') ? saveEdit('address') : toggleEdit('address')"
+            class="px-4 py-2 bg-black text-white hover:bg-blue-600"
+          >
+            {{ editingFields.has('address') ? t('common.save') : t('common.edit') }}
+          </button>
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="font-medium mb-2">{{ t('accountDetails.fields.birthday') }}</label>
+        <div class="flex items-center">
+          <input
+            v-if="editingFields.has('birthday')"
+            v-model="birthday"
+            type="date"
+            class="flex-grow p-2 border mr-2"
+          />
+          <span v-else class="flex-grow p-2">{{ userDetails.birthday }}</span>
+          <button
+            @click="editingFields.has('birthday') ? saveEdit('birthday') : toggleEdit('birthday')"
+            class="px-4 py-2 bg-black text-white hover:bg-blue-600"
+          >
+            {{ editingFields.has('birthday') ? t('common.save') : t('common.edit') }}
           </button>
         </div>
       </div>

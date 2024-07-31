@@ -3,11 +3,21 @@
     "title": "Account Details",
     "subtitle": "Update your account details",
     "fields": {
-      "fullName": "Full Name",
-      "university": "University",
+      "id": "ID",
+      "user_name": "Full Name",
       "email": "Email",
-      "fieldOfStudy": "Field of Study",
-      "dateOfBirth": "Date of Birth"
+      "email_verified_at": "Email Verified At",
+      "address": "Address",
+      "city": "City",
+      "state_province": "State/Province",
+      "country": "Country",
+      "mobile": "Mobile",
+      "gender": "Gender",
+      "avatar": "Avatar",
+      "birthday": "Date of Birth",
+      "last_login": "Last Login",
+      "created_at": "Created At",
+      "updated_at": "Updated At"
     },
     "placeholders": {
       "fullName": "Enter your full name",

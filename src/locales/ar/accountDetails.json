@@ -3,11 +3,21 @@
     "title": "تفاصيل الحساب",
     "subtitle": "قم بتحديث تفاصيل حسابك",
     "fields": {
-      "fullName": "الاسم الكامل",
-      "university": "الجامعة",
+      "id": "المعرف",
+      "user_name": "الاسم الكامل",
       "email": "البريد الإلكتروني",
-      "fieldOfStudy": "مجال الدراسة",
-      "dateOfBirth": "تاريخ الميلاد"
+      "email_verified_at": "تأكيد البريد الإلكتروني",
+      "address": "العنوان",
+      "city": "المدينة",
+      "state_province": "المحافظة / الولاية",
+      "country": "البلد",
+      "mobile": "الهاتف المحمول",
+      "gender": "النوع",
+      "avatar": "الصورة الشخصية",
+      "birthday": "تاريخ الميلاد",
+      "last_login": "آخر تسجيل دخول",
+      "created_at": "تاريخ الإنشاء",
+      "updated_at": "تاريخ التحديث"
     },
     "placeholders": {
       "fullName": "أدخل اسمك الكامل",
