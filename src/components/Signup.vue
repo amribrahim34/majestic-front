@@ -147,7 +147,7 @@ const register = async () => {
     await loginStore.handleSignup({
       user_name: formData.fullName,
       email: formData.email,
-      mobileNumber: formData.mobileNumber,
+      mobile: formData.mobileNumber,
       password: formData.password,
       password_confirmation: formData.confirmPassword
     })
