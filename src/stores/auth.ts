@@ -2,11 +2,14 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import api from '@/api'
 import type { User } from '@/types/user'
+import axios from 'axios'
 
 export const useLoginStore = defineStore('login', () => {
   const userData = ref<User | null>(null)
   const isInitialized = ref(false)
-
+  const errors = ref<null | [] | Error>(null)
+  const successMessage = ref<string | null>(null)
+  const errorMessage = ref<string | null>(null)
   const isLoggedIn = computed(() => !!userData.value)
 
   async function handleLogin(email: string, password: string) {
@@ -14,9 +17,22 @@ export const useLoginStore = defineStore('login', () => {
       const response = await api.post('/login', { email, password })
       userData.value = response.data
       setToken(response.data?.token)
+      successMessage.value = 'Login successful!'
+      errorMessage.value = null
       // await transferGuestCart()
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'An unknown error occurred')
+      if (axios.isAxiosError(error) && error.response) {
+        errorMessage.value = error.response.data.message || 'An error occurred during login.'
+      } else {
+        errorMessage.value = 'An unknown error occurred'
+      }
+      errors.value = error as Error | [] | null
+      successMessage.value = null
+      if (errorMessage.value === null) {
+        throw new Error('An unexpected error occurred')
+      } else {
+        throw new Error(errorMessage.value)
+      }
     }
   }
 
@@ -25,9 +41,22 @@ export const useLoginStore = defineStore('login', () => {
       const response = await api.post('/register', user)
       userData.value = response.data
       setToken(response.data?.token)
+      successMessage.value = 'Signup successful!'
+      errorMessage.value = null
       // await transferGuestCart()
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'An unknown error occurred')
+      if (axios.isAxiosError(error) && error.response) {
+        errorMessage.value = error.response.data.message || 'An error occurred '
+      } else {
+        errorMessage.value = 'An unknown error occurred'
+      }
+      errors.value = error as Error | [] | null
+      successMessage.value = null
+      if (errorMessage.value === null) {
+        throw new Error('An unexpected error occurred')
+      } else {
+        throw new Error(errorMessage.value)
+      }
     }
   }
 
@@ -161,6 +190,9 @@ export const useLoginStore = defineStore('login', () => {
     userData,
     isInitialized,
     isLoggedIn,
+    errors,
+    successMessage,
+    errorMessage,
     loginWithProvider,
     handleLogin,
     handleSignup,

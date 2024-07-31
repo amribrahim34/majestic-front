@@ -1,6 +1,13 @@
 <template>
   <div class="flex items-center justify-center align-middle min-h-screen background">
     <div class="bg-white p-8 rounded shadow-md w-96">
+      <div v-if="successMessage" class="text-green-500 text-sm text-center mb-4">
+        {{ successMessage }}
+      </div>
+      <div v-if="errorMessage" class="text-red-500 text-sm text-center mb-4">
+        {{ errorMessage }}
+      </div>
+
       <h2 class="text-3xl font-bold mb-2 text-center text-black">{{ $t('login.title') }}</h2>
       <div class="text-sm text-gray-600 text-center mb-8">
         {{ $t('login.subtitle') }}
@@ -77,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useLoginStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
@@ -96,6 +103,10 @@ const errors = reactive({
   password: '',
   general: ''
 })
+
+const successMessage = computed(() => loginStore.successMessage)
+const errorMessage = computed(() => loginStore.errorMessage)
+// const errors = ref({ email: null, password: null })
 
 const validateForm = () => {
   let isValid = true
