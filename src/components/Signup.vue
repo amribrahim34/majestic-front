@@ -2,11 +2,11 @@
   <div
     class="flex items-center justify-center min-h-screen bg-cover bg-no-repeat bg-center background"
   >
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-      <h2 class="text-3xl font-bold mb-4 text-center">{{ $t('signup.title') }}</h2>
-      <p class="text-sm text-gray-600 text-center mb-8">{{ $t('signup.subtitle') }}</p>
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md px-8 pb-2">
+      <h2 class="text-3xl font-bold mb-4 text-center mt-5">{{ $t('signup.title') }}</h2>
+      <p class="text-sm text-gray-600 text-center mb-2">{{ $t('signup.subtitle') }}</p>
       <form @submit.prevent="register">
-        <div class="mb-4">
+        <div class="mb-1">
           <label for="fullName" class="block text-gray-700 text-sm font-bold mb-2">
             {{ $t('signup.fullName') }}
           </label>
@@ -19,7 +19,7 @@
             required
           />
         </div>
-        <div class="mb-4">
+        <div class="mb-1">
           <label for="email" class="block text-gray-700 text-sm font-bold mb-2">
             {{ $t('signup.email') }}
           </label>
@@ -32,7 +32,7 @@
             required
           />
         </div>
-        <div class="mb-4">
+        <div class="mb-1">
           <label for="mobileNumber" class="block text-gray-700 text-sm font-bold mb-2">
             {{ $t('signup.mobileNumber') }}
           </label>
@@ -45,7 +45,7 @@
             required
           />
         </div>
-        <div class="mb-4">
+        <div class="mb-1">
           <label for="password" class="block text-gray-700 text-sm font-bold mb-2">
             {{ $t('signup.password') }}
           </label>
@@ -58,7 +58,7 @@
             required
           />
         </div>
-        <div class="mb-4">
+        <div class="mb-1">
           <label for="confirmPassword" class="block text-gray-700 text-sm font-bold mb-2">
             {{ $t('signup.confirmPassword') }}
           </label>
