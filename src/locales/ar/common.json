@@ -18,6 +18,9 @@
     "category": "الفئة",
     "bookFormat": "تنسيق الكتاب",
     "priceRange": "نطاق السعر",
-    "publishingYear": "سنة النشر"
+    "publishingYear": "سنة النشر",
+    "loadMore": "المزيد",
+    "from": "من",
+    "to": "الي"
   }
 }

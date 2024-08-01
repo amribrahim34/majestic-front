@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h3 class="font-bold mb-2">{{ $t('common.publishingYear') }}</h3>
     <n-date-picker
       v-model:value="internalSelectedRange"
       type="yearrange"
@@ -7,15 +8,16 @@
       @update:value="updateRange"
     />
     <div v-if="internalSelectedRange && internalSelectedRange[0] && internalSelectedRange[1]">
-      From: {{ formatDate(internalSelectedRange[0]) }}, To:
+      {{ $t('common.from') }}: {{ formatDate(internalSelectedRange[0]) }}, {{ $t('common.to') }}:
       {{ formatDate(internalSelectedRange[1]) }}
     </div>
   </div>
+  <n-divider />
 </template>
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
-import { NDatePicker } from 'naive-ui'
+import { NDatePicker, NDivider } from 'naive-ui'
 import { format } from 'date-fns'
 
 const props = defineProps<{

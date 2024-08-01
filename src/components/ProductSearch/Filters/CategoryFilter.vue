@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h3 class="font-bold mb-2">Categories</h3>
-    <n-divider />
+    <h3 class="font-bold mb-2">{{ $t('common.category') }}</h3>
     <n-tree
       block-line
       :data="treeData"
@@ -11,8 +10,11 @@
       :checked-keys="selectedOptions"
       @update:checked-keys="updateModelValue"
     />
-    <n-button v-if="hasMoreCategories" @click="loadMore" class="mt-4"> Load More </n-button>
+    <n-button v-if="hasMoreCategories" @click="loadMore" class="mt-4">
+      {{ $t('common.loadMore') }}</n-button
+    >
   </div>
+  <n-divider />
 </template>
 
 <script setup lang="ts">

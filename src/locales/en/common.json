@@ -18,6 +18,9 @@
     "category": "Category",
     "bookFormat": "Book Format",
     "priceRange": "Price Range",
-    "publishingYear": "Publishing Year"
+    "publishingYear": "Publishing Year",
+    "loadMore": "load more",
+    "from": "from",
+    "to": "to"
   }
 }
