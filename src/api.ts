@@ -4,7 +4,7 @@ import axios, { type AxiosInstance } from 'axios'
 // require('dotenv').config()
 import.meta.env.VITE_API_BASE_URL
 // Use an environment variable for the base URL
-const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://majesticminds.net/api'
+const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://api.majesticminds.net/api'
 
 const api: AxiosInstance = axios.create({
   baseURL,
