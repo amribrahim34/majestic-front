@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center mt-8">
+  <div class="flex justify-center mt-8 flex-wrap">
     <button
       @click="changePage(1)"
       :disabled="currentPage === 1"
@@ -19,7 +19,7 @@
       :key="page"
       @click="changePage(typeof page === 'number' ? page : currentPage)"
       :class="[
-        'mx-1 px-3 py-2 rounded',
+        'mx-1 my-1 px-3 py-2 rounded',
         currentPage === page ? 'bg-black text-white' : 'bg-gray-200 hover:bg-gray-300'
       ]"
     >

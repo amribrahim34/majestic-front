@@ -1,12 +1,12 @@
 <template>
-  <div class="filter-section">
+  <div class="filter-section" ref="filterSection">
     <!-- Toggle button for mobile -->
     <n-button class="md:hidden mb-4" @click="toggleFilters">
       {{ showFilters ? 'Hide Filters' : 'Show Filters' }}
     </n-button>
 
     <!-- Filters container -->
-    <div :class="{ 'hidden md:block': !showFilters }" class="filter-container">
+    <div v-show="showFilters" class="filter-container md:block">
       <div class="p-4 bg-white shadow-lg">
         <DateRangeFilter
           v-model="selectedYearRange"
@@ -28,13 +28,19 @@
             @update:modelValue="updatePriceRange"
           />
         </div>
+
+        <!-- Apply and Reset buttons -->
+        <div class="flex justify-between mt-6">
+          <n-button @click="resetFilters">Reset Filters</n-button>
+          <n-button type="primary" @click="applyFilters">Apply Filters</n-button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import CategoryFilter from './Filters/CategoryFilter.vue'
 import PriceFilter from './Filters/PriceFilter.vue'
@@ -42,35 +48,24 @@ import DateRangeFilter from './Filters/DateRangeFilter.vue'
 import { useBookStore } from '@/stores/bookStore'
 import { storeToRefs } from 'pinia'
 import { debounce } from '@/utils/debounce'
+import { NButton } from 'naive-ui'
+import { useRouter } from 'vue-router'
 
 const { t } = useI18n()
 const bookStore = useBookStore()
 const { categories, priceRange, yearRange } = storeToRefs(bookStore)
+const router = useRouter()
 
 const props = defineProps<{
   initialFilters: Record<string, any>
 }>()
 
-const showFilters = ref(false)
-
-const toggleFilters = () => {
-  showFilters.value = !showFilters.value
-}
-
-// const filters = ref([
-//   {
-//     title: t('common.publishingYear'),
-//     key: 'year_range[]',
-//     componentType: 'DateRangeFilter',
-//     min: yearRange.value.min,
-//     max: yearRange.value.max,
-//     selected: [yearRange.value.min, yearRange.value.max]
-//   }
-// ])
-
 const emit = defineEmits<{
   (e: 'filterUpdated', filters: Record<string, any>): void
 }>()
+
+const showFilters = ref(false)
+const filterSection = ref(null)
 
 const selectedCategories = ref<(string | number)[]>([])
 const categoryDisplayLimit = ref(10)
@@ -85,86 +80,80 @@ const selectedYearRange = ref<[number, number]>([
   yearRange.value?.max || maxYear
 ])
 
+const toggleFilters = () => {
+  showFilters.value = !showFilters.value
+}
+
 const loadMoreCategories = () => {
   categoryDisplayLimit.value += 10
 }
 
 const updateYearRange = (newRange: { min: number; max: number }) => {
   selectedYearRange.value = [newRange.min, newRange.max]
-  emitFilterUpdated('year_range[]', selectedYearRange.value)
 }
 
 const updatePriceRange = (newRange: number[]) => {
   selectedPriceRange.value = [newRange[0], newRange[1]]
-  emitFilterUpdated('price_range[]', selectedPriceRange.value)
 }
 
 const updateCategory = (ids: number[]) => {
   selectedCategories.value = ids
-  emitFilterUpdated('category_ids[]', selectedCategories.value)
 }
 
-const debouncedEmitFilterUpdated = debounce((filters: Record<string, any>) => {
-  emit('filterUpdated', filters)
-}, 300)
-
-const previousFilters = ref<Record<string, any>>({})
-
-const emitFilterUpdated = (changedFilterKey: string, value: any) => {
-  const updatedFilters: Record<string, any> = {}
-
-  if (JSON.stringify(previousFilters.value[changedFilterKey]) !== JSON.stringify(value)) {
-    updatedFilters[changedFilterKey] = value
-    previousFilters.value[changedFilterKey] = value
+const applyFilters = () => {
+  const updatedFilters: Record<string, any> = {
+    'year_range[]': selectedYearRange.value,
+    'price_range[]': selectedPriceRange.value,
+    'category_ids[]': selectedCategories.value
   }
-
-  if (Object.keys(updatedFilters).length > 0) {
-    debouncedEmitFilterUpdated(updatedFilters)
+  emit('filterUpdated', updatedFilters)
+  if (window.innerWidth < 768) {
+    showFilters.value = false
   }
 }
 
-// watch(
-//   [selectedCategories, selectedPriceRange, selectedYearRange],
-//   () => {
-//     emitFilterUpdated()
-//   },
-//   { deep: true }
-// )
+const resetFilters = () => {
+  selectedYearRange.value = [yearRange.value?.min || minYear, yearRange.value?.max || maxYear]
+  selectedPriceRange.value = [priceRange.value?.min || 0, priceRange.value?.max || 0]
+  selectedCategories.value = []
+  applyFilters()
+  router.push({ query: {} })
+}
 
-// watch(
-//   () => props.initialFilters,
-//   (newFilters) => {
-//     if (newFilters['category_ids[]']) {
-//       selectedCategories.value = newFilters['category_ids[]']
-//     }
-//     if (newFilters['price_range[]']) {
-//       selectedPriceRange.value = newFilters['price_range[]']
-//     }
-//     if (newFilters['year_range[]']) {
-//       selectedYearRange.value = newFilters['year_range[]']
-//     }
-//   },
-//   { immediate: true }
-// )
+const handleClickOutside = (event: MouseEvent) => {
+  if (
+    filterSection.value &&
+    filterSection.value.contains(event.target as Node) &&
+    window.innerWidth < 768
+  ) {
+    showFilters.value = false
+    console.log('this is true', filterSection.value, window.innerWidth < 768)
+  } else {
+    console.log('this is false', filterSection.value, window.innerWidth < 768)
+  }
+}
 
 watch(
   () => props.initialFilters,
   (newFilters) => {
     if (newFilters['category_ids[]']) {
       selectedCategories.value = newFilters['category_ids[]']
-      previousFilters.value['category_ids[]'] = newFilters['category_ids[]']
     }
     if (newFilters['price_range[]']) {
       selectedPriceRange.value = newFilters['price_range[]']
-      previousFilters.value['price_range[]'] = newFilters['price_range[]']
     }
     if (newFilters['year_range[]']) {
       selectedYearRange.value = newFilters['year_range[]']
-      previousFilters.value['year_range[]'] = newFilters['year_range[]']
     }
   },
   { immediate: true }
 )
+
+const handleResize = () => {
+  if (window.innerWidth >= 768) {
+    showFilters.value = true
+  }
+}
 
 onMounted(() => {
   if (categories.value.length === 0) {
@@ -173,11 +162,22 @@ onMounted(() => {
   if (!priceRange.value?.min || !priceRange.value?.max) {
     bookStore.fetchPriceRange().then(() => {
       selectedPriceRange.value = [priceRange.value.min, priceRange.value.max]
-      previousFilters.value['price_range[]'] = selectedPriceRange.value
     })
   }
-  previousFilters.value['year_range[]'] = selectedYearRange.value
-  previousFilters.value['category_ids[]'] = selectedCategories.value
+
+  if (window.innerWidth < 768) {
+    showFilters.value = false
+  }
+
+  document.addEventListener('click', handleClickOutside)
+
+  window.addEventListener('resize', handleResize)
+  handleResize()
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+  window.removeEventListener('resize', handleResize)
 })
 </script>
 <style scoped>
