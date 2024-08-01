@@ -35,7 +35,7 @@ jobs:
 
     - name: Execute remote commands
       run: |
-        ssh -o StrictHostKeyChecking=no user@your-server-ip << 'EOF'
+        ssh -o StrictHostKeyChecking=no amr@209.38.198.225 << 'EOF'
           cd /var/www/majesticminds.net
           # Example command to restart the web server (adjust as needed)
           sudo systemctl restart apache2
