@@ -29,9 +29,15 @@ jobs:
     - name: Build project
       run: npm run build-only
 
-    - name: Copy files via SCP
+    - name: Create remote dist folder (if needed)
       run: |
-        scp -r -o StrictHostKeyChecking=no dist/* amr@209.38.198.225:/var/www/majesticminds.net
+        ssh amr@209.38.198.225 -o StrictHostKeyChecking=no '[ -d /var/www/majesticminds.net/dist ] || mkdir /var/www/majesticminds.net/dist'
+    
+    - name: Transfer files via SCP
+      run: scp -r -o StrictHostKeyChecking=no dist/* amr@209.38.198.225:/var/www/majesticminds.net/dist
+
+
+
 
     - name: Execute remote commands
       run: |
