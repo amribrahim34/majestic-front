@@ -1,27 +1,34 @@
 <template>
-  <div class="filter-section p-10 bg-white shadow-lg">
-    <!-- Other filters -->
-    <DateRangeFilter
-      v-model="selectedYearRange"
-      :filter="{ min: yearRange.min, max: yearRange.max, selected: selectedYearRange }"
-      @update:modelValue="updateYearRange"
-    />
-    <CategoryFilter
-      v-model="selectedCategories"
-      :display-limit="categoryDisplayLimit"
-      @load-more="loadMoreCategories"
-      @update:modelValue="updateCategory"
-    />
+  <div class="filter-section">
+    <!-- Toggle button for mobile -->
+    <n-button class="md:hidden mb-4" @click="toggleFilters">
+      {{ showFilters ? 'Hide Filters' : 'Show Filters' }}
+    </n-button>
 
-    <!-- Price filter -->
-    <div class="mb-6">
-      <h3 class="font-bold mb-2">{{ t('common.priceRange') }}</h3>
-      <PriceFilter
-        v-model="selectedPriceRange"
-        :min="priceRange.min"
-        :max="priceRange.max"
-        @update:modelValue="updatePriceRange"
-      />
+    <!-- Filters container -->
+    <div :class="{ 'hidden md:block': !showFilters }" class="filter-container">
+      <div class="p-4 bg-white shadow-lg">
+        <DateRangeFilter
+          v-model="selectedYearRange"
+          :filter="{ min: yearRange.min, max: yearRange.max, selected: selectedYearRange }"
+          @update:modelValue="updateYearRange"
+        />
+        <CategoryFilter
+          v-model="selectedCategories"
+          :display-limit="categoryDisplayLimit"
+          @load-more="loadMoreCategories"
+          @update:modelValue="updateCategory"
+        />
+        <div class="mb-6">
+          <h3 class="font-bold mb-2">{{ t('common.priceRange') }}</h3>
+          <PriceFilter
+            v-model="selectedPriceRange"
+            :min="priceRange.min"
+            :max="priceRange.max"
+            @update:modelValue="updatePriceRange"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -43,6 +50,12 @@ const { categories, priceRange, yearRange } = storeToRefs(bookStore)
 const props = defineProps<{
   initialFilters: Record<string, any>
 }>()
+
+const showFilters = ref(false)
+
+const toggleFilters = () => {
+  showFilters.value = !showFilters.value
+}
 
 // const filters = ref([
 //   {
@@ -167,3 +180,30 @@ onMounted(() => {
   previousFilters.value['category_ids[]'] = selectedCategories.value
 })
 </script>
+<style scoped>
+.filter-section {
+  position: relative;
+}
+
+.filter-container {
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .filter-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+  }
+
+  .filter-container > div {
+    max-width: 300px;
+    margin: 20px auto;
+  }
+}
+</style>
