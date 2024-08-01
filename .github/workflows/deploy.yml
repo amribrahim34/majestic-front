@@ -31,7 +31,7 @@ jobs:
 
     - name: Copy files via SCP
       run: |
-        scp -r -o StrictHostKeyChecking=no dist/* amr@209.38.198.225:/var/www/majesticminds.net
+        scp -r -o StrictHostKeyChecking=no dist/* amr@209.38.198.225:/var/www/majesticminds.net/dist
 
     - name: Execute remote commands
       run: |
