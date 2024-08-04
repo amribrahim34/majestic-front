@@ -10,7 +10,11 @@
       <div class="product-details w-full md:w-1/2">
         <h1 class="text-3xl font-bold mb-4">{{ book.title }}</h1>
         <div class="rating flex items-center mb-4">
-          <star-rating :rating="book.rating" />
+          <StarRating
+            :book-id="book.id"
+            :readonly="isAuthenticated()"
+            :rating="book.average_rating"
+          />
           <span class="ml-2 text-gray-600">
             {{ $t('productInfo.reviews', { count: book.reviewCount }) }}
           </span>
@@ -100,6 +104,7 @@ import { Book } from '@/types/Book'
 import { useCartStore } from '@/stores/cart'
 import { useWishlistStore } from '@/stores/wishlist'
 import { storeToRefs } from 'pinia'
+import { isAuthenticated } from '@/utils/auth'
 
 const props = defineProps({
   book: {

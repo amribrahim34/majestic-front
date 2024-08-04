@@ -1,14 +1,14 @@
-import axios, { type AxiosInstance } from 'axios'
+import axios, { AxiosError, type AxiosInstance } from 'axios'
 // import 'dotenv/config'
+import { API_BASE_URL, API_TIMEOUT } from './config'
 
 // require('dotenv').config()
 import.meta.env.VITE_API_BASE_URL
 // Use an environment variable for the base URL
-const baseURL = import.meta.env.VITE_API_BASE_URL || 'https://api.majesticminds.net/api'
 
 const api: AxiosInstance = axios.create({
-  baseURL,
-  timeout: 10000, // Optional: sets timeout to 10 seconds
+  baseURL: API_BASE_URL,
+  timeout: API_TIMEOUT, // Optional: sets timeout to 10 seconds
   withCredentials: true, // Important for handling cookies/sessions
   headers: {
     'Content-Type': 'application/json',
@@ -18,40 +18,37 @@ const api: AxiosInstance = axios.create({
   }
 })
 
-// Request interceptor for API calls
-// api.interceptors.request.use(
-//   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-//     // You can modify config here if needed, for example, attaching an authorization token
-//     const token = localStorage.getItem('auth_token')
-//     if (token) {
-//       config.headers['Authorization'] = `Bearer ${token}`
-//     }
-//     return config
-//   },
-//   (error: any) => {
-//     return Promise.reject(error)
-//   }
-// )
+// Request interceptor
+api.interceptors.request.use(
+  (config) => {
+    const token = document.head.querySelector('meta[name="csrf-token"]')
+    if (token) {
+      config.headers['X-CSRF-TOKEN'] = (token as HTMLMetaElement).content
+    }
 
-api.interceptors.request.use((config) => {
-  const token = document.head.querySelector('meta[name="csrf-token"]')
-  if (token) {
-    config.headers['X-CSRF-TOKEN'] = (token as HTMLMetaElement).content
-  }
-  return config
-})
+    const authToken = localStorage.getItem('auth_token')
+    if (authToken) {
+      config.headers['Authorization'] = `Bearer ${authToken}`
+    }
 
-// Response interceptor for API calls
-api.interceptors.response.use(
-  (response) => {
-    // Handle a successful response here
-    return response
+    return config
   },
-  async (error) => {
+  (error) => Promise.reject(error)
+)
+
+// Response interceptor
+api.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config
+    if (!originalRequest) return Promise.reject(error)
+
     if (error.response) {
       switch (error.response.status) {
         case 401:
           console.log('Unauthorized access')
+          localStorage.removeItem('auth_token')
+          // Redirect to login page or refresh token logic here
           break
         case 403:
           console.log('Forbidden')
@@ -62,6 +59,10 @@ api.interceptors.response.use(
         case 422:
           console.log('Validation error', error.response.data)
           break
+        case 429:
+          // Rate limiting - wait and retry
+          await new Promise((resolve) => setTimeout(resolve, 1000))
+          return api(originalRequest)
         default:
           console.log('An error occurred', error.response.data)
       }
@@ -70,6 +71,7 @@ api.interceptors.response.use(
     } else {
       console.log('Error', error.message)
     }
+
     return Promise.reject(error)
   }
 )

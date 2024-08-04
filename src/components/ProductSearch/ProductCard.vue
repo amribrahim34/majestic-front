@@ -20,7 +20,7 @@
 
       <div class="flex items-center mt-2.5 mb-5">
         <div class="flex items-center space-x-1 rtl:space-x-reverse">
-          <!-- Star rating SVGs here -->
+          <StarRating :book-id="book.id" :readonly="true" :rating="book.average_rating" />
         </div>
         <span
           class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3"
@@ -102,6 +102,7 @@ import { useCartStore } from '@/stores/cart'
 import { useWishlistStore } from '@/stores/wishlist'
 import type { Book } from '@/types/Book'
 import { isAuthenticated } from '@/utils/auth'
+import StarRating from '@/components/shared/StarRating.vue'
 
 const props = defineProps<{
   book: Book

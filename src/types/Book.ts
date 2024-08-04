@@ -24,7 +24,7 @@ export interface Book {
   updated_at?: string
   image: string
   originalPrice?: number
-  rating: number
+  average_rating: number
   reviewCount: number
   is_wishlisted: boolean
   // Relations

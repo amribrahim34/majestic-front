@@ -42,7 +42,8 @@ export const useBlogStore = defineStore('blog', () => {
     state.value.error = null
     try {
       const response = await api.get(`/blog/recent?limit=${limit}`)
-      state.value.recentPosts = response.data.data
+      state.value.recentPosts = response.data
+      console.log(response.data)
     } catch (error) {
       state.value.error = 'Failed to fetch recent posts'
       console.error('Error fetching recent posts:', error)
