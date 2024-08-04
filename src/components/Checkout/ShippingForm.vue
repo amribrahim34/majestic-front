@@ -15,7 +15,7 @@
       </div>
       <div>
         <input
-          type="tel"
+          type="number"
           id="phone"
           v-model="form.phone"
           required
@@ -25,19 +25,33 @@
         />
         <span v-if="errors.phone" class="text-red-500 text-sm">{{ errors.phone }}</span>
       </div>
+      <div class="flex gap-4">
+        <div class="flex-1">
+          <input
+            type="text"
+            id="address"
+            v-model="form.address"
+            required
+            class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
+            :placeholder="t('shipping.address')"
+          />
+        </div>
+        <div class="flex-1">
+          <input
+            type="text"
+            id="special_mark"
+            v-model="form.special_mark"
+            required
+            class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
+            :placeholder="t('shipping.specialMark')"
+          />
+        </div>
+      </div>
       <div>
-        <input
-          type="text"
-          id="address"
-          v-model="form.address"
-          required
-          class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
-          :placeholder="t('shipping.address')"
-        />
         <button
           type="button"
           @click="getGeolocation"
-          class="mt-2 bg-gray-700 text-white py-1 px-2 rounded text-sm"
+          class="mt-2 bg-gray-700 text-white py-1 px-2 rounded text-sm w-full"
         >
           {{ t('shipping.useMyLocation') }}
         </button>
@@ -68,6 +82,7 @@
             v-model="form.districtId"
             required
             :disabled="!form.cityId"
+            @change="getShippingCost"
             class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           >
             <option value="" class="bg-black">{{ t('shipping.selectDistrict') }}</option>
@@ -86,11 +101,11 @@
         <input
           type="text"
           id="shippingCost"
-          v-model="form.shippingCost"
-          required
+          :value="bostaStore.shippingCost"
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           :placeholder="t('shipping.shippingCost')"
           :aria-label="t('shipping.shippingCost')"
+          disabled
         />
       </div>
       <button
@@ -109,6 +124,11 @@ import { reactive, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useBostaStore } from '@/stores/bostaStore'
 import { useLoginStore } from '@/stores/auth'
+import { defineProps } from 'vue'
+
+const props = defineProps<{
+  total: number
+}>()
 
 const { t, locale } = useI18n()
 const bostaStore = useBostaStore()
@@ -118,15 +138,16 @@ const currentLocale = computed(() => locale.value)
 
 const form = reactive({
   name: '',
-  institution: '',
   email: '',
   phone: '',
   address: '',
   cityId: '',
+  cityName: '',
   districtId: '',
-  zip: '',
-  country: 'Egypt',
-  useBillingAddress: false,
+  special_mark: '',
+  latitude: '',
+  longitude: '',
+  is_default: true,
   shippingCost: ''
 })
 
@@ -143,9 +164,6 @@ const isFormValid = computed(() => {
     form.address &&
     form.cityId &&
     form.districtId &&
-    form.zip &&
-    form.country &&
-    form.shippingCost &&
     !errors.email &&
     !errors.phone
   )
@@ -172,7 +190,11 @@ const validatePhone = () => {
 const onCityChange = () => {
   form.districtId = ''
   if (form.cityId) {
+    const selectedCity = bostaStore.cities.find((city) => city._id === form.cityId)
+    form.cityName = selectedCity?.name || ''
     bostaStore.fetchDistricts(form.cityId)
+  } else {
+    form.cityName = ''
   }
 }
 
@@ -182,6 +204,12 @@ const submitForm = () => {
   if (isFormValid.value) {
     emit('submit', form)
     sendOrderRequest()
+  }
+}
+
+const getShippingCost = async () => {
+  if (form.cityName && props.total) {
+    await bostaStore.calculateShipment(props.total, form.cityName)
   }
 }
 
@@ -212,7 +240,7 @@ const getGeolocation = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords
-        form.address = `Lat: ${latitude}, Lon: ${longitude}`
+        form.address = `latitude: ${latitude}, longitude: ${longitude}`
       },
       (error) => {
         console.error('Error getting location:', error.message)
@@ -235,12 +263,21 @@ watch(
       form.name = userData.user_name || ''
       form.email = userData.email || ''
       form.phone = userData.mobile || ''
-      form.address = userData.address || ''
-      form.cityId = userData.city || ''
-      form.country = userData.country || 'Egypt'
+      form.address = userData?.address?.address || ''
+      form.cityId = userData.address?.city || ''
+      form.districtId = userData.address?.state || ''
     }
   },
   { immediate: true }
+)
+
+watch(
+  () => props.total,
+  (newTotal) => {
+    if (form.cityName && newTotal) {
+      getShippingCost()
+    }
+  }
 )
 
 const emit = defineEmits(['submit'])

@@ -11,6 +11,11 @@
     "useBillingAddress": "استخدم كعنوان للفواتير",
     "continueToPayment": "المتابعة إلى الدفع",
     "selectCity": "اختر المدينة",
+    "specialMark": "علامة مميزة",
+    "useMyLocation": "استخدم موقعي",
+
+    "shippingCost": "مصاريف الشحن",
+
     "selectDistrict": "اختر الحي"
   },
   "countries": {

@@ -11,6 +11,9 @@
     "email": "Email",
     "selectCity": "Select City",
     "selectDistrict": "Select District",
+    "specialMark": "special sign",
+    "useMyLocation": "use my location ",
+    "shippingCost": "shipping cost",
     "useBillingAddress": "Use as Billing Address"
   },
   "countries": {

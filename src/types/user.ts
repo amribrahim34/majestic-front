@@ -1,3 +1,5 @@
+import { Address } from './Address'
+
 export interface User {
   user_name: string
   email: string
@@ -9,10 +11,7 @@ export interface User {
   university?: string
   fieldOfStudy?: string
   dateOfBirth?: string
-  address?: string
-  city?: string
-  state_province?: string
-  country?: string
+  address?: Address
   gender?: string
   avatar?: string
   birthday?: string

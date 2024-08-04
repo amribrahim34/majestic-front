@@ -1,30 +1,26 @@
 // stores/bostaStore.ts
 import { defineStore } from 'pinia'
 import axios, { AxiosInstance } from 'axios'
-import { BostaState } from '@/types/bosta/BostaState'
+import { BostaState, BostaResponse } from '@/types/bosta/BostaState'
 import { City } from '@/types/bosta/City'
 import { District } from '@/types/bosta/District'
+import { BOSTA_API_TOKEN } from '@/config'
 
 const api: AxiosInstance = axios.create({
   timeout: 10000, // Optional: sets timeout to 10 seconds
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
-    Authorization: `Bearer ${import.meta.env.VITE_BOSTA_API_KEY}`,
+    Authorization: `Bearer ${BOSTA_API_TOKEN}`,
     Accept: 'application/json'
   }
 })
-
-interface BostaResponse<T> {
-  success: boolean
-  message: string
-  data: T
-}
 
 export const useBostaStore = defineStore('bosta', {
   state: (): BostaState => ({
     cities: [],
     districts: [],
+    shippingCost: 0,
     loading: false,
     error: null
   }),
@@ -59,6 +55,24 @@ export const useBostaStore = defineStore('bosta', {
         this.error = 'Failed to fetch districts'
       } finally {
         this.loading = false
+      }
+    },
+
+    async calculateShipment(cod: number, DOCity: string) {
+      try {
+        const response = await api.get('https://app.bosta.co/api/v2/pricing/shipment/calculator', {
+          params: {
+            cod: cod,
+            dropOffCity: DOCity,
+            pickupCity: 'Cairo',
+            size: 'Normal'
+          }
+        })
+        this.shippingCost = response.data.data.priceAfterVat
+        return response.data.priceAfterVat
+      } catch (error) {
+        console.error('Error calculating shipment:', error)
+        throw error
       }
     }
   },

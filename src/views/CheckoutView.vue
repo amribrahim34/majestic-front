@@ -45,7 +45,7 @@
 
         <div v-if="cartStore.items.length > 0" class="flex-1 bg-black text-white p-6 rounded-lg">
           <h2 class="text-2xl font-bold mb-4">{{ $t('checkout.shippingInfo') }}</h2>
-          <ShippingForm @submit="submitShippingInfo" />
+          <ShippingForm @submit="submitShippingInfo" :total="total" />
         </div>
       </div>
     </div>
