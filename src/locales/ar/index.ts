@@ -13,6 +13,7 @@ import blogPost from './blogPost.json'
 import requestBook from './requestBook.json'
 import productInfo from './productInfo.json'
 import ratingReviews from './ratingReviews.json'
+import validation from './validation.json'
 
 const ar = {
   ...header,
@@ -29,6 +30,7 @@ const ar = {
   ...requestBook,
   ...productInfo,
   ...ratingReviews,
+  ...validation,
   ...home
 }
 

@@ -13,9 +13,12 @@
     "selectCity": "اختر المدينة",
     "specialMark": "علامة مميزة",
     "useMyLocation": "استخدم موقعي",
-
+    "confirmOrder": "تأكيد الطلب",
     "shippingCost": "مصاريف الشحن",
-
+    "selectPaymentType": "اختر طريقة الدفع",
+    "cashOnDelivery": "الدفع عند الاستلام",
+    "refundPolicy": "سياسة الاسترجاع",
+    "additionalNotes": "ملاحظات إضافية (اختياري)",
     "selectDistrict": "اختر الحي"
   },
   "countries": {

@@ -14,6 +14,10 @@
     "specialMark": "special sign",
     "useMyLocation": "use my location ",
     "shippingCost": "shipping cost",
+    "confirmOrder": "confirm order",
+    "selectPaymentType": "Select Payment Type",
+    "cashOnDelivery": "Cash on Delivery",
+    "refundPolicy": "Refund Policy",
     "useBillingAddress": "Use as Billing Address"
   },
   "countries": {
