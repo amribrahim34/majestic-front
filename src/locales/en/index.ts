@@ -13,6 +13,7 @@ import blogPost from './blogPost.json'
 import requestBook from './requestBook.json'
 import productInfo from './productInfo.json'
 import ratingReviews from './ratingReviews.json'
+import order from './order.json'
 import validation from './validation.json'
 
 const en = {
@@ -31,6 +32,7 @@ const en = {
   ...productInfo,
   ...ratingReviews,
   ...validation,
+  ...order,
   ...home
 }
 

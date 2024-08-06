@@ -1,0 +1,19 @@
+{
+  "yourOrders": "طلباتك",
+  "noOrders": "ليس لديك طلبات",
+  "order": "الطلب رقم {id}",
+  "book": "الكتاب",
+  "status": "الحالة",
+  "estimatedDelivery": "التسليم المتوقع: {days} أيام",
+  "deliveredOn": "تم التسليم في: {date}",
+  "cancel": "إلغاء",
+  "track": "تتبع",
+  "reorder": "إعادة الطلب",
+  "orderStatus": {
+    "Pending": "قيد الانتظار",
+    "Processing": "قيد المعالجة",
+    "Shipped": "تم الشحن",
+    "Delivered": "تم التسليم",
+    "Cancelled": "تم الإلغاء"
+  }
+}

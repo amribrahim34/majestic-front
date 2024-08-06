@@ -1,0 +1,19 @@
+{
+  "yourOrders": "Your Orders",
+  "noOrders": "You have no orders",
+  "order": "Order #{id}",
+  "book": "Book",
+  "status": "Status",
+  "estimatedDelivery": "Estimated Delivery: {days} days",
+  "deliveredOn": "Delivered on: {date}",
+  "cancel": "Cancel",
+  "track": "Track",
+  "reorder": "Reorder",
+  "orderStatus": {
+    "Pending": "Pending",
+    "Processing": "Processing",
+    "Shipped": "Shipped",
+    "Delivered": "Delivered",
+    "Cancelled": "Cancelled"
+  }
+}

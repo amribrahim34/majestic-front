@@ -136,10 +136,13 @@ import { useLoginStore } from '@/stores/auth'
 import { defineProps } from 'vue'
 import { useFormValidation } from '@/Composables/Checkout/useFormValidation'
 import { useOrderStore } from '@/stores/orderStore'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   total: number
 }>()
+
+const router = useRouter()
 
 const { form, errors, validateForm } = useFormValidation()
 
@@ -176,7 +179,9 @@ const getShippingCost = async () => {
 const sendOrderRequest = async () => {
   const orderStore = useOrderStore()
   try {
-    const createdOrder = await orderStore.createOrder(form)
+    const createdOrder = await orderStore
+      .createOrder(form)
+      .then(() => router.push({ name: 'BookSearch' }))
     if (createdOrder) {
       console.log('Order submitted successfully')
     } else {
