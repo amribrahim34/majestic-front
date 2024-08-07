@@ -1,8 +1,8 @@
 <template>
   <div class="p-5 mx-10 w-4/5">
-    <h2 v-if="searchTerm" class="text-xl font-bold mb-5">
+    <h1 v-if="searchTerm" class="text-xl font-bold mb-5">
       {{ t('common.searchResultsFor', { term: searchTerm }) }}
-    </h2>
+    </h1>
     <h2 class="text-xl font-bold mb-5">
       {{ t('common.numberOfBooks', { count: total }) }}
     </h2>

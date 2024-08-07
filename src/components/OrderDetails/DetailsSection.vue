@@ -2,7 +2,12 @@
 <template>
   <n-card>
     <div class="space-y-4">
-      <img :src="order.bookImage" alt="Book image" class="w-full h-48 object-cover rounded-lg" />
+      <img
+        :src="order.bookImage"
+        alt="Book image"
+        class="w-full h-48 object-cover rounded-lg"
+        loading="lazy"
+      />
       <h2 class="text-xl font-semibold">{{ order.bookType }}</h2>
       <p class="text-gray-600">{{ order.bookDescription }}</p>
       <n-descriptions bordered>

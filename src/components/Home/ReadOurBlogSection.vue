@@ -19,7 +19,12 @@
       </div>
       <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div v-for="post in recentPosts" :key="post.id" class="bg-white p-6 rounded-lg shadow-lg">
-          <img :src="post.img" :alt="post.title" class="mb-4 w-full h-48 object-cover rounded-lg" />
+          <img
+            :src="post.img"
+            :alt="post.title"
+            class="mb-4 w-full h-48 object-cover rounded-lg"
+            loading="lazy"
+          />
           <h3 class="text-xl font-semibold mb-2">{{ post.title }}</h3>
           <p class="mb-4">{{ truncateContent(post.content, 100) }}</p>
           <router-link

@@ -20,7 +20,12 @@
         <ul v-if="!loading" class="divide-y divide-gray-200">
           <n-scrollbar style="max-height: 200px">
             <li v-for="item in items" :key="item.id" class="py-4 flex">
-              <img :src="item.book.image" alt="Book cover" class="h-24 w-16 object-cover mr-4" />
+              <img
+                :src="item.book.image"
+                alt="Book cover"
+                class="h-24 w-16 object-cover mr-4"
+                loading="lazy"
+              />
               <div class="flex-1">
                 <h4 class="font-semibold">{{ item.book.title }}</h4>
                 <p class="text-gray-600">

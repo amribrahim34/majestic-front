@@ -18,6 +18,7 @@
                 :src="item.book.image"
                 :alt="item.book.title"
                 class="w-16 h-20 object-cover mr-4"
+                loading="lazy"
               />
               <div>
                 <h3 class="font-semibold">{{ item.book.title }}</h3>

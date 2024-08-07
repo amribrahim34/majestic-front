@@ -15,6 +15,7 @@
             :src="book.image"
             :alt="book.title"
             class="mb-4 w-full h-40 object-cover rounded-lg"
+            loading="lazy"
           />
           <h3 class="text-lg font-bold mb-2 truncate">{{ book.title }}</h3>
           <p class="text-gray-600 mb-2">{{ formatPrice(book.price) }}</p>

@@ -6,6 +6,7 @@
     :bordered="false"
     size="small"
     @click="viewOrder"
+    :data-testid="`order-card-${order.id}`"
   >
     <template #header-extra>
       <n-tag :type="getStatusType(order.status)" class="text-xs font-medium">
@@ -47,6 +48,7 @@
           class="text-xs font-semibold bg-white text-black border border-gray-300 hover:bg-gray-100"
           secondary
           size="small"
+          :aria-label="t('cancelOrder', { id: order.id })"
         >
           {{ t('cancel') }}
         </n-button>
@@ -55,6 +57,7 @@
           @click.stop="$emit('cancel', order.id)"
           class="text-xs font-semibold bg-gray-800 text-white hover:bg-gray-700"
           size="small"
+          :aria-label="t('trackOrder', { id: order.id })"
         >
           {{ t('track') }}
         </n-button>
@@ -64,6 +67,7 @@
           @click="$emit('reorder', order.id)"
           class="text-xs font-semibold bg-black text-white hover:bg-gray-900"
           size="small"
+          :aria-label="t('reorder', { id: order.id })"
         >
           {{ t('reorder') }}
         </n-button>
@@ -77,6 +81,7 @@ import { NCard, NButton, NSpace, NList, NListItem, NThing, NTag, NImage } from '
 import { useI18n } from 'vue-i18n'
 import { useOrderStore } from '@/stores/orderStore'
 import { Order } from '@/types/Order'
+import { computed } from 'vue'
 
 const { t } = useI18n()
 const orderStore = useOrderStore()
@@ -110,6 +115,24 @@ const getStatusType = (status: string) => {
       return 'default'
   }
 }
+
+const orderSchema = computed(() => ({
+  '@context': 'https://schema.org',
+  '@type': 'Order',
+  orderNumber: props.order.id,
+  orderStatus: props.order.status,
+  orderDate: props.order.orderDate,
+  acceptedOffer: props.order.items.map((item) => ({
+    '@type': 'Offer',
+    itemOffered: {
+      '@type': 'Book',
+      name: item.title
+    },
+    price: item.price,
+    priceCurrency: 'EGP',
+    quantity: item.quantity
+  }))
+}))
 </script>
 
 <style scoped>

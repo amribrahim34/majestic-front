@@ -5,7 +5,12 @@
       class="flex flex-col md:flex-row justify-between items-start w-full max-w-6xl mx-auto"
     >
       <div class="product-image w-full md:w-2/5 mb-8 md:mb-0 h-96">
-        <img :src="book.image" :alt="book.title" class="w-full h-full object-contain rounded-lg" />
+        <img
+          :src="book.image"
+          :alt="book.title"
+          class="w-full h-full object-contain rounded-lg"
+          loading="lazy"
+        />
       </div>
       <div class="product-details w-full md:w-1/2">
         <h1 class="text-3xl font-bold mb-4">{{ book.title }}</h1>

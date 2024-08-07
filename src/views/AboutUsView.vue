@@ -7,7 +7,12 @@
     <section class="text-center py-12">
       <h1 class="text-4xl font-bold mb-3">{{ t('aboutUs.title') }}</h1>
       <p class="mb-6">{{ t('aboutUs.subtitle') }}</p>
-      <img src="../assets/about-us/mission.png" :alt="t('aboutUs.imageAlt')" class="mx-auto mb-6" />
+      <img
+        src="../assets/about-us/mission.png"
+        :alt="t('aboutUs.imageAlt')"
+        class="mx-auto mb-6"
+        loading="lazy"
+      />
       <p class="max-w-2xl mx-auto">{{ t('aboutUs.description') }}</p>
     </section>
 
@@ -19,7 +24,12 @@
         <div class="flex flex-wrap justify-center gap-10">
           <!-- Team Member Component -->
           <div class="w-40 text-center" v-for="member in teamMembers" :key="member.name">
-            <img :src="member.image" :alt="member.name" class="w-24 h-24 rounded-full mx-auto" />
+            <img
+              :src="member.image"
+              :alt="member.name"
+              class="w-24 h-24 rounded-full mx-auto"
+              loading="lazy"
+            />
             <h3 class="font-bold text-lg mt-4">{{ member.name }}</h3>
             <p class="text-gray-600">{{ t(`team.roles.${member.role}`) }}</p>
           </div>
@@ -43,7 +53,7 @@
       </div>
       <div class="flex-1 hidden lg:block">
         <div class="w-2/3 h-2/3 bg-cover bg-no-repeat bg-center">
-          <img src="../assets/about-us/journey.jpeg" :alt="t('cta.imageAlt')" />
+          <img src="../assets/about-us/journey.jpeg" :alt="t('cta.imageAlt')" loading="lazy" />
         </div>
       </div>
     </section>

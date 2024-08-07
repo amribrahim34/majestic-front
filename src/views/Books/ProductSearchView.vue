@@ -2,8 +2,8 @@
 <template>
   <div class="container mx-auto">
     <HeaderComponent />
-    <div class="flex my-20">
-      <div class="filter-sidebar w-1/5 ml-7">
+    <main class="flex my-20">
+      <aside class="filter-sidebar w-1/5 ml-7">
         <FilterSection
           @filter-updated="debouncedOnFilterUpdated"
           :initial-filters="filtersFromURL"
@@ -12,7 +12,7 @@
           :price-range="priceRange"
           :year-range="yearRange"
         />
-      </div>
+      </aside>
       <SearchResults
         :books="books"
         :total="total"
@@ -21,7 +21,7 @@
         :search-term="searchTerm"
         @page-change="onPageChange"
       />
-    </div>
+    </main>
     <FooterComponent />
   </div>
 </template>

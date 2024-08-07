@@ -8,6 +8,7 @@
             :src="book.image"
             :alt="book.title"
             class="mb-4 w-full h-40 object-cover rounded-lg"
+            loading="lazy"
           />
           <h3 class="text-lg font-bold mb-2">{{ book.title }}</h3>
           <button

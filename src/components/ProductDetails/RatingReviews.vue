@@ -1,5 +1,5 @@
 <template>
-  <div class="rating-reviews max-w-4xl mx-auto p-6">
+  <section class="rating-reviews max-w-4xl mx-auto p-6">
     <div class="rating-summary mb-8">
       <h2 class="text-2xl font-bold mb-4">{{ $t('ratingReviews.rating') }}</h2>
       <div class="average-rating flex items-center mb-4">
@@ -41,7 +41,7 @@
         {{ $t('ratingReviews.loadMore') }}
       </button>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">

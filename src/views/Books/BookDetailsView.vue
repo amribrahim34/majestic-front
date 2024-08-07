@@ -7,11 +7,15 @@
   />
   <div class="container mx-auto">
     <HeaderComponent />
-    <div class="book-display">
-      <product-info :book="book" />
-      <!-- <related-products :products="relatedProducts" /> -->
-      <!-- <rating-reviews :rating="book.rating" :reviews="book.reviews" /> -->
-    </div>
+    <main>
+      <div class="book-display">
+        <Breadcrumb :items="breadcrumbItems" class="m-6" />
+        <product-info :book="book" />
+        <!-- <related-products :products="relatedProducts" /> -->
+        <!-- <rating-reviews :rating="book.rating" :reviews="book.reviews" /> -->
+      </div>
+    </main>
+
     <FooterComponent />
   </div>
 </template>
@@ -24,6 +28,7 @@ import { useMeta } from 'vue-meta'
 import HeaderComponent from '@/components/Header.vue'
 import ProductInfo from '@/components/ProductDetails/ProductInfo.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
+import Breadcrumb from '@/components/shared/Breadcrumb.vue'
 
 const route = useRoute()
 const bookStore = useBookStore()
@@ -84,6 +89,12 @@ useMeta(() => ({
     }
   ]
 }))
+
+const breadcrumbItems = computed(() => [
+  { label: 'Home', link: '/' },
+  { label: 'Books', link: '/books' },
+  { label: book.value.title }
+])
 </script>
 
 <style scoped>

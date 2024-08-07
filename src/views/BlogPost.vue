@@ -17,6 +17,7 @@
       :src="currentPost.img"
       :alt="currentPost.title"
       class="w-full h-64 object-cover mb-6 rounded-lg"
+      loading="lazy"
     />
     <div class="prose lg:prose-xl" v-html="currentPost.content"></div>
     <div class="mt-6">

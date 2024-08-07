@@ -8,7 +8,12 @@
           :key="feature.id"
           class="p-6 bg-white rounded-lg shadow-lg"
         >
-          <img :src="feature.image" :alt="t(feature.titleKey)" class="mb-4 w-24 h-24 mx-auto" />
+          <img
+            :src="feature.image"
+            :alt="t(feature.titleKey)"
+            class="mb-4 w-24 h-24 mx-auto"
+            loading="lazy"
+          />
           <h3 class="text-xl font-semibold mb-2">{{ t(feature.titleKey) }}</h3>
           <p class="mb-4">{{ t(feature.descriptionKey) }}</p>
           <a :href="feature.link" class="bg-black text-white py-2 px-4 inline-block w-40">

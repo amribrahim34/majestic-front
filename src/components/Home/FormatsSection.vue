@@ -7,6 +7,7 @@
             :src="format.image"
             :alt="t(`home.formatsSection.${format.id}.alt`)"
             class="mx-auto mb-4 w-24 h-24 object-cover rounded-full"
+            loading="lazy"
           />
           <h3 class="text-lg font-semibold mb-2">
             {{ t(`home.formatsSection.${format.id}.title`) }}

@@ -1,5 +1,5 @@
 <template>
-  <div class="related-products">
+  <section class="related-products">
     <h2 class="text-2xl font-bold mb-4">{{ $t('productInfo.relatedProducts.title') }}</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       <div v-for="book in books" :key="book.id" class="book-card bg-white rounded-lg shadow-md p-4">
@@ -16,7 +16,7 @@
         </button>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">

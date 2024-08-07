@@ -14,7 +14,12 @@
           :key="book.id"
           class="bg-white border border-gray-200 rounded-lg overflow-hidden"
         >
-          <img :src="book.image" :alt="book.title" class="w-full h-48 object-cover" />
+          <img
+            :src="book.image"
+            :alt="book.title"
+            class="w-full h-48 object-cover"
+            loading="lazy"
+          />
           <div class="p-4">
             <h3 class="text-lg font-semibold mb-1">{{ book.title }}</h3>
             <p class="text-gray-600 mb-4">{{ formatPrice(book.price) }}</p>

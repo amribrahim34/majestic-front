@@ -59,27 +59,52 @@ interface MetaInfo {
 
 app.use(
   createMetaManager(undefined, (metaInfo: MetaInfo) => {
+    const title = metaInfo.title || 'Majestic Minds Bookstore'
+    const description =
+      metaInfo.meta?.find((m) => m.name === 'description')?.content ||
+      'Discover a world of knowledge at Majestic Minds Bookstore. Browse our vast collection of books across all genres and expand your horizons.'
+
     return {
-      title: 'Majestic Minds',
+      title: title,
       titleTemplate: '%s | Majestic Minds Bookstore',
       meta: [
+        { name: 'description', content: description },
         {
-          name: 'description',
-          content:
-            'Discover a world of knowledge at Majestic Minds Bookstore. Browse our vast collection of books across all genres and expand your horizons.'
+          name: 'keywords',
+          content: 'books, bookstore, reading, literature, education, knowledge'
         },
-        { property: 'og:title', content: 'Majestic Minds Bookstore - Your Gateway to Knowledge' },
-        {
-          property: 'og:description',
-          content:
-            'Explore our curated selection of books, from bestsellers to rare finds. Majestic Minds Bookstore: Where curious minds find their next great read.'
-        }
+        { property: 'og:title', content: title },
+        { property: 'og:description', content: description },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:url', content: metaInfo.url },
+        { property: 'og:site_name', content: 'Majestic Minds Bookstore' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: title },
+        { name: 'twitter:description', content: description },
+        { name: 'robots', content: 'index, follow' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { 'http-equiv': 'Content-Type', content: 'text/html; charset=utf-8' }
       ],
-      link: [{ rel: 'canonical', href: metaInfo.url }]
+      link: [
+        { rel: 'canonical', href: metaInfo.url },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      ],
+      script: [
+        {
+          type: 'application/ld+json',
+          innerHTML: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BookStore',
+            name: 'Majestic Minds Bookstore',
+            description: description,
+            url: metaInfo.url
+            // Add more structured data as needed
+          })
+        }
+      ]
     }
   })
 )
-
 app.component('font-awesome-icon', FontAwesomeIcon)
 
 // Set up a global navigation guard

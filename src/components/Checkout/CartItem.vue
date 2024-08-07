@@ -8,6 +8,7 @@
             :src="item.book.image"
             :alt="item.book.title"
             class="w-full h-full object-cover object-center"
+            loading="lazy"
           />
         </div>
         <div>

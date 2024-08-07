@@ -1,7 +1,7 @@
 <template>
   <div class="rounded shadow-lg w-80 mb-16">
     <div>
-      <img class="w-full object-cover h-56" :src="book.image" :alt="book.title" />
+      <img class="w-full object-cover h-56" :src="book.image" :alt="book.title" loading="lazy" />
     </div>
     <div class="px-5 pb-5">
       <div>

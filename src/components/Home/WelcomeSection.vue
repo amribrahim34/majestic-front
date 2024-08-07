@@ -8,6 +8,7 @@
           src="@/assets/home/welcome.jpeg"
           :alt="t('home.welcomeSection.imageAlt')"
           class="w-full rounded-lg shadow-lg"
+          loading="lazy"
         />
       </div>
       <div class="w-full lg:w-1/2" :class="textOrder">
