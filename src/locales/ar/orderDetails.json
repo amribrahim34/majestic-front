@@ -1,0 +1,24 @@
+{
+  "orderDetails": {
+    "orderDetails": "تفاصيل الطلب",
+    "orderNumber": "رقم الطلب: {id}",
+    "orderSummary": "ملخص الطلب",
+    "orderDate": "تاريخ الطلب",
+    "status": "الحالة",
+    "total": "الإجمالي",
+    "shippingDetails": "تفاصيل الشحن",
+    "address": "العنوان",
+    "city": "المدينة",
+    "country": "الدولة",
+    "trackingNumber": "رقم التتبع",
+    "orderItems": "العناصر المطلوبة",
+    "trackOrder": "تتبع الطلب",
+    "cancelOrder": "إلغاء الطلب",
+    "requestRefund": "طلب استرداد",
+    "orderNotFound": "الطلب غير موجود",
+    "orderNotFoundDescription": "عذرًا، لم نتمكن من العثور على الطلب المطلوب.",
+    "book": "الكتاب",
+    "quantity": "الكمية",
+    "price": "السعر"
+  }
+}

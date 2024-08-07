@@ -1,0 +1,24 @@
+{
+  "orderDetails": {
+    "orderDetails": "Order Details",
+    "orderNumber": "Order Number: {id}",
+    "orderSummary": "Order Summary",
+    "orderDate": "Order Date",
+    "status": "Status",
+    "total": "Total",
+    "shippingDetails": "Shipping Details",
+    "address": "Address",
+    "city": "City",
+    "country": "Country",
+    "trackingNumber": "Tracking Number",
+    "orderItems": "Order Items",
+    "trackOrder": "Track Order",
+    "cancelOrder": "Cancel Order",
+    "requestRefund": "Request Refund",
+    "orderNotFound": "Order Not Found",
+    "orderNotFoundDescription": "Sorry, we couldn't find the order you're looking for.",
+    "book": "Book",
+    "quantity": "Quantity",
+    "price": "Price"
+  }
+}

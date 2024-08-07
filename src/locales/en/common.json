@@ -21,6 +21,13 @@
     "publishingYear": "Publishing Year",
     "loadMore": "load more",
     "from": "from",
-    "to": "to"
+    "to": "to",
+    "dateTimeFormats": {
+      "long": {
+        "year": "numeric",
+        "month": "long",
+        "day": "numeric"
+      }
+    }
   }
 }

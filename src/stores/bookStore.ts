@@ -131,10 +131,19 @@ export const useBookStore = defineStore('bookStore', {
     },
 
     updatePaginationInfo(data: any) {
-      this.currentPage = data.meta.current_page
-      this.lastPage = data.meta.last_page
-      this.total = data.meta.total
-      this.perPage = data.meta.per_page
+      if (data && data.meta) {
+        this.currentPage = data.meta.current_page ?? 1
+        this.lastPage = data.meta.last_page ?? 1
+        this.total = data.meta.total ?? 0
+        this.perPage = data.meta.per_page ?? 10
+      } else {
+        console.error('Pagination data is not in the expected format:', data)
+        // Set default values
+        this.currentPage = 1
+        this.lastPage = 1
+        this.total = 0
+        this.perPage = 10
+      }
     },
 
     setPage(page: number) {

@@ -1,5 +1,6 @@
 import AllOrdersView from '@/views/Orders/AllOrdersView.vue'
 import requireAuth from '@/utils/requireAuth'
+import OrderDetailsView from '@/views/Orders/OrderDetails.vue'
 
 const orders = [
   {
@@ -10,8 +11,8 @@ const orders = [
   },
   {
     path: '/orders/:id',
-    name: 'order-details',
-    // component: SingleOrderView,
+    name: 'OrderDetails',
+    component: OrderDetailsView,
     beforeEnter: requireAuth,
     props: true
   }

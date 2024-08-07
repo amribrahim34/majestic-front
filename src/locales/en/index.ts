@@ -15,6 +15,7 @@ import productInfo from './productInfo.json'
 import ratingReviews from './ratingReviews.json'
 import order from './order.json'
 import validation from './validation.json'
+import orderDetails from './orderDetails.json'
 
 const en = {
   ...header,
@@ -33,6 +34,7 @@ const en = {
   ...ratingReviews,
   ...validation,
   ...order,
+  ...orderDetails,
   ...home
 }
 

@@ -41,7 +41,7 @@ export const useOrderStore = defineStore('order', () => {
     loading.value = true
     try {
       const response = await api.get(`/orders/${orderId}`)
-      currentOrder.value = response.data
+      currentOrder.value = response.data.data
     } catch (err) {
       error.value = 'Failed to fetch order'
       console.error(err)

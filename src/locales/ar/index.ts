@@ -14,6 +14,7 @@ import requestBook from './requestBook.json'
 import productInfo from './productInfo.json'
 import ratingReviews from './ratingReviews.json'
 import order from './order.json'
+import orderDetails from './orderDetails.json'
 import validation from './validation.json'
 
 const ar = {
@@ -33,6 +34,7 @@ const ar = {
   ...ratingReviews,
   ...validation,
   ...order,
+  ...orderDetails,
   ...home
 }
 

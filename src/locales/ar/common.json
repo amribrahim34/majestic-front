@@ -21,6 +21,13 @@
     "publishingYear": "سنة النشر",
     "loadMore": "المزيد",
     "from": "من",
+    "dateTimeFormats": {
+      "long": {
+        "year": "رقم",
+        "month": "طويل",
+        "day": "رقم"
+      }
+    },
     "to": "الي"
   }
 }
