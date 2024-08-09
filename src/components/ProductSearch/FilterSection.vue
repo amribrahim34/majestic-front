@@ -9,6 +9,7 @@
     <div v-show="showFilters" class="filter-container md:block">
       <div class="p-4 bg-white shadow-lg">
         <DateRangeFilter
+          v-if="yearRange"
           v-model="selectedYearRange"
           :filter="{ min: yearRange.min, max: yearRange.max, selected: selectedYearRange }"
           @update:modelValue="updateYearRange"
@@ -64,8 +65,14 @@ const emit = defineEmits<{
   (e: 'filterUpdated', filters: Record<string, any>): void
 }>()
 
+const debouncedResize = debounce(() => {
+  if (window.innerWidth >= 768) {
+    showFilters.value = true
+  }
+}, 250)
+
 const showFilters = ref(false)
-const filterSection = ref(null)
+const filterSection = ref<HTMLElement | null>(null)
 
 const selectedCategories = ref<(string | number)[]>([])
 const categoryDisplayLimit = ref(10)
@@ -89,26 +96,36 @@ const loadMoreCategories = () => {
 }
 
 const updateYearRange = (newRange: { min: number; max: number }) => {
-  selectedYearRange.value = [newRange.min, newRange.max]
+  if (newRange && typeof newRange.min === 'number' && typeof newRange.max === 'number') {
+    selectedYearRange.value = [newRange.min, newRange.max]
+  }
 }
 
 const updatePriceRange = (newRange: number[]) => {
-  selectedPriceRange.value = [newRange[0], newRange[1]]
+  if (Array.isArray(newRange) && newRange.length === 2) {
+    selectedPriceRange.value = [newRange[0], newRange[1]]
+  }
 }
 
 const updateCategory = (ids: number[]) => {
-  selectedCategories.value = ids
+  if (Array.isArray(ids)) {
+    selectedCategories.value = ids
+  }
 }
 
 const applyFilters = () => {
-  const updatedFilters: Record<string, any> = {
-    'year_range[]': selectedYearRange.value,
-    'price_range[]': selectedPriceRange.value,
-    'category_ids[]': selectedCategories.value
-  }
-  emit('filterUpdated', updatedFilters)
-  if (window.innerWidth < 768) {
-    showFilters.value = false
+  try {
+    const updatedFilters: Record<string, any> = {
+      'year_range[]': selectedYearRange.value,
+      'price_range[]': selectedPriceRange.value,
+      'category_ids[]': selectedCategories.value
+    }
+    emit('filterUpdated', updatedFilters)
+    if (window.innerWidth < 768) {
+      showFilters.value = false
+    }
+  } catch (error) {
+    console.error('Error applying filters:', error)
   }
 }
 
@@ -116,20 +133,22 @@ const resetFilters = () => {
   selectedYearRange.value = [yearRange.value?.min || minYear, yearRange.value?.max || maxYear]
   selectedPriceRange.value = [priceRange.value?.min || 0, priceRange.value?.max || 0]
   selectedCategories.value = []
-  applyFilters()
+  // applyFilters()
   router.push({ query: {} })
 }
 
-const handleClickOutside = (event: MouseEvent) => {
-  if (
-    filterSection.value &&
-    filterSection.value.contains(event.target as Node) &&
-    window.innerWidth < 768
-  ) {
-    showFilters.value = false
-    console.log('this is true', filterSection.value, window.innerWidth < 768)
-  } else {
-    console.log('this is false', filterSection.value, window.innerWidth < 768)
+const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+  if (filterSection.value && window.innerWidth < 768) {
+    const rect = filterSection.value.getBoundingClientRect()
+    const isOutside =
+      event.clientX < rect.left ||
+      event.clientX > rect.right ||
+      event.clientY < rect.top ||
+      event.clientY > rect.bottom
+
+    if (isOutside) {
+      showFilters.value = false
+    }
   }
 }
 
@@ -171,13 +190,14 @@ onMounted(() => {
 
   document.addEventListener('click', handleClickOutside)
 
-  window.addEventListener('resize', handleResize)
-  handleResize()
+  window.addEventListener('resize', debouncedResize)
+  debouncedResize()
+  // handleResize()
 })
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
-  window.removeEventListener('resize', handleResize)
+  window.removeEventListener('resize', debouncedResize)
 })
 </script>
 <style scoped>

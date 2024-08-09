@@ -2,12 +2,14 @@ import { RouteRecordRaw } from 'vue-router'
 import books from './books'
 import orders from './orders'
 import carts from './carts'
+import blog from './blog'
 import requireGuest from '@/utils/requireGuest'
 
 const routes: Array<RouteRecordRaw> = [
   ...books,
   ...orders,
   ...carts,
+  ...blog,
   {
     path: '/',
     name: 'Home',
