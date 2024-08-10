@@ -1,10 +1,10 @@
 <script lang="ts">
-import Login from '@/components/Login.vue'
+import LoginComponent from '@/components/LoginComponent.vue'
 
 export default {
   name: 'LoginView',
   components: {
-    Login
+    LoginComponent
   },
   data() {
     return {
@@ -15,5 +15,5 @@ export default {
 </script>
 
 <template>
-  <Login />
+  <LoginComponent />
 </template>

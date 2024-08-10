@@ -89,7 +89,6 @@ import { useRouter } from 'vue-router'
 import { useLoginStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
 import api from '@/api'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const router = useRouter()
 const loginStore = useLoginStore()
