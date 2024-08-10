@@ -23,7 +23,7 @@
             id="email"
             type="email"
             v-model="email"
-            :placeholder="$t('login.emailPlaceholder')"
+            placeholder="example@example.com"
           />
           <p v-if="errors.email" class="text-red-500 text-xs italic">{{ errors.email }}</p>
         </div>
