@@ -13,6 +13,7 @@ export function useFormValidation() {
     address: '',
     cityId: '',
     city: '',
+    cityName: '',
     districtId: '',
     special_mark: '',
     latitude: '',

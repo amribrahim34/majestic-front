@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, computed, onMounted, watch } from 'vue'
+import { onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useBostaStore } from '@/stores/bostaStore'
 import { useLoginStore } from '@/stores/auth'
@@ -35,7 +35,7 @@ const props = defineProps<{
   total: number
 }>()
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const bostaStore = useBostaStore()
 const loginStore = useLoginStore()
 
@@ -59,6 +59,8 @@ const submitForm = async () => {
   if (validateForm()) {
     // await submitOrder(form)
     emit('submit', form)
+  } else {
+    console.log('Form has errors:', errors)
   }
 }
 
