@@ -1,12 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import api from '@/api'
-import { useI18n } from 'vue-i18n'
 import { Order } from '@/types/Order'
 
 export const useOrderStore = defineStore('order', () => {
-  const { t } = useI18n()
-
   const orders = ref<Order[]>([])
   const currentOrder = ref<Order | null>(null)
   const loading = ref(false)
@@ -30,11 +27,11 @@ export const useOrderStore = defineStore('order', () => {
   }
 
   function getOrderStatus(status: string) {
-    return t(`orderStatus.${status}`)
+    return status
   }
 
   function getEstimatedDelivery(days: number) {
-    return t('estimatedDelivery', { days })
+    return days
   }
 
   async function fetchOrder(orderId: number) {
