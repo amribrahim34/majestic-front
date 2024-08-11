@@ -7,8 +7,8 @@
           id="name"
           v-model="form.name"
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
-          :placeholder="t('shipping.name')"
-          :aria-label="t('shipping.name')"
+          :placeholder="$t('shipping.name')"
+          :aria-label="$t('shipping.name')"
         />
         <span v-if="errors.name" class="text-red-500 text-sm">{{ errors.name }}</span>
       </div>
@@ -18,8 +18,8 @@
           id="phone"
           v-model="form.phone"
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
-          :placeholder="t('shipping.phone')"
-          :aria-label="t('shipping.phone')"
+          :placeholder="$t('shipping.phone')"
+          :aria-label="$t('shipping.phone')"
         />
         <span v-if="errors.phone" class="text-red-500 text-sm">{{ errors.phone }}</span>
       </div>
@@ -30,7 +30,7 @@
             id="address"
             v-model="form.address"
             class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
-            :placeholder="t('shipping.address')"
+            :placeholder="$t('shipping.address')"
           />
           <span v-if="errors.address" class="text-red-500 text-sm">{{ errors.address }}</span>
         </div>
@@ -40,7 +40,7 @@
             id="special_mark"
             v-model="form.special_mark"
             class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
-            :placeholder="t('shipping.specialMark')"
+            :placeholder="$t('shipping.specialMark')"
           />
           <span v-if="errors.special_mark" class="text-red-500 text-sm">{{
             errors.special_mark
@@ -55,7 +55,7 @@
             @change="onCityChange"
             class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           >
-            <option value="" class="bg-black">{{ t('shipping.selectCity') }}</option>
+            <option value="" class="bg-black">{{ $t('shipping.selectCity') }}</option>
             <option
               v-for="city in bostaStore.cities"
               :key="city._id"
@@ -75,7 +75,7 @@
             @change="getShippingCost"
             class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           >
-            <option value="" class="bg-black">{{ t('shipping.selectDistrict') }}</option>
+            <option value="" class="bg-black">{{ $t('shipping.selectDistrict') }}</option>
             <option
               v-for="district in bostaStore.districts"
               :key="district.districtId"
@@ -94,8 +94,8 @@
           id="shippingCost"
           :value="bostaStore.shippingCost"
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
-          :placeholder="t('shipping.shippingCost')"
-          :aria-label="t('shipping.shippingCost')"
+          :placeholder="$t('shipping.shippingCost')"
+          :aria-label="$t('shipping.shippingCost')"
           disabled
         />
       </div>
@@ -106,9 +106,9 @@
           v-model="form.paymentType"
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
         >
-          <option value="" class="bg-black" disabled>{{ t('shipping.selectPaymentType') }}</option>
+          <option value="" class="bg-black" disabled>{{ $t('shipping.selectPaymentType') }}</option>
           <option value="cashOnDelivery" class="bg-black text-white" selected>
-            {{ t('shipping.cashOnDelivery') }}
+            {{ $t('shipping.cashOnDelivery') }}
           </option>
           <!-- Add more payment options if needed -->
         </select>
@@ -116,13 +116,13 @@
       </div>
       <!-- Refund Policy Link -->
       <div>
-        <a href="#" class="text-blue-400 hover:underline">{{ t('shipping.refundPolicy') }}</a>
+        <a href="#" class="text-blue-400 hover:underline">{{ $t('shipping.refundPolicy') }}</a>
       </div>
       <button
         type="submit"
         class="w-full bg-white text-black py-2 px-4 rounded hover:bg-gray-200 transition-colors"
       >
-        {{ t('shipping.confirmOrder') }} &gt;
+        {{ $t('shipping.confirmOrder') }} &gt;
       </button>
     </form>
   </div>
@@ -146,7 +146,7 @@ const router = useRouter()
 
 const { form, errors, validateForm } = useFormValidation()
 
-const { t, locale } = useI18n()
+const { locale } = useI18n()
 const bostaStore = useBostaStore()
 const loginStore = useLoginStore()
 
