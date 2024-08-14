@@ -8,16 +8,12 @@
           class="flex items-center mb-4"
           :class="{ 'md:justify-start': isLTR, 'md:justify-end': !isLTR }"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            style="width: 24px; height: 24px; overflow: visible; fill: rgb(0, 0, 0)"
-            viewBox="0 0 24 24"
-          >
-            <path d="M0 0h24v24H0z" fill="none"></path>
-            <path
-              d="m17.21 9-4.38-6.56a.993.993 0 0 0-.83-.42c-.32 0-.64.14-.83.43L6.79 9H2c-.55 0-1 .45-1 1 0 .09.01.18.04.27l2.54 9.27c.23.84 1 1.46 1.92 1.46h13c.92 0 1.69-.62 1.93-1.46l2.54-9.27L23 10c0-.55-.45-1-1-1h-4.79zM9 9l3-4.4L15 9H9zm3 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
-            ></path>
-          </svg>
+          <img
+            src="../assets/LOGO MAJESTICMIND PNG-07.png"
+            alt="MajesticMinds Logo"
+            class="h-6 md:h-8 mr-2 md:mr-3"
+            loading="lazy"
+          />
           <span class="text-xl font-semibold text-gray-800 ml-2">{{ t('footer.brandName') }}</span>
         </router-link>
         <p class="text-gray-600 text-sm mb-4">{{ t('footer.tagline') }}</p>
@@ -80,8 +76,8 @@
               d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"
             ></path>
           </svg>
-          <a href="mailto:support@majisticminds.net"
-            ><span :class="{ 'mr-2': isLTR, 'ml-2': !isLTR }">support@majesticminds.net</span></a
+          <a href="mailto:majisticminds.net@gmail.com"
+            ><span :class="{ 'mr-2': isLTR, 'ml-2': !isLTR }">majesticminds.net@gmail.com</span></a
           >
         </p>
       </div>
