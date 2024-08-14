@@ -15,6 +15,8 @@ import productInfo from './productInfo.json'
 import ratingReviews from './ratingReviews.json'
 import order from './order.json'
 import orderDetails from './orderDetails.json'
+import termsAndConditions from './termsAndConditions.json'
+import privacyPolicy from './privacyPolicy.json'
 import validation from './validation.json'
 
 const ar = {
@@ -35,6 +37,8 @@ const ar = {
   ...validation,
   ...order,
   ...orderDetails,
+  ...termsAndConditions,
+  ...privacyPolicy,
   ...home
 }
 

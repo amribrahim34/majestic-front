@@ -78,11 +78,23 @@
             v-model="formData.termsAccepted"
             class="mr-2 leading-tight"
           />
-          <label
-            for="terms"
-            class="text-xs text-gray-700"
-            v-html="$t('signup.termsAgreement')"
-          ></label>
+          <label for="terms" class="text-xs text-gray-700">
+            <i18n-t keypath="signup.termsAgreement" scope="global">
+              <template #termsLink>
+                <router-link to="/terms" class="text-blue-500 hover:text-blue-800 cursor-pointer">
+                  {{ $t('signup.termsLinkText') }}
+                </router-link>
+              </template>
+              <template #privacyLink>
+                <router-link
+                  to="/privacy-policy"
+                  class="text-blue-500 hover:text-blue-800 cursor-pointer"
+                >
+                  {{ $t('signup.privacyLinkText') }}
+                </router-link>
+              </template>
+            </i18n-t>
+          </label>
         </div>
         <div class="mb-6">
           <button

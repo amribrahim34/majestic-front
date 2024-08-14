@@ -1,0 +1,49 @@
+{
+  "termsAndConditions": {
+    "title": "Terms and Conditions",
+    "seoTitle": "Terms and Conditions",
+    "seoDescription": "Read our Terms and Conditions to understand your rights and responsibilities when using our service.",
+    "sections": {
+      "0": {
+        "title": "Acceptance of Terms",
+        "content": "By accessing or using our service, you agree to be bound by these Terms and Conditions."
+      },
+      "1": {
+        "title": "Changes to Terms",
+        "content": "We reserve the right to modify these terms at any time. Your continued use of the service after such modifications constitutes your acceptance of the new terms."
+      },
+      "2": {
+        "title": "Access to the Service",
+        "content": "We reserve the right to withdraw or amend our service, and any service or material we provide, in our sole discretion without notice."
+      },
+      "3": {
+        "title": "Intellectual Property Rights",
+        "content": "The Service and its original content, features, and functionality are owned by us and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws."
+      },
+      "4": {
+        "title": "User Content",
+        "content": "You retain any and all of your rights to any content you submit, post or display on or through the Service and you are responsible for protecting those rights."
+      },
+      "5": {
+        "title": "Prohibited Uses",
+        "content": "You may use the Service only for lawful purposes and in accordance with these Terms. You agree not to use the Service in any way that violates any applicable national or international law or regulation."
+      },
+      "6": {
+        "title": "Termination",
+        "content": "We may terminate or suspend your access to the Service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of the Terms."
+      },
+      "7": {
+        "title": "Disclaimers",
+        "content": "Your use of the Service is at your sole risk. The Service is provided on an \"AS IS\" and \"AS AVAILABLE\" basis without any warranty or condition, express, implied or statutory."
+      },
+      "8": {
+        "title": "Limitation of Liability",
+        "content": "In no event shall we be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service."
+      },
+      "9": {
+        "title": "Governing Law",
+        "content": "These Terms shall be governed and construed in accordance with the laws of [Your Country/State], without regard to its conflict of law provisions."
+      }
+    }
+  }
+}

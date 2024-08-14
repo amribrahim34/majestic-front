@@ -15,6 +15,8 @@ import productInfo from './productInfo.json'
 import ratingReviews from './ratingReviews.json'
 import order from './order.json'
 import validation from './validation.json'
+import termsAndConditions from './termsAndConditions.json'
+import privacyPolicy from './privacyPolicy.json'
 import orderDetails from './orderDetails.json'
 
 const en = {
@@ -35,6 +37,8 @@ const en = {
   ...validation,
   ...order,
   ...orderDetails,
+  ...termsAndConditions,
+  ...privacyPolicy,
   ...home
 }
 

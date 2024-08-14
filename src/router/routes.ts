@@ -43,6 +43,16 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/components/AuthCallback.vue')
   },
   {
+    path: '/terms',
+    name: 'TermsAndConditions',
+    component: () => import('@/views/TermsAndConditions.vue')
+  },
+  {
+    path: '/privacy-policy',
+    name: 'PrivacyPolicies',
+    component: () => import('@/views/PrivacyPolicy.vue')
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/LoginView.vue'),
