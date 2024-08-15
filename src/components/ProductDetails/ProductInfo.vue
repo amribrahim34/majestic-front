@@ -15,11 +15,12 @@
       <div class="product-details w-full md:w-1/2">
         <h1 class="text-3xl font-bold mb-4">{{ book.title }}</h1>
         <div class="rating flex items-center mb-4">
-          <StarRating
+          <!-- <StarRating
             :book-id="book.id"
             :readonly="isAuthenticated()"
             :rating="book.average_rating"
-          />
+          /> -->
+          <StarRating v-if="book.id" :book-id="book.id" :rating="book.average_rating" />
           <span class="ml-2 text-gray-600">
             {{ $t('productInfo.reviews', { count: book.reviewCount }) }}
           </span>

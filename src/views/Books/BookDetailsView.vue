@@ -29,6 +29,7 @@ import HeaderComponent from '@/components/Header.vue'
 import ProductInfo from '@/components/ProductDetails/ProductInfo.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import Breadcrumb from '@/components/shared/Breadcrumb.vue'
+import SEOMetaTags from '@/components/SEOMetaTags.vue'
 
 const route = useRoute()
 const bookStore = useBookStore()
