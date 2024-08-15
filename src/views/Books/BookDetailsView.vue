@@ -35,7 +35,12 @@ const route = useRoute()
 const bookStore = useBookStore()
 const book = computed(() => bookStore.currentBook)
 const currentURL = computed(() => window.location.href)
-
+const props = defineProps({
+  id: {
+    type: String,
+    required: true
+  }
+})
 const author = computed(() => {
   return book.value?.authors && book.value.authors.length > 0
     ? book.value.authors[0].name
@@ -56,8 +61,12 @@ computed(() => ({
 }))
 
 const fetchBook = async () => {
-  const id = route.params.id as string
-  await bookStore.fetchBookById(id)
+  const id = props.id || (route.params.id as string)
+  if (id) {
+    await bookStore.fetchBookById(id)
+  } else {
+    console.error('No book ID provided')
+  }
 }
 
 onMounted(fetchBook)
