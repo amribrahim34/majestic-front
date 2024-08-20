@@ -1,46 +1,72 @@
 <template>
-  <section class="related-products">
-    <h2 class="text-2xl font-bold mb-4">{{ $t('productInfo.relatedProducts.title') }}</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      <div v-for="book in books" :key="book.id" class="book-card bg-white rounded-lg shadow-md p-4">
-        <img :src="book.image" :alt="book.title" class="w-full h-48 object-cover mb-2 rounded" />
-        <h3 class="text-lg font-semibold mb-1">{{ book.title }}</h3>
-        <p class="text-gray-700 mb-2">
-          {{ $t('productInfo.relatedProducts.price', { price: book.price }) }}
-        </p>
-        <button
-          class="wishlist-button text-2xl focus:outline-none"
-          @click="toggleWishlist(book.id)"
-        >
-          {{ isInWishlist(book.id) ? '♥' : '♡' }}
-        </button>
+  <n-card class="related-products my-8">
+    <template #header>
+      <h2 class="text-2xl font-bold">{{ $t('productInfo.relatedProducts.title') }}</h2>
+    </template>
+    <n-spin :show="loading">
+      <n-empty
+        v-if="!loading && (!books || books.length === 0)"
+        description="No related products found"
+      >
+        <template #extra>
+          <n-button>{{ $t('productInfo.relatedProducts.browseMore') }}</n-button>
+        </template>
+      </n-empty>
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <n-card v-for="book in books" :key="book.id" class="book-card" hoverable>
+          <template #cover>
+            <img :src="book.image" :alt="book.title" class="w-full h-48 object-cover" />
+          </template>
+          <n-space vertical>
+            <n-text class="text-lg font-semibold line-clamp-1">{{ book.title }}</n-text>
+            <n-text class="text-xl font-bold">
+              {{ $t('productInfo.relatedProducts.price', { price: book.price }) }}
+            </n-text>
+            <n-space justify="space-between">
+              <WishlistButton
+                v-if="book.id"
+                :book-id="book.id"
+                :is-wishlisted="book.is_wishlisted"
+              />
+              <AddToCartButton v-if="book.id" :book-id="book.id" />
+            </n-space>
+          </n-space>
+        </n-card>
       </div>
-    </div>
-  </section>
+    </n-spin>
+  </n-card>
 </template>
 
 <script setup lang="ts">
-import { ref, PropType } from 'vue'
+import { ref, PropType, onMounted } from 'vue'
+import { NCard, NSpin, NEmpty, NButton, NSpace, NText } from 'naive-ui'
 import { Book } from '@/types/Book'
+import WishlistButton from '@/components/shared/WishlistButton.vue'
+import AddToCartButton from '@/components/shared/AddToCartButton.vue'
 
-defineProps({
+const props = defineProps({
   books: {
     type: Array as PropType<Book[]>,
-    required: true
+    default: () => []
   }
 })
 
-const wishlist = ref<Set<number>>(new Set())
+const loading = ref(true)
 
-const toggleWishlist = (bookId: number) => {
-  if (wishlist.value.has(bookId)) {
-    wishlist.value.delete(bookId)
-  } else {
-    wishlist.value.add(bookId)
-  }
-}
-
-const isInWishlist = (bookId: number): boolean => {
-  return wishlist.value.has(bookId)
-}
+onMounted(() => {
+  // Simulate loading
+  setTimeout(() => {
+    loading.value = false
+  }, 1000)
+})
 </script>
+
+<style scoped>
+.book-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+}
+</style>

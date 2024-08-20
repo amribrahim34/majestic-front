@@ -1,40 +1,59 @@
 <template>
   <SEOMetaTags
-    :title="book.title + ' | MajesticMinds'"
-    :description="book.description"
-    :image="book.image"
+    :title="book.title ? `${book.title} | MajesticMinds` : 'Book Details | MajesticMinds'"
+    :description="book.description || 'Book details page'"
+    :image="book.image || ''"
     :url="currentURL"
   />
   <div class="container mx-auto">
     <HeaderComponent />
     <main>
-      <div class="book-display">
+      <div v-if="loading" class="text-center py-8">
+        <p>Loading book details...</p>
+      </div>
+      <div v-else-if="error" class="text-center py-8">
+        <p class="text-red-500">{{ error }}</p>
+      </div>
+      <div v-else class="book-display">
         <Breadcrumb :items="breadcrumbItems" class="m-6" />
         <product-info :book="book" />
-        <!-- <related-products :products="relatedProducts" /> -->
-        <!-- <rating-reviews :rating="book.rating" :reviews="book.reviews" /> -->
+        <related-products :books="relatedProducts" />
+        <!-- <rating-reviews
+          v-if="rating"
+          :rating="Number(rating.average_rating)"
+          :reviews-count="rating.ratings_count"
+          :reviews="reviews"
+          :bookId="book.id"
+        /> -->
       </div>
     </main>
-
     <FooterComponent />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useBookStore } from '@/stores/bookStore'
 import { useMeta } from 'vue-meta'
 import HeaderComponent from '@/components/Header.vue'
 import ProductInfo from '@/components/ProductDetails/ProductInfo.vue'
+import RelatedProducts from '@/components/ProductDetails/RelatedProducts.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import Breadcrumb from '@/components/shared/Breadcrumb.vue'
 import SEOMetaTags from '@/components/SEOMetaTags.vue'
+import RatingReviews from '@/components/ProductDetails/RatingReviews.vue'
 
 const route = useRoute()
 const bookStore = useBookStore()
 const book = computed(() => bookStore.currentBook)
+const rating = computed(() => bookStore.rating)
+const relatedProducts = computed(() => bookStore.relatedProducts)
+const reviews = computed(() => bookStore.reviews || [])
 const currentURL = computed(() => window.location.href)
+const loading = ref(false)
+const error = ref('')
+
 const props = defineProps({
   id: {
     type: String,
@@ -61,11 +80,20 @@ computed(() => ({
 }))
 
 const fetchBook = async () => {
-  const id = props.id || (route.params.id as string)
-  if (id) {
-    await bookStore.fetchBookById(id)
-  } else {
-    console.error('No book ID provided')
+  loading.value = true
+  error.value = ''
+  try {
+    const id = props.id || (route.params.id as string)
+    if (id) {
+      await bookStore.fetchBookById(id)
+    } else {
+      throw new Error('No book ID provided')
+    }
+  } catch (err) {
+    console.error('Error fetching book:', err)
+    error.value = 'Failed to load book details. Please try again later.'
+  } finally {
+    loading.value = false
   }
 }
 

@@ -25,6 +25,8 @@ export const useBookStore = defineStore('bookStore', {
     formats: [],
     priceRange: {} as RangeFilterType,
     yearRange: { min: 0, max: 0 },
+    rating: null,
+    relatedProducts: [],
     route: null as RouteLocationNormalizedLoaded | null,
     error: '',
     searchQuery: ''
@@ -62,6 +64,8 @@ export const useBookStore = defineStore('bookStore', {
       try {
         const response = await api.get(`/books/${id}/show`)
         this.currentBook = response.data.data
+        this.rating = response.data.rating
+        this.relatedProducts = response.data.related_products
       } catch (error) {
         this.error = 'Error fetching book details'
         console.error(error)

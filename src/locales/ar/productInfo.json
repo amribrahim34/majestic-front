@@ -13,7 +13,7 @@
     "addToCart": "أضف إلى السلة",
     "relatedProducts": {
       "title": "قد يعجبك أيضًا",
-      "price": "${price} $"
+      "price": "ج.م {price}"
     }
   }
 }

@@ -1,12 +1,12 @@
 <template>
-  <section class="rating-reviews max-w-4xl mx-auto p-6">
+  <section v-if="isValidRating" class="rating-reviews max-w-4xl mx-auto p-6">
     <div class="rating-summary mb-8">
       <h2 class="text-2xl font-bold mb-4">{{ $t('ratingReviews.rating') }}</h2>
       <div class="average-rating flex items-center mb-4">
-        <span class="rating-number text-3xl font-bold mr-4">{{ averageRating.toFixed(1) }}/5</span>
-        <star-rating :rating="averageRating" class="mr-4" />
+        <span class="rating-number text-3xl font-bold mr-4">{{ formattedRating }}/5</span>
+        <star-rating :rating="averageRating" :bookId="bookId" class="mr-4" />
         <span class="review-count text-gray-600">
-          {{ $t('ratingReviews.ratingsCount', { count: reviews.length }) }}
+          {{ $t('ratingReviews.ratingsCount', { count: reviewsCount }) }}
         </span>
       </div>
       <div class="rating-bars space-y-2">
@@ -26,7 +26,9 @@
       <h2 class="text-2xl font-bold mb-4">{{ $t('ratingReviews.reviews') }}</h2>
       <div v-for="review in paginatedReviews" :key="review.id" class="review mb-6 pb-6 border-b">
         <div class="review-header flex items-center mb-2">
-          <star-rating :rating="review.rating" class="mr-4" />
+          <!-- <star-rating :rating="review.rating" class="mr-4" /> -->
+          <star-rating :rating="averageRating" :bookId="bookId" class="mr-4" />
+
           <span class="reviewer-name font-semibold">{{ review.name }}</span>
         </div>
         <p class="review-title text-lg font-semibold mb-2">{{ review.title }}</p>
@@ -42,6 +44,9 @@
       </button>
     </div>
   </section>
+  <section v-else class="rating-reviews max-w-4xl mx-auto p-6">
+    <p>{{ $t('ratingReviews.noRatingAvailable') }}</p>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -52,22 +57,50 @@ import type { Review } from '@/types/Review'
 
 const props = defineProps({
   rating: {
+    type: [Number, Object],
+    required: true
+  },
+  reviewsCount: {
+    type: Number,
+    required: true
+  },
+  bookId: {
     type: Number,
     required: true
   },
   reviews: {
     type: Array as () => Review[],
-    required: true
+    default: () => []
   }
 })
 
-const { d } = useI18n()
+const { d, t } = useI18n()
 
-const averageRating = computed(() => props.rating)
+const averageRating = computed(() => {
+  if (typeof props.rating === 'number') {
+    return props.rating
+  } else if (typeof props.rating === 'string') {
+    return parseFloat(props.rating) || 0
+  } else if (typeof props.rating === 'object' && props.rating !== null) {
+    return props.rating.average_rating || 0
+  }
+  return 0
+})
+
+const isValidRating = computed(() => {
+  return typeof averageRating.value === 'number' && !isNaN(averageRating.value)
+})
+
+const formattedRating = computed(() => {
+  return isValidRating.value ? averageRating.value.toFixed(1) : '0.0'
+})
+
+// const averageRating = computed(() => props.rating)
 const reviewsPerPage = 5
 const currentPage = ref(1)
 
 const paginatedReviews = computed(() => {
+  if (!props.reviews) return []
   const start = 0
   const end = currentPage.value * reviewsPerPage
   return props.reviews.slice(start, end)

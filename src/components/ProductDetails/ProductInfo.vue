@@ -42,30 +42,11 @@
           <input type="number" v-model="quantity" min="1" class="w-16 p-2 border rounded" />
         </div>
         <div class="actions flex">
-          <button
-            @click="toggleWishlist"
-            class="p-2.5 mx-3 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            :disabled="isWishlistLoading"
-            :aria-label="
-              $t(isWishlisted ? 'productInfo.removeFromWishlist' : 'productInfo.addToWishlist')
-            "
-          >
-            <svg
-              class="w-5 h-5"
-              :class="{ 'text-red-500 fill-current': isWishlisted, 'text-gray-600': !isWishlisted }"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-          </button>
-          <div v-if="cartItem" class="flex items-center space-x-2">
+          <!-- <WishlistButton :book-id="book.id" :isWishlisted="book.is_wishlisted" /> -->
+          <WishlistButton v-if="book.id" :book-id="book.id" :is-wishlisted="book.is_wishlisted" />
+          <AddToCartButton v-if="book.id" :book-id="book.id" />
+
+          <!-- <div v-if="cartItem" class="flex items-center space-x-2">
             <button
               @click="decreaseQuantity"
               class="px-2 py-1 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
@@ -96,7 +77,7 @@
             :disabled="isAddingToCart"
           >
             {{ $t(isAddingToCart ? 'productInfo.adding' : 'productInfo.addToCart') }}
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
@@ -110,7 +91,9 @@ import { Book } from '@/types/Book'
 import { useCartStore } from '@/stores/cart'
 import { useWishlistStore } from '@/stores/wishlist'
 import { storeToRefs } from 'pinia'
-import { isAuthenticated } from '@/utils/auth'
+
+import WishlistButton from '@/components/shared/WishlistButton.vue'
+import AddToCartButton from '@/components/shared/AddToCartButton.vue'
 
 const props = defineProps({
   book: {
@@ -126,16 +109,16 @@ const quantity = ref(1)
 const isAddingToCart = ref(false)
 
 const cartItem = computed(() => cartItems.value.find((item) => item.book.id === props.book.id))
-const isWishlisted = computed(() => wishlistStore.isItemWishlisted(props.book.id))
-const isWishlistLoading = computed(() => wishlistStore.loading)
+// const isWishlisted = computed(() => wishlistStore.isItemWishlisted(props.book.id))
+// const isWishlistLoading = computed(() => wishlistStore.loading)
 
 onMounted(() => {
   wishlistStore.fetchWishlist()
 })
 
-const toggleWishlist = async () => {
-  await wishlistStore.toggleWishlistItem(props.book.id)
-}
+// const toggleWishlist = async () => {
+//   await wishlistStore.toggleWishlistItem(props.book.id)
+// }
 
 const addToCart = async () => {
   if (isAddingToCart.value) return
