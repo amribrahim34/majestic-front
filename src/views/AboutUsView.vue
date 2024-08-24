@@ -17,12 +17,11 @@
     </section>
 
     <!-- Team Section -->
-    <section class="bg-white py-12">
+    <!-- <section class="bg-white py-12">
       <div class="container mx-auto px-4">
         <h2 class="text-center text-4xl font-extrabold mb-12">{{ t('team.title') }}</h2>
         <p class="text-center text-lg mb-8">{{ t('team.subtitle') }}</p>
         <div class="flex flex-wrap justify-center gap-10">
-          <!-- Team Member Component -->
           <div class="w-40 text-center" v-for="member in teamMembers" :key="member.name">
             <img
               :src="member.image"
@@ -35,7 +34,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
 
     <!-- CTA Section -->
     <section

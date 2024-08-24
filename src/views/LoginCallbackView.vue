@@ -15,6 +15,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useLoginStore } from '@/stores/auth'
 import { useMessage } from 'naive-ui'
+import { NCard, NSpace, NH2, NSpin, NText } from 'naive-ui'
 
 const router = useRouter()
 const loginStore = useLoginStore()
