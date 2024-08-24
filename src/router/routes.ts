@@ -4,6 +4,7 @@ import orders from './orders'
 import carts from './carts'
 import blog from './blog'
 import requireGuest from '@/utils/requireGuest'
+import AuthCallback from '@/components/AuthCallback.vue'
 
 const routes: Array<RouteRecordRaw> = [
   ...books,
@@ -40,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/auth/callback',
     name: 'AuthCallback',
-    component: () => import('@/components/AuthCallback.vue')
+    component: AuthCallback
   },
   {
     path: '/terms',
