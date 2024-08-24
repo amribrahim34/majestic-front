@@ -82,10 +82,12 @@ const selectedPriceRange = ref<[number, number]>([
 ])
 const minYear = new Date().getFullYear() - 100
 const maxYear = new Date().getFullYear()
-const selectedYearRange = ref<[number, number]>([
-  yearRange.value?.min || minYear,
-  yearRange.value?.max || maxYear
-])
+// const selectedYearRange = ref<[number, number]>([
+//   yearRange.value?.min || minYear,
+//   yearRange.value?.max || maxYear
+// ])
+
+const selectedYearRange = ref<[number, number]>([minYear, maxYear])
 
 const toggleFilters = () => {
   showFilters.value = !showFilters.value
@@ -152,6 +154,13 @@ const handleClickOutside = (event: MouseEvent | TouchEvent) => {
   }
 }
 
+// const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+//       const target = event.target as HTMLElement
+//       if (!target.closest('.year-range-filter')) {
+//         // Handle click outside logic
+//       }
+//     }
+
 watch(
   () => props.initialFilters,
   (newFilters) => {
@@ -167,12 +176,6 @@ watch(
   },
   { immediate: true }
 )
-
-const handleResize = () => {
-  if (window.innerWidth >= 768) {
-    showFilters.value = true
-  }
-}
 
 onMounted(() => {
   if (categories.value.length === 0) {

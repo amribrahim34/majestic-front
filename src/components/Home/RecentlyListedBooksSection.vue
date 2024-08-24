@@ -51,13 +51,13 @@ onMounted(() => {
 })
 
 const viewBookDetails = (bookId: number) => {
-  router.push(`/book/${bookId}`)
+  router.push(`/books/${bookId}`)
 }
 
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat(locale.value, {
     style: 'currency',
-    currency: locale.value === 'ar' ? 'AED' : 'USD'
+    currency: locale.value === 'ar' ? 'EGP' : 'EGP'
   }).format(price)
 }
 </script>

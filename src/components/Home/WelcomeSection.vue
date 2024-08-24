@@ -18,13 +18,12 @@
         <p class="text-lg text-gray-600 mb-6">
           {{ t('home.welcomeSection.description') }}
         </p>
-
-        <a
-          :href="t('home.welcomeSection.shopLink')"
+        <router-link
+          to="/books"
           class="bg-black text-white py-2 px-4 inline-block font-medium hover:bg-gray-800 transition duration-300"
         >
           {{ t('home.welcomeSection.shopNow') }}
-        </a>
+        </router-link>
       </div>
     </div>
   </section>

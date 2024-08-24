@@ -43,7 +43,7 @@ import { useBookStore } from '@/stores/bookStore'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const bookStore = useBookStore()
 const router = useRouter()
 
@@ -54,11 +54,14 @@ onMounted(() => {
 })
 
 const viewBookDetails = (bookId: number) => {
-  router.push(`/book/${bookId}`)
+  router.push(`/books/${bookId}`)
 }
 
 const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price)
+  return new Intl.NumberFormat(locale.value, {
+    style: 'currency',
+    currency: locale.value === 'ar' ? 'EGP' : 'EGP'
+  }).format(price)
 }
 </script>
 

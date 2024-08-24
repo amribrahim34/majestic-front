@@ -48,21 +48,21 @@ const features = ref<Feature[]>([
     titleKey: 'home.features.personalized.title',
     descriptionKey: 'home.features.personalized.description',
     image: personalizedImage,
-    link: '#'
+    link: '/books'
   },
   {
     id: 2,
     titleKey: 'home.features.bookRequest.title',
     descriptionKey: 'home.features.bookRequest.description',
     image: bookRequestImage,
-    link: '#'
+    link: '/request-book'
   },
   {
     id: 3,
     titleKey: 'home.features.bookReviews.title',
     descriptionKey: 'home.features.bookReviews.description',
     image: bookReviewsImage,
-    link: '#'
+    link: '/books'
   }
 ])
 </script>
