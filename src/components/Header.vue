@@ -20,9 +20,9 @@
       </n-button>
 
       <!-- Desktop Navigation -->
-      <div class="hidden md:flex flex-1 items-center justify-end space-x-5">
+      <div class="hidden md:flex flex-1 space-x-5">
         <!-- Search Bar -->
-        <div class="flex-1 mx-6">
+        <div class="mx-6 w-3/5">
           <n-input
             v-model:value="searchQuery"
             @keyup.enter="performSearch"
