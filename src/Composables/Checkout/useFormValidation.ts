@@ -9,7 +9,7 @@ export function useFormValidation() {
   const form = reactive({
     name: '',
     email: '',
-    phone: '',
+    mobile: '',
     address: '',
     cityId: '',
     city: '',
@@ -26,7 +26,7 @@ export function useFormValidation() {
   const errors = reactive({
     name: '',
     email: '',
-    phone: '',
+    mobile: '',
     address: '',
     cityId: '',
     districtId: '',
@@ -62,7 +62,7 @@ export function useFormValidation() {
       case 'email':
         validateEmail()
         break
-      case 'phone':
+      case 'mobile':
         validatePhone()
         break
       default:
@@ -85,8 +85,8 @@ export function useFormValidation() {
 
   const validatePhone = () => {
     const phoneRegex = /^\+?[0-9]{10,14}$/
-    errors.phone = form.phone
-      ? phoneRegex.test(form.phone)
+    errors.mobile = form.mobile
+      ? phoneRegex.test(form.mobile)
         ? ''
         : t('validation.invalidPhone')
       : t('validation.required')

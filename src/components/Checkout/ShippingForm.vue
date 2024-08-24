@@ -15,8 +15,8 @@
       <div>
         <input
           type="number"
-          id="phone"
-          v-model="form.phone"
+          id="mobile"
+          v-model="form.mobile"
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
           :placeholder="$t('shipping.phone')"
           :aria-label="$t('shipping.phone')"
@@ -105,14 +105,15 @@
           id="paymentType"
           v-model="form.paymentType"
           class="w-full border-b border-gray-500 p-2 appearance-none bg-transparent text-white"
+          @change="validatePaymentType"
         >
-          <option value="" class="bg-black" disabled>{{ $t('shipping.selectPaymentType') }}</option>
+          <option value="" class="bg-black">{{ $t('shipping.selectPaymentType') }}</option>
           <option value="cashOnDelivery" class="bg-black text-white" selected>
             {{ $t('shipping.cashOnDelivery') }}
           </option>
           <!-- Add more payment options if needed -->
         </select>
-        <!-- <span v-if="errors.paymentType" class="text-red-500 text-sm">{{ errors.paymentType }}</span> -->
+        <span v-if="errors.paymentType" class="text-red-500 text-sm">{{ errors.paymentType }}</span>
       </div>
       <!-- Refund Policy Link -->
       <div>
@@ -202,10 +203,10 @@ watch(
     if (userData) {
       form.name = userData.user_name || ''
       form.email = userData.email || ''
-      form.phone = userData.mobile || ''
-      form.address = userData?.address?.address || ''
-      form.cityId = userData.address?.city || ''
-      form.districtId = userData.address?.state || ''
+      form.mobile = userData.mobile || ''
+      form.address = userData?.default_address?.address || ''
+      form.cityId = userData.default_address?.city || ''
+      form.districtId = userData.default_address?.state || ''
     }
   },
   { immediate: true }

@@ -20,7 +20,7 @@ export const useBostaStore = defineStore('bosta', {
   state: (): BostaState => ({
     cities: [],
     districts: [],
-    shippingCost: 0,
+    shippingCost: 100,
     loading: false,
     error: null
   }),
