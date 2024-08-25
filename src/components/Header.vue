@@ -22,7 +22,7 @@
       <!-- Desktop Navigation -->
       <div class="hidden md:flex flex-1 space-x-5">
         <!-- Search Bar -->
-        <div class="mx-6 w-3/5">
+        <div class="mx-6 w-full">
           <n-input
             v-model:value="searchQuery"
             @keyup.enter="performSearch"
@@ -32,7 +32,7 @@
         </div>
 
         <!-- Navigation Links -->
-        <nav class="flex items-center space-x-5">
+        <nav class="flex items-center justify-between space-x-5 w-4/5">
           <router-link to="/books">{{ $t('header.nav.books') }}</router-link>
           <cart-icon />
           <user-menu />
