@@ -15,7 +15,14 @@
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <n-card v-for="book in books" :key="book.id" class="book-card" hoverable>
           <template #cover>
-            <img :src="book.image" :alt="book.title" class="w-full h-48 object-cover" />
+            <!-- <img :src="book.image" :alt="book.title" class="w-full h-48 object-cover" /> -->
+            <n-image
+              class="w-full h-48 object-cover"
+              :src="book.image"
+              :alt="book.title"
+              fallback-src="/public/default.png"
+              preview-disabled
+            />
           </template>
           <n-space vertical>
             <n-text class="text-lg font-semibold line-clamp-1">{{ book.title }}</n-text>
@@ -43,6 +50,7 @@ import { NCard, NSpin, NEmpty, NButton, NSpace, NText } from 'naive-ui'
 import { Book } from '@/types/Book'
 import WishlistButton from '@/components/shared/WishlistButton.vue'
 import AddToCartButton from '@/components/shared/AddToCartButton.vue'
+import { NImage } from 'naive-ui'
 
 const props = defineProps({
   books: {

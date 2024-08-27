@@ -1,7 +1,14 @@
 <template>
   <div class="rounded shadow-lg w-80 mb-16">
     <div>
-      <img class="w-full object-cover h-56" :src="book.image" :alt="book.title" loading="lazy" />
+      <!-- <img class="w-full object-cover h-56" :src="book.image" :alt="book.title" loading="lazy" /> -->
+      <n-image
+        class="w-full h-full object-cover"
+        :src="book.image"
+        :alt="book.title"
+        fallback-src="/public/default.png"
+        preview-disabled
+      />
     </div>
     <div class="px-5 pb-5">
       <div>
@@ -96,13 +103,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useCartStore } from '@/stores/cart'
 import { useWishlistStore } from '@/stores/wishlist'
 import type { Book } from '@/types/Book'
 import { isAuthenticated } from '@/utils/auth'
 import StarRating from '@/components/shared/StarRating.vue'
+import { NImage } from 'naive-ui'
 
 const props = defineProps<{
   book: Book

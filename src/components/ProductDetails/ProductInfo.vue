@@ -5,11 +5,19 @@
       class="flex flex-col md:flex-row justify-between items-start w-full max-w-6xl mx-auto"
     >
       <div class="product-image w-full md:w-2/5 mb-8 md:mb-0 h-96">
-        <img
+        <!-- <img
           :src="book.image"
           :alt="book.title"
           class="w-full h-full object-contain rounded-lg"
           loading="lazy"
+        /> -->
+
+        <n-image
+          class="w-full h-full object-contain rounded-lg"
+          :src="book.image"
+          :alt="book.title"
+          fallback-src="/public/default.png"
+          preview-disabled
         />
       </div>
       <div class="product-details w-full md:w-1/2">
@@ -94,6 +102,7 @@ import { storeToRefs } from 'pinia'
 
 import WishlistButton from '@/components/shared/WishlistButton.vue'
 import AddToCartButton from '@/components/shared/AddToCartButton.vue'
+import { NImage } from 'naive-ui'
 
 const props = defineProps({
   book: {
