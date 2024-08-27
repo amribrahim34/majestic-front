@@ -6,7 +6,7 @@
         class="w-full h-full object-cover"
         :src="book.image"
         :alt="book.title"
-        fallback-src="/public/default.png"
+        fallback-src="/default.png"
         preview-disabled
       />
     </div>

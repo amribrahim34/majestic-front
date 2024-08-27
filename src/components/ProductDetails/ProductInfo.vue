@@ -16,7 +16,7 @@
           class="w-full h-full object-contain rounded-lg"
           :src="book.image"
           :alt="book.title"
-          fallback-src="/public/default.png"
+          fallback-src="/default.png"
           preview-disabled
         />
       </div>
