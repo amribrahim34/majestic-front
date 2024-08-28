@@ -3,7 +3,7 @@
   <div class="container mx-auto">
     <HeaderComponent />
     <main class="flex my-20">
-      <aside class="filter-sidebar w-1/5 ml-7">
+      <aside class="filter-sidebar w-1/5 ml-7 -mt-4">
         <FilterSection
           @filter-updated="debouncedOnFilterUpdated"
           :initial-filters="filtersFromURL"

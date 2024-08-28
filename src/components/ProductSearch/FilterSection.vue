@@ -1,7 +1,7 @@
 <template>
   <div class="filter-section" ref="filterSection">
     <!-- Toggle button for mobile -->
-    <n-button class="md:hidden mb-4" @click="toggleFilters">
+    <n-button class="md:hidden mb-4 absolute" @click="toggleFilters">
       {{ showFilters ? 'Hide Filters' : 'Show Filters' }}
     </n-button>
 
