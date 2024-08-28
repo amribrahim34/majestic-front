@@ -1,8 +1,10 @@
 <template>
   <SEOMetaTags
-    :title="book.title ? `${book.title} | MajesticMinds` : 'Book Details | MajesticMinds'"
-    :description="book.description || 'Book details page'"
-    :image="book.image || ''"
+    :title="
+      currentBook.title ? `${currentBook.title} | MajesticMinds` : 'Book Details | MajesticMinds'
+    "
+    :description="currentBook.description || 'Book details page'"
+    :image="currentBook.image || ''"
     :url="currentURL"
   />
   <div class="container mx-auto">
@@ -16,7 +18,7 @@
       </div>
       <div v-else class="book-display">
         <Breadcrumb :items="breadcrumbItems" class="m-6" />
-        <product-info :book="book" />
+        <product-info :book="currentBook" />
         <related-products :books="relatedProducts" />
         <!-- <rating-reviews
           v-if="rating"
@@ -33,7 +35,7 @@
 
 <script setup lang="ts">
 import { onMounted, computed, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { useBookStore } from '@/stores/bookStore'
 import { useMeta } from 'vue-meta'
 import HeaderComponent from '@/components/Header.vue'
@@ -42,14 +44,16 @@ import RelatedProducts from '@/components/ProductDetails/RelatedProducts.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import Breadcrumb from '@/components/shared/Breadcrumb.vue'
 import SEOMetaTags from '@/components/SEOMetaTags.vue'
-import RatingReviews from '@/components/ProductDetails/RatingReviews.vue'
+// import RatingReviews from '@/components/ProductDetails/RatingReviews.vue'
+import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const route = useRoute()
 const bookStore = useBookStore()
-const book = computed(() => bookStore.currentBook)
-const rating = computed(() => bookStore.rating)
-const relatedProducts = computed(() => bookStore.relatedProducts)
-const reviews = computed(() => bookStore.reviews || [])
+const { currentBook, relatedProducts } = storeToRefs(bookStore)
+// const rating = computed(() => bookStore.rating)
+// const reviews = computed(() => bookStore.reviews || [])
 const currentURL = computed(() => window.location.href)
 const loading = ref(false)
 const error = ref('')
@@ -61,31 +65,31 @@ const props = defineProps({
   }
 })
 const author = computed(() => {
-  return book.value?.authors && book.value.authors.length > 0
-    ? book.value.authors[0].name
+  return currentBook.value?.authors && currentBook.value.authors.length > 0
+    ? currentBook.value.authors[0].name
     : 'Unknown Author'
 })
 
 computed(() => ({
   '@context': 'https://schema.org',
   '@type': 'Book',
-  name: book.value.title,
+  name: currentBook.value.title,
   author: author,
-  isbn10: book.value.isbn10,
-  isbn13: book.value.isbn13,
-  numberOfPages: book.value.num_pages,
-  publisher: book.value.publisher,
-  datePublished: book.value.publication_date,
-  description: book.value.description
+  isbn10: currentBook.value.isbn10,
+  isbn13: currentBook.value.isbn13,
+  numberOfPages: currentBook.value.num_pages,
+  publisher: currentBook.value.publisher,
+  datePublished: currentBook.value.publication_date,
+  description: currentBook.value.description
 }))
 
-const fetchBook = async () => {
+const fetchBook = async (bookId) => {
   loading.value = true
   error.value = ''
+  let id = route.params.id as string
   try {
-    const id = props.id || (route.params.id as string)
-    if (id) {
-      await bookStore.fetchBookById(id)
+    if (bookId) {
+      await bookStore.fetchBookById(bookId)
     } else {
       throw new Error('No book ID provided')
     }
@@ -97,16 +101,23 @@ const fetchBook = async () => {
   }
 }
 
-onMounted(fetchBook)
+const bookId = props.id || route.params.id
+onMounted(fetchBook(bookId))
+
+onBeforeRouteUpdate(async (to) => {
+  if (to.params.id !== route.params.id) {
+    await fetchBook(to.params.id)
+  }
+})
 
 // Use vue-meta to set meta tags and structured data
 useMeta(() => ({
-  title: `${book.value.title} | MajesticMinds`,
+  title: `${currentBook.value.title} | MajesticMinds`,
   meta: [
-    { name: 'description', content: book.value.description },
-    { property: 'og:title', content: `${book.value.title} | MajesticMinds` },
-    { property: 'og:description', content: book.value.description },
-    { property: 'og:image', content: book.value.image },
+    { name: 'description', content: currentBook.value.description },
+    { property: 'og:title', content: `${currentBook.value.title} | MajesticMinds` },
+    { property: 'og:description', content: currentBook.value.description },
+    { property: 'og:image', content: currentBook.value.image },
     { property: 'og:url', content: window.location.href }
   ],
   script: [
@@ -115,23 +126,23 @@ useMeta(() => ({
       json: {
         '@context': 'https://schema.org',
         '@type': 'Book',
-        name: book.value.title,
+        name: currentBook.value.title,
         author: author,
-        isbn10: book.value.isbn10,
-        isbn13: book.value.isbn13,
-        numberOfPages: book.value.num_pages,
-        publisher: book.value.publisher,
-        datePublished: book.value.publication_date,
-        description: book.value.description
+        isbn10: currentBook.value.isbn10,
+        isbn13: currentBook.value.isbn13,
+        numberOfPages: currentBook.value.num_pages,
+        publisher: currentBook.value.publisher,
+        datePublished: currentBook.value.publication_date,
+        description: currentBook.value.description
       }
     }
   ]
 }))
 
 const breadcrumbItems = computed(() => [
-  { label: 'Home', link: '/' },
-  { label: 'Books', link: '/books' },
-  { label: book.value.title }
+  { label: t('breadcrumb.home'), link: '/' },
+  { label: t('breadcrumb.books'), link: '/books' },
+  { label: currentBook.value.title }
 ])
 </script>
 

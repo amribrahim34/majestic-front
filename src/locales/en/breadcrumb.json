@@ -1,0 +1,8 @@
+{
+  "breadcrumb": {
+    "home": "Home",
+    "books": "Books",
+    "category": "{category}",
+    "uncategorized": "Uncategorized"
+  }
+}

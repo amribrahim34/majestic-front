@@ -2,11 +2,11 @@
   <div>
     <HeaderComponent />
     <WelcomeSection class="mb-8 md:mb-12" />
-    <SectionSeparator />
-    <FeaturesSection class="" />
-    <SectionSeparator />
+    <!-- <SectionSeparator /> -->
+    <!-- <FeaturesSection class="" /> -->
+    <!-- <SectionSeparator /> -->
     <!-- <OtherSections /> -->
-    <FormatsSection class="mb-8 md:mb-12" />
+    <!-- <FormatsSection class="mb-8 md:mb-12" /> -->
     <SectionSeparator />
     <FeaturedBooksSection />
     <SectionSeparator />

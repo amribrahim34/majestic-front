@@ -18,6 +18,7 @@ import validation from './validation.json'
 import termsAndConditions from './termsAndConditions.json'
 import privacyPolicy from './privacyPolicy.json'
 import orderDetails from './orderDetails.json'
+import breadcrumb from './breadcrumb.json'
 
 const en = {
   ...header,
@@ -39,6 +40,7 @@ const en = {
   ...orderDetails,
   ...termsAndConditions,
   ...privacyPolicy,
+  ...breadcrumb,
   ...home
 }
 

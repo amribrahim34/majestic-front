@@ -18,6 +18,7 @@ import orderDetails from './orderDetails.json'
 import termsAndConditions from './termsAndConditions.json'
 import privacyPolicy from './privacyPolicy.json'
 import validation from './validation.json'
+import breadcrumb from './breadcrumb.json'
 
 const ar = {
   ...header,
@@ -39,6 +40,7 @@ const ar = {
   ...orderDetails,
   ...termsAndConditions,
   ...privacyPolicy,
+  ...breadcrumb,
   ...home
 }
 
