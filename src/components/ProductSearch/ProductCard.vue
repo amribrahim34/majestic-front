@@ -1,14 +1,15 @@
 <template>
   <div class="rounded shadow-lg w-80 mb-16">
     <div>
-      <!-- <img class="w-full object-cover h-56" :src="book.image" :alt="book.title" loading="lazy" /> -->
-      <n-image
-        class="w-full h-full object-cover"
-        :src="book.image"
-        :alt="book.title"
-        fallback-src="/default.png"
-        preview-disabled
-      />
+      <router-link :to="{ name: 'BookDetails', params: { id: book.id } }" :id="book.id">
+        <n-image
+          class="w-full h-full object-cover"
+          :src="book.image"
+          :alt="book.title"
+          fallback-src="/default.png"
+          preview-disabled
+        />
+      </router-link>
     </div>
     <div class="px-5 pb-5">
       <div>

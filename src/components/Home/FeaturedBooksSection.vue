@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-white py-16">
+  <section class="bg-gray-100 py-16">
     <div class="container mx-auto px-4">
       <h2 class="text-2xl font-semibold mb-2">{{ t('home.featuredBooks.title') }}</h2>
       <p class="text-gray-600 mb-8">
