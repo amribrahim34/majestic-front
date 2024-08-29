@@ -20,9 +20,9 @@
               class="h-6 md:h-8 mr-2 md:mr-3"
               loading="lazy"
             />
-            <span class="text-xl font-semibold text-gray-800 ml-2">{{
+            <!-- <span class="text-xl font-semibold text-gray-800 ml-2">{{
               t('footer.brandName')
-            }}</span>
+            }}</span> -->
           </n-button>
           <n-text class="text-gray-600 text-sm mb-4">{{ t('footer.tagline') }}</n-text>
           <n-button text tag="a" :to="{ name: 'requestBook' }" class="text-gray-800">

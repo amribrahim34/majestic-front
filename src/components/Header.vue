@@ -9,9 +9,14 @@
           class="h-6 md:h-8 mr-2 md:mr-3"
           loading="lazy"
         />
-        <span class="text-lg md:text-xl font-semibold text-gray-800">MajesticMinds</span>
+        <!-- <span class="text-lg md:text-xl font-semibold text-gray-800">MajesticMinds</span> -->
       </router-link>
 
+      <n-button class="md:hidden bg-violet-800 text-white">
+        <router-link to="/books" @click="showMobileMenu = false">{{
+          $t('header.nav.books')
+        }}</router-link>
+      </n-button>
       <!-- Mobile Menu Button -->
       <n-button class="md:hidden" @click="toggleMobileMenu">
         <template #icon>
