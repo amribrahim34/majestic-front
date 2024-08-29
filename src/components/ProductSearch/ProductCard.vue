@@ -6,6 +6,7 @@
           class="w-full h-full object-cover object-center"
           :src="book.image"
           :alt="book.title"
+          fallback-src="/default.png"
           preview-disabled
         />
       </router-link>
