@@ -15,8 +15,8 @@
     <BooksYouMayEnjoySection />
     <SectionSeparator />
     <FeaturesOfOurAcademicBookApp />
-    <SectionSeparator />
-    <ReadOurBlogSection />
+    <!-- <SectionSeparator /> -->
+    <!-- <ReadOurBlogSection /> -->
 
     <FooterComponent />
   </div>
