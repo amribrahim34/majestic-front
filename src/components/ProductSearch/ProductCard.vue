@@ -1,12 +1,11 @@
 <template>
   <div class="rounded shadow-lg w-80 mb-16">
-    <div>
+    <div class="h-64 overflow-hidden">
       <router-link :to="{ name: 'BookDetails', params: { id: book.id } }" :id="book.id">
         <n-image
-          class="w-full h-full object-cover"
+          class="w-full h-full object-cover object-center"
           :src="book.image"
           :alt="book.title"
-          fallback-src="/default.png"
           preview-disabled
         />
       </router-link>
@@ -175,3 +174,8 @@ const formatPrice = (price: number | string | undefined): string => {
   return t('common.priceNotAvailable')
 }
 </script>
+<style scoped>
+.n-image {
+  display: block; /* Ensures the image behaves as a block element */
+}
+</style>
