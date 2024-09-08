@@ -7,7 +7,16 @@
 
     <!-- Filters container -->
     <div v-show="showFilters" class="filter-container md:block">
-      <div class="p-4 bg-white shadow-lg">
+      <div class="p-4 bg-white shadow-lg relative">
+        <!-- New close button -->
+        <n-button
+          class="absolute top-2 md:hidden bg-red-800 text-white"
+          :class="{ 'right-2': !isRTL, 'left-2': isRTL }"
+          @click="closeFilters"
+        >
+          <n-icon><close /></n-icon>
+        </n-button>
+
         <DateRangeFilter
           v-if="yearRange"
           v-model="selectedYearRange"
@@ -41,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import CategoryFilter from './Filters/CategoryFilter.vue'
 import PriceFilter from './Filters/PriceFilter.vue'
@@ -49,14 +58,18 @@ import DateRangeFilter from './Filters/DateRangeFilter.vue'
 import { useBookStore } from '@/stores/bookStore'
 import { storeToRefs } from 'pinia'
 import { debounce } from '@/utils/debounce'
-import { NButton } from 'naive-ui'
+import { NButton, NIcon } from 'naive-ui'
+import { Close } from '@vicons/ionicons5'
 import { useRouter } from 'vue-router'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const bookStore = useBookStore()
 const { categories, priceRange, yearRange } = storeToRefs(bookStore)
 const router = useRouter()
-
+const isRTL = computed(() => {
+  const rtlLocales = ['ar', 'he', 'fa', 'ur'] // Add more RTL locales as needed
+  return rtlLocales.includes(locale.value)
+})
 const props = defineProps<{
   initialFilters: Record<string, any>
 }>()
@@ -82,15 +95,14 @@ const selectedPriceRange = ref<[number, number]>([
 ])
 const minYear = new Date().getFullYear() - 100
 const maxYear = new Date().getFullYear()
-// const selectedYearRange = ref<[number, number]>([
-//   yearRange.value?.min || minYear,
-//   yearRange.value?.max || maxYear
-// ])
-
 const selectedYearRange = ref<[number, number]>([minYear, maxYear])
 
 const toggleFilters = () => {
   showFilters.value = !showFilters.value
+}
+
+const closeFilters = () => {
+  showFilters.value = false
 }
 
 const loadMoreCategories = () => {
@@ -135,7 +147,6 @@ const resetFilters = () => {
   selectedYearRange.value = [yearRange.value?.min || minYear, yearRange.value?.max || maxYear]
   selectedPriceRange.value = [priceRange.value?.min || 0, priceRange.value?.max || 0]
   selectedCategories.value = []
-  // applyFilters()
   router.push({ query: {} })
 }
 
@@ -148,18 +159,11 @@ const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       event.clientY < rect.top ||
       event.clientY > rect.bottom
 
-    if (isOutside) {
-      showFilters.value = false
-    }
+    // if (isOutside) {
+    //   showFilters.value = false
+    // }
   }
 }
-
-// const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-//       const target = event.target as HTMLElement
-//       if (!target.closest('.year-range-filter')) {
-//         // Handle click outside logic
-//       }
-//     }
 
 watch(
   () => props.initialFilters,
@@ -195,7 +199,6 @@ onMounted(() => {
 
   window.addEventListener('resize', debouncedResize)
   debouncedResize()
-  // handleResize()
 })
 
 onUnmounted(() => {
@@ -203,6 +206,7 @@ onUnmounted(() => {
   window.removeEventListener('resize', debouncedResize)
 })
 </script>
+
 <style scoped>
 .filter-section {
   position: relative;
