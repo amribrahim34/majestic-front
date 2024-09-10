@@ -1,6 +1,5 @@
-<!-- src/components/Breadcrumb.vue -->
 <template>
-  <n-breadcrumb class="text-sm text-gray-500">
+  <n-breadcrumb class="text-sm text-gray-500 text-wrap">
     <n-breadcrumb-item v-for="(item, index) in items" :key="index">
       <n-button
         v-if="item.link"
