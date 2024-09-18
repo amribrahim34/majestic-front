@@ -17,6 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { createMetaManager } from 'vue-meta'
 import * as Sentry from '@sentry/vue'
+import 'vue-social-chat/dist/style.css'
 
 library.add(
   faGoogle,
